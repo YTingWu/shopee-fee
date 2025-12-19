@@ -231,9 +231,50 @@
                 font-size: 0.75rem;
             }
         }
+
+        /* Floating Header */
+        .floating-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 10px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+            transform: translateY(-100%);
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .floating-header.visible {
+            transform: translateY(0);
+        }
     </style>
 </head>
 <body>
+    <!-- Floating Header (Hidden by default) -->
+    <div id="floatingHeader" class="floating-header">
+        <div class="container position-relative">
+            <div class="d-flex justify-content-center align-items-center gap-3">
+                <div class="text-center">
+                    <small class="text-muted d-block" style="font-size: 0.7rem;">進價</small>
+                    <span class="fw-bold" id="floatCost">$ 0</span>
+                </div>
+                <div class="text-center">
+                    <small class="text-muted d-block" style="font-size: 0.7rem;">售價</small>
+                    <span class="fw-bold" id="floatSell">$ 0</span>
+                </div>
+                <div class="text-center">
+                    <small class="text-muted d-block" style="font-size: 0.7rem;">蝦幣回饋</small>
+                    <span class="badge bg-secondary" id="floatCashback">不參加</span>
+                </div>
+            </div>
+            <i class="bi bi-arrow-up-circle-fill text-primary fs-2 position-absolute top-50 translate-middle-y" style="right: 20px;"></i>
+        </div>
+    </div>
+
     <div class="container">
         <div class="main-container">
             <div class="header">

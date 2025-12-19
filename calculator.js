@@ -19,9 +19,13 @@ function calculateFees() {
     
     // Get selected cashback program rate
     let cashbackRate = 0;
+    let cashbackLabel = '不參加';
     cashbackRadios.forEach(radio => {
         if (radio.checked) {
             cashbackRate = parseFloat(radio.value);
+            if (radio.id === 'cashback5') cashbackLabel = '5%';
+            else if (radio.id === 'cashback10') cashbackLabel = '10%';
+            else cashbackLabel = '不參加';
         }
     });
     const hasCashback = cashbackRate > 0;
@@ -94,6 +98,18 @@ function calculateFees() {
     updateSummaryRow('regular-ship2', regularShip2Total, regularShip2Profit, sellPrice);
     updateSummaryRow('event-ship1', eventShip1Total, eventShip1Profit, sellPrice);
     updateSummaryRow('event-ship2', eventShip2Total, eventShip2Profit, sellPrice);
+
+    // Update Floating Header
+    document.getElementById('floatCost').textContent = formatCurrency(costPrice);
+    document.getElementById('floatSell').textContent = formatCurrency(sellPrice);
+    
+    const floatCashback = document.getElementById('floatCashback');
+    floatCashback.textContent = cashbackLabel;
+    if (cashbackRate > 0) {
+        floatCashback.className = 'badge bg-warning text-dark';
+    } else {
+        floatCashback.className = 'badge bg-secondary';
+    }
 }
 
 // Update summary table row
@@ -163,6 +179,27 @@ transactionFeeInput.addEventListener('input', calculateFees);
 // Add event listeners for cashback program radio buttons
 cashbackRadios.forEach(radio => {
     radio.addEventListener('change', calculateFees);
+});
+
+// Floating Header Logic
+const floatingHeader = document.getElementById('floatingHeader');
+const inputSection = document.querySelector('.input-section');
+
+window.addEventListener('scroll', () => {
+    if (window.innerWidth <= 768) { // Only for mobile
+        const inputRect = inputSection.getBoundingClientRect();
+        if (inputRect.bottom < 0) {
+            floatingHeader.classList.add('visible');
+        } else {
+            floatingHeader.classList.remove('visible');
+        }
+    } else {
+        floatingHeader.classList.remove('visible');
+    }
+});
+
+floatingHeader.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 });
 
 // Initial calculation
