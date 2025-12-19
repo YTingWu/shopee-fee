@@ -31,7 +31,8 @@ function calculateFees() {
     const hasCashback = cashbackRate > 0;
 
     // Base fees
-    const transactionFee = Math.round(sellPrice * (transactionFeeRate / 100));
+    const transactionPriceLimit = 35000;
+    const transactionFee = Math.round(Math.min(sellPrice, transactionPriceLimit) * (transactionFeeRate / 100));
     const paymentFee = Math.round(sellPrice * 0.025);
     // Event surcharge is 0% if participating in cashback program, otherwise 2%
     const eventSurcharge = hasCashback ? 0 : Math.round(sellPrice * 0.02);
