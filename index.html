@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>蝦皮手續費計算器</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --primary: #4e73df;
+            --secondary: #858796;
+            --success: #1cc88a;
+            --warning: #f6c23e;
+            --danger: #e74a3b;
+            --dark: #5a5c69;
+            --light: #f8f9fc;
+        }
+        
+        body {
+            background-color: #f3f4f6;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            min-height: 100vh;
+            padding: 40px 0;
+            color: var(--dark);
+        }
+        
+        .main-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+            padding: 40px;
+            margin: 0 auto;
+            max-width: 1200px;
+            border: 1px solid rgba(0,0,0,0.02);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .header h1 {
+            color: var(--primary);
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+        .header p {
+            color: var(--secondary);
+            font-size: 1.1rem;
+        }
+        
+        .input-section {
+            background: #fff;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border: 1px solid #e3e6f0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+        }
+        
+        .event-info {
+            background: #fff8e1;
+            border-left: 5px solid var(--warning);
+            padding: 20px;
+            margin-bottom: 40px;
+            border-radius: 8px;
+            color: #856404;
+        }
+        
+        /* Result Cards */
+        .result-card {
+            background: #fff;
+            border: none;
+            border-radius: 15px;
+            padding: 0;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .result-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+        
+        /* Card Headers */
+        .result-card h5 {
+            margin: 0;
+            padding: 20px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .result-card.regular h5 {
+            background: linear-gradient(135deg, #4e73df 0%, #224abe 100%);
+        }
+        
+        .result-card.event h5 {
+            background: linear-gradient(135deg, #f6c23e 0%, #e0a800 100%);
+        }
+        
+        /* Fee Items */
+        .fee-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 25px;
+            border-bottom: 1px solid #f1f3f9;
+            align-items: center;
+        }
+        
+        .fee-label {
+            color: var(--secondary);
+            font-weight: 500;
+        }
+        
+        .fee-value {
+            font-weight: 700;
+            color: var(--dark);
+        }
+        
+        /* Total Row */
+        .fee-item.total-row {
+            background: #f8f9fc;
+            border-top: 2px solid #eaecf4;
+            margin: 0;
+            border-radius: 0;
+            color: var(--primary);
+            font-weight: 800;
+        }
+        .fee-item.total-row .fee-value {
+            color: var(--primary);
+            font-size: 1.1rem;
+        }
+        
+        /* Profit Row */
+        .fee-item.profit-row {
+            background: var(--success);
+            margin: 0;
+            border-radius: 0;
+            color: white;
+            border-bottom: none;
+        }
+        .fee-item.profit-row .fee-label,
+        .fee-item.profit-row .fee-value {
+            color: white;
+            font-size: 1.2rem;
+        }
+        
+        .fee-item.profit-row.negative {
+            background: var(--danger);
+        }
+        
+        /* Form Elements */
+        .form-label {
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 8px;
+        }
+        
+        .input-group-text {
+            background-color: #eaecf4;
+            border: 1px solid #d1d3e2;
+            color: var(--dark);
+            font-weight: 600;
+        }
+        
+        .form-control {
+            border: 1px solid #d1d3e2;
+            padding: 12px;
+            color: var(--dark);
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="main-container">
+            <div class="header">
+                <h1><i class="bi bi-calculator"></i> 蝦皮手續費計算器</h1>
+                <p>輕鬆計算您的商品成本與獲利</p>
+            </div>
+
+            <!-- Input Section -->
+            <div class="input-section">
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <label for="costPrice" class="form-label">
+                            <i class="bi bi-tag"></i> 進價（成本）
+                        </label>
+                        <div class="input-group">
+                            <span class="input-group-text">NT$</span>
+                            <input type="number" class="form-control" id="costPrice" placeholder="0" min="0">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="sellPrice" class="form-label">
+                            <i class="bi bi-cash-stack"></i> 蝦皮價格（售價）
+                        </label>
+                        <div class="input-group">
+                            <span class="input-group-text">NT$</span>
+                            <input type="number" class="form-control" id="sellPrice" placeholder="0" min="0">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="transactionFee" class="form-label">
+                            <i class="bi bi-percent"></i> 成交手續費
+                        </label>
+                        <div class="input-group">
+                            <input type="number" class="form-control" id="transactionFee" value="6" min="0" max="100" step="0.1">
+                            <span class="input-group-text">%</span>
+                        </div>
+                        <small class="text-muted">
+                            依照分類不同而手續費不同 
+                            <a href="https://seller.shopee.tw/edu/article/26470" target="_blank" class="text-decoration-none">
+                                <i class="bi bi-info-circle"></i> 查看詳情
+                            </a>
+                        </small>
+                    </div>
+                </div>
+                
+                <!-- Shopee Coins Cashback Program -->
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <label class="form-label">
+                            <i class="bi bi-coin"></i> 參加蝦幣回饋方案 <a href="https://help.shopee.tw/portal/4/article/139826-[%E6%A2%9D%E6%AC%BE%E8%88%87%E6%94%BF%E7%AD%96]-%E8%9D%A6%E5%B9%A3%E5%9B%9E%E9%A5%8B%E6%96%B9%E6%A1%88%E7%B4%84%E5%AE%9A%E6%A2%9D%E6%AC%BE" target="_blank" class="text-decoration-none">
+                                <i class="bi bi-info-circle"></i> 查看詳情
+                            </a>
+                        </label>
+                        <div class="d-flex flex-wrap gap-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="cashbackProgram" id="noCashback" value="0" checked>
+                                <label class="form-check-label" for="noCashback">
+                                    不參加
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="cashbackProgram" id="cashback5" value="1.5">
+                                <label class="form-check-label" for="cashback5">
+                                    5%蝦幣回饋方案
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="cashbackProgram" id="cashback10" value="2.5">
+                                <label class="form-check-label" for="cashback10">
+                                    10%蝦幣回饋方案
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Event Day Info -->
+            <div class="event-info">
+                <h6 style="cursor: pointer;" data-bs-toggle="collapse" data-bs-target="#eventDayDetails" aria-expanded="false" aria-controls="eventDayDetails">
+                    <i class="bi bi-calendar-event"></i> <strong>活動日說明（手續費額外 +2%）</strong>
+                    <i class="bi bi-chevron-down float-end"></i>
+                </h6>
+                <div class="collapse" id="eventDayDetails">
+                    <div class="row mt-2">
+                        <div class="col-md-6">
+                            <ul class="mb-0">
+                                <li>一月：1/11-1/12；1/18；1/25</li>
+                                <li>二月：2/2-2/3；2/18；2/25</li>
+                                <li>三月：3/3-3/4；3/18；3/25</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <ul class="mb-0">
+                                <li>四月：4/4；4/18-4/19；4/25</li>
+                                <li>五月：5/5-5/6；5/18；5/25</li>
+                                <li>六月：6/6；6/18-6/19；6/25</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Section -->
+            <div class="row">
+                <!-- Regular Day + Shipping Option 1 -->
+                <div class="col-md-6 col-lg-6">
+                    <div class="result-card regular">
+                        <h5><i class="bi bi-calendar-check"></i> 一般日 + 免運方案一 (6%)</h5>
+                        <div class="fee-item">
+                            <span class="fee-label">成交手續費</span>
+                            <span class="fee-value" id="regular-ship1-transaction">NT$ 0</span>
+                        </div>
+                        <div class="fee-item">
+                            <span class="fee-label">金流手續費 (2.5%)</span>
+                            <span class="fee-value" id="regular-ship1-payment">NT$ 0</span>
+                        </div>
+                        <div class="fee-item">
+                            <span class="fee-label">免運手續費 (6%)</span>
+                            <span class="fee-value" id="regular-ship1-shipping">NT$ 0</span>
+                        </div>
+                        <div class="fee-item" id="regular-ship1-cashback-row" style="display: none;">
+                            <span class="fee-label">蝦幣回饋活動服務費</span>
+                            <span class="fee-value" id="regular-ship1-cashback">NT$ 0</span>
+                        </div>
+                        <div class="fee-item total-row">
+                            <span class="fee-label">總手續費</span>
+                            <span class="fee-value" id="regular-ship1-total">NT$ 0</span>
+                        </div>
+                        <div class="fee-item profit-row" id="regular-ship1-profit-row">
+                            <span class="fee-label">獲利</span>
+                            <span class="fee-value" id="regular-ship1-profit">NT$ 0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Regular Day + Shipping Option 2 -->
+                <div class="col-md-6 col-lg-6">
+                    <div class="result-card regular">
+                        <h5><i class="bi bi-calendar-check"></i> 一般日 + 免運方案二 (+60元)</h5>
+                        <div class="fee-item">
+                            <span class="fee-label">成交手續費</span>
+                            <span class="fee-value" id="regular-ship2-transaction">NT$ 0</span>
+                        </div>
+                        <div class="fee-item">
+                            <span class="fee-label">金流手續費 (2.5%)</span>
+                            <span class="fee-value" id="regular-ship2-payment">NT$ 0</span>
+                        </div>
+                        <div class="fee-item">
+                            <span class="fee-label">免運手續費 (+60元)</span>
+                            <span class="fee-value" id="regular-ship2-shipping">NT$ 0</span>
+                        </div>
+                        <div class="fee-item" id="regular-ship2-cashback-row" style="display: none;">
+                            <span class="fee-label">蝦幣回饋活動服務費</span>
+                            <span class="fee-value" id="regular-ship2-cashback">NT$ 0</span>
+                        </div>
+                        <div class="fee-item total-row">
+                            <span class="fee-label">總手續費</span>
+                            <span class="fee-value" id="regular-ship2-total">NT$ 0</span>
+                        </div>
+                        <div class="fee-item profit-row" id="regular-ship2-profit-row">
+                            <span class="fee-label">獲利</span>
+                            <span class="fee-value" id="regular-ship2-profit">NT$ 0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Event Day + Shipping Option 1 -->
+                <div class="col-md-6 col-lg-6">
+                    <div class="result-card event">
+                        <h5><i class="bi bi-star-fill"></i> 活動日 + 免運方案一 (6%)</h5>
+                        <div class="fee-item">
+                            <span class="fee-label">成交手續費</span>
+                            <span class="fee-value" id="event-ship1-transaction">NT$ 0</span>
+                        </div>
+                        <div class="fee-item">
+                            <span class="fee-label">金流手續費 (2.5%)</span>
+                            <span class="fee-value" id="event-ship1-payment">NT$ 0</span>
+                        </div>
+                        <div class="fee-item">
+                            <span class="fee-label">活動日加收 (2%)</span>
+                            <span class="fee-value" id="event-ship1-surcharge">NT$ 0</span>
+                        </div>
+                        <div class="fee-item">
+                            <span class="fee-label">免運手續費 (6%)</span>
+                            <span class="fee-value" id="event-ship1-shipping">NT$ 0</span>
+                        </div>
+                        <div class="fee-item" id="event-ship1-cashback-row" style="display: none;">
+                            <span class="fee-label">蝦幣回饋活動服務費</span>
+                            <span class="fee-value" id="event-ship1-cashback">NT$ 0</span>
+                        </div>
+                        <div class="fee-item total-row">
+                            <span class="fee-label">總手續費</span>
+                            <span class="fee-value" id="event-ship1-total">NT$ 0</span>
+                        </div>
+                        <div class="fee-item profit-row" id="event-ship1-profit-row">
+                            <span class="fee-label">獲利</span>
+                            <span class="fee-value" id="event-ship1-profit">NT$ 0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Event Day + Shipping Option 2 -->
+                <div class="col-md-6 col-lg-6">
+                    <div class="result-card event">
+                        <h5><i class="bi bi-star-fill"></i> 活動日 + 免運方案二 (+60元)</h5>
+                        <div class="fee-item">
+                            <span class="fee-label">成交手續費</span>
+                            <span class="fee-value" id="event-ship2-transaction">NT$ 0</span>
+                        </div>
+                        <div class="fee-item">
+                            <span class="fee-label">金流手續費 (2.5%)</span>
+                            <span class="fee-value" id="event-ship2-payment">NT$ 0</span>
+                        </div>
+                        <div class="fee-item">
+                            <span class="fee-label">活動日加收 (2%)</span>
+                            <span class="fee-value" id="event-ship2-surcharge">NT$ 0</span>
+                        </div>
+                        <div class="fee-item">
+                            <span class="fee-label">免運手續費 (+60元)</span>
+                            <span class="fee-value" id="event-ship2-shipping">NT$ 0</span>
+                        </div>
+                        <div class="fee-item" id="event-ship2-cashback-row" style="display: none;">
+                            <span class="fee-label">蝦幣回饋活動服務費</span>
+                            <span class="fee-value" id="event-ship2-cashback">NT$ 0</span>
+                        </div>
+                        <div class="fee-item total-row">
+                            <span class="fee-label">總手續費</span>
+                            <span class="fee-value" id="event-ship2-total">NT$ 0</span>
+                        </div>
+                        <div class="fee-item profit-row" id="event-ship2-profit-row">
+                            <span class="fee-label">獲利</span>
+                            <span class="fee-value" id="event-ship2-profit">NT$ 0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center text-muted mt-4">
+                <small>💡 所有金額以新台幣整數計算</small>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="text-center mt-4 pb-2">
+            <p class="text-secondary mb-1">Author: <strong>Bruce</strong></p>
+            <p class="small text-muted">
+                如有相關問題，歡迎至 
+                <a href="https://github.com/YTingWu/shopee-fee" target="_blank" class="text-decoration-none">
+                    <i class="bi bi-github"></i> GitHub
+                </a> 聯絡
+            </p>
+        </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="calculator.js"></script>
+</body>
+</html>
