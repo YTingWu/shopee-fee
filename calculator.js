@@ -8,7 +8,7 @@ const cashbackRadios = document.querySelectorAll('input[name="cashbackProgram"]'
 
 // Format number with thousand separators and no decimals
 function formatCurrency(amount) {
-    return 'NT$ ' + Math.round(amount).toLocaleString('zh-TW');
+    return '$ ' + Math.round(amount).toLocaleString('zh-TW');
 }
 
 // Calculate fees and profit

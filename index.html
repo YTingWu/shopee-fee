@@ -195,6 +195,21 @@
             .header h1 {
                 font-size: 1.8rem;
             }
+            
+            /* Table Mobile Optimization */
+            .table th, .table td {
+                padding: 0.5rem 0.25rem !important;
+                font-size: 0.9rem;
+            }
+            .table th:first-child, .table td:first-child {
+                padding-left: 0.75rem !important;
+            }
+            .table .badge {
+                display: block;
+                margin-bottom: 4px;
+                width: fit-content;
+                font-size: 0.75rem;
+            }
         }
     </style>
 </head>
@@ -214,7 +229,7 @@
                             <i class="bi bi-tag"></i> 進價（成本）
                         </label>
                         <div class="input-group">
-                            <span class="input-group-text">NT$</span>
+                            <span class="input-group-text">$</span>
                             <input type="number" class="form-control" id="costPrice" placeholder="0" min="0">
                         </div>
                     </div>
@@ -223,7 +238,7 @@
                             <i class="bi bi-cash-stack"></i> 蝦皮價格（售價）
                         </label>
                         <div class="input-group">
-                            <span class="input-group-text">NT$</span>
+                            <span class="input-group-text">$</span>
                             <input type="number" class="form-control" id="sellPrice" placeholder="0" min="0">
                         </div>
                     </div>
@@ -313,27 +328,27 @@
                         <h5><i class="bi bi-calendar-check"></i> 一般日 + 免運方案一 (6%)</h5>
                         <div class="fee-item">
                             <span class="fee-label">成交手續費</span>
-                            <span class="fee-value" id="regular-ship1-transaction">NT$ 0</span>
+                            <span class="fee-value" id="regular-ship1-transaction">$ 0</span>
                         </div>
                         <div class="fee-item">
                             <span class="fee-label">金流手續費 (2.5%)</span>
-                            <span class="fee-value" id="regular-ship1-payment">NT$ 0</span>
+                            <span class="fee-value" id="regular-ship1-payment">$ 0</span>
                         </div>
                         <div class="fee-item">
                             <span class="fee-label">免運手續費 (6%)</span>
-                            <span class="fee-value" id="regular-ship1-shipping">NT$ 0</span>
+                            <span class="fee-value" id="regular-ship1-shipping">$ 0</span>
                         </div>
                         <div class="fee-item" id="regular-ship1-cashback-row" style="display: none;">
                             <span class="fee-label">蝦幣回饋活動服務費</span>
-                            <span class="fee-value" id="regular-ship1-cashback">NT$ 0</span>
+                            <span class="fee-value" id="regular-ship1-cashback">$ 0</span>
                         </div>
                         <div class="fee-item total-row">
                             <span class="fee-label">總手續費</span>
-                            <span class="fee-value" id="regular-ship1-total">NT$ 0</span>
+                            <span class="fee-value" id="regular-ship1-total">$ 0</span>
                         </div>
                         <div class="fee-item profit-row" id="regular-ship1-profit-row">
                             <span class="fee-label">獲利</span>
-                            <span class="fee-value" id="regular-ship1-profit">NT$ 0</span>
+                            <span class="fee-value" id="regular-ship1-profit">$ 0</span>
                         </div>
                     </div>
                 </div>
@@ -344,27 +359,27 @@
                         <h5><i class="bi bi-calendar-check"></i> 一般日 + 免運方案二 (+60元)</h5>
                         <div class="fee-item">
                             <span class="fee-label">成交手續費</span>
-                            <span class="fee-value" id="regular-ship2-transaction">NT$ 0</span>
+                            <span class="fee-value" id="regular-ship2-transaction">$ 0</span>
                         </div>
                         <div class="fee-item">
                             <span class="fee-label">金流手續費 (2.5%)</span>
-                            <span class="fee-value" id="regular-ship2-payment">NT$ 0</span>
+                            <span class="fee-value" id="regular-ship2-payment">$ 0</span>
                         </div>
                         <div class="fee-item">
                             <span class="fee-label">免運手續費 (+60元)</span>
-                            <span class="fee-value" id="regular-ship2-shipping">NT$ 0</span>
+                            <span class="fee-value" id="regular-ship2-shipping">$ 0</span>
                         </div>
                         <div class="fee-item" id="regular-ship2-cashback-row" style="display: none;">
                             <span class="fee-label">蝦幣回饋活動服務費</span>
-                            <span class="fee-value" id="regular-ship2-cashback">NT$ 0</span>
+                            <span class="fee-value" id="regular-ship2-cashback">$ 0</span>
                         </div>
                         <div class="fee-item total-row">
                             <span class="fee-label">總手續費</span>
-                            <span class="fee-value" id="regular-ship2-total">NT$ 0</span>
+                            <span class="fee-value" id="regular-ship2-total">$ 0</span>
                         </div>
                         <div class="fee-item profit-row" id="regular-ship2-profit-row">
                             <span class="fee-label">獲利</span>
-                            <span class="fee-value" id="regular-ship2-profit">NT$ 0</span>
+                            <span class="fee-value" id="regular-ship2-profit">$ 0</span>
                         </div>
                     </div>
                 </div>
@@ -375,31 +390,31 @@
                         <h5><i class="bi bi-star-fill"></i> 活動日 + 免運方案一 (6%)</h5>
                         <div class="fee-item">
                             <span class="fee-label">成交手續費</span>
-                            <span class="fee-value" id="event-ship1-transaction">NT$ 0</span>
+                            <span class="fee-value" id="event-ship1-transaction">$ 0</span>
                         </div>
                         <div class="fee-item">
                             <span class="fee-label">金流手續費 (2.5%)</span>
-                            <span class="fee-value" id="event-ship1-payment">NT$ 0</span>
+                            <span class="fee-value" id="event-ship1-payment">$ 0</span>
                         </div>
                         <div class="fee-item">
                             <span class="fee-label">活動日加收 (2%)</span>
-                            <span class="fee-value" id="event-ship1-surcharge">NT$ 0</span>
+                            <span class="fee-value" id="event-ship1-surcharge">$ 0</span>
                         </div>
                         <div class="fee-item">
                             <span class="fee-label">免運手續費 (6%)</span>
-                            <span class="fee-value" id="event-ship1-shipping">NT$ 0</span>
+                            <span class="fee-value" id="event-ship1-shipping">$ 0</span>
                         </div>
                         <div class="fee-item" id="event-ship1-cashback-row" style="display: none;">
                             <span class="fee-label">蝦幣回饋活動服務費</span>
-                            <span class="fee-value" id="event-ship1-cashback">NT$ 0</span>
+                            <span class="fee-value" id="event-ship1-cashback">$ 0</span>
                         </div>
                         <div class="fee-item total-row">
                             <span class="fee-label">總手續費</span>
-                            <span class="fee-value" id="event-ship1-total">NT$ 0</span>
+                            <span class="fee-value" id="event-ship1-total">$ 0</span>
                         </div>
                         <div class="fee-item profit-row" id="event-ship1-profit-row">
                             <span class="fee-label">獲利</span>
-                            <span class="fee-value" id="event-ship1-profit">NT$ 0</span>
+                            <span class="fee-value" id="event-ship1-profit">$ 0</span>
                         </div>
                     </div>
                 </div>
@@ -410,31 +425,31 @@
                         <h5><i class="bi bi-star-fill"></i> 活動日 + 免運方案二 (+60元)</h5>
                         <div class="fee-item">
                             <span class="fee-label">成交手續費</span>
-                            <span class="fee-value" id="event-ship2-transaction">NT$ 0</span>
+                            <span class="fee-value" id="event-ship2-transaction">$ 0</span>
                         </div>
                         <div class="fee-item">
                             <span class="fee-label">金流手續費 (2.5%)</span>
-                            <span class="fee-value" id="event-ship2-payment">NT$ 0</span>
+                            <span class="fee-value" id="event-ship2-payment">$ 0</span>
                         </div>
                         <div class="fee-item">
                             <span class="fee-label">活動日加收 (2%)</span>
-                            <span class="fee-value" id="event-ship2-surcharge">NT$ 0</span>
+                            <span class="fee-value" id="event-ship2-surcharge">$ 0</span>
                         </div>
                         <div class="fee-item">
                             <span class="fee-label">免運手續費 (+60元)</span>
-                            <span class="fee-value" id="event-ship2-shipping">NT$ 0</span>
+                            <span class="fee-value" id="event-ship2-shipping">$ 0</span>
                         </div>
                         <div class="fee-item" id="event-ship2-cashback-row" style="display: none;">
                             <span class="fee-label">蝦幣回饋活動服務費</span>
-                            <span class="fee-value" id="event-ship2-cashback">NT$ 0</span>
+                            <span class="fee-value" id="event-ship2-cashback">$ 0</span>
                         </div>
                         <div class="fee-item total-row">
                             <span class="fee-label">總手續費</span>
-                            <span class="fee-value" id="event-ship2-total">NT$ 0</span>
+                            <span class="fee-value" id="event-ship2-total">$ 0</span>
                         </div>
                         <div class="fee-item profit-row" id="event-ship2-profit-row">
                             <span class="fee-label">獲利</span>
-                            <span class="fee-value" id="event-ship2-profit">NT$ 0</span>
+                            <span class="fee-value" id="event-ship2-profit">$ 0</span>
                         </div>
                     </div>
                 </div>
@@ -451,48 +466,48 @@
                             <table class="table table-hover mb-0 text-center align-middle">
                                 <thead class="table-light">
                                     <tr>
-                                        <th scope="col" class="py-3 text-start ps-4">情境</th>
-                                        <th scope="col" class="py-3">總手續費</th>
-                                        <th scope="col" class="py-3">獲利</th>
-                                        <th scope="col" class="py-3">獲利率</th>
+                                        <th scope="col" class="py-3 text-start ps-3">情境</th>
+                                        <th scope="col" class="py-3 text-nowrap">總手續費</th>
+                                        <th scope="col" class="py-3 text-nowrap">獲利</th>
+                                        <th scope="col" class="py-3 text-nowrap">獲利率</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td class="text-start ps-4">
+                                        <td class="text-start ps-3">
                                             <span class="badge bg-primary me-2">一般日</span>
-                                            免運方案一 (6%)
+                                            <span class="d-inline-block">免運方案一</span>
                                         </td>
-                                        <td class="fw-bold text-primary" id="summary-regular-ship1-total">NT$ 0</td>
-                                        <td class="fw-bold text-success" id="summary-regular-ship1-profit">NT$ 0</td>
-                                        <td class="text-muted" id="summary-regular-ship1-margin">0%</td>
+                                        <td class="fw-bold text-primary text-nowrap" id="summary-regular-ship1-total">$ 0</td>
+                                        <td class="fw-bold text-success text-nowrap" id="summary-regular-ship1-profit">$ 0</td>
+                                        <td class="text-muted text-nowrap" id="summary-regular-ship1-margin">0%</td>
                                     </tr>
                                     <tr>
-                                        <td class="text-start ps-4">
+                                        <td class="text-start ps-3">
                                             <span class="badge bg-primary me-2">一般日</span>
-                                            免運方案二 (+60元)
+                                            <span class="d-inline-block">免運方案二</span>
                                         </td>
-                                        <td class="fw-bold text-primary" id="summary-regular-ship2-total">NT$ 0</td>
-                                        <td class="fw-bold text-success" id="summary-regular-ship2-profit">NT$ 0</td>
-                                        <td class="text-muted" id="summary-regular-ship2-margin">0%</td>
+                                        <td class="fw-bold text-primary text-nowrap" id="summary-regular-ship2-total">$ 0</td>
+                                        <td class="fw-bold text-success text-nowrap" id="summary-regular-ship2-profit">$ 0</td>
+                                        <td class="text-muted text-nowrap" id="summary-regular-ship2-margin">0%</td>
                                     </tr>
                                     <tr>
-                                        <td class="text-start ps-4">
+                                        <td class="text-start ps-3">
                                             <span class="badge bg-warning text-dark me-2">活動日</span>
-                                            免運方案一 (6%)
+                                            <span class="d-inline-block">免運方案一</span>
                                         </td>
-                                        <td class="fw-bold text-primary" id="summary-event-ship1-total">NT$ 0</td>
-                                        <td class="fw-bold text-success" id="summary-event-ship1-profit">NT$ 0</td>
-                                        <td class="text-muted" id="summary-event-ship1-margin">0%</td>
+                                        <td class="fw-bold text-primary text-nowrap" id="summary-event-ship1-total">$ 0</td>
+                                        <td class="fw-bold text-success text-nowrap" id="summary-event-ship1-profit">$ 0</td>
+                                        <td class="text-muted text-nowrap" id="summary-event-ship1-margin">0%</td>
                                     </tr>
                                     <tr>
-                                        <td class="text-start ps-4">
+                                        <td class="text-start ps-3">
                                             <span class="badge bg-warning text-dark me-2">活動日</span>
-                                            免運方案二 (+60元)
+                                            <span class="d-inline-block">免運方案二</span>
                                         </td>
-                                        <td class="fw-bold text-primary" id="summary-event-ship2-total">NT$ 0</td>
-                                        <td class="fw-bold text-success" id="summary-event-ship2-profit">NT$ 0</td>
-                                        <td class="text-muted" id="summary-event-ship2-margin">0%</td>
+                                        <td class="fw-bold text-primary text-nowrap" id="summary-event-ship2-total">$ 0</td>
+                                        <td class="fw-bold text-success text-nowrap" id="summary-event-ship2-profit">$ 0</td>
+                                        <td class="text-muted text-nowrap" id="summary-event-ship2-margin">0%</td>
                                     </tr>
                                 </tbody>
                             </table>
