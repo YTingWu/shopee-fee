@@ -88,6 +88,48 @@ function calculateFees() {
     document.getElementById('event-ship2-total').textContent = formatCurrency(eventShip2Total);
     document.getElementById('event-ship2-profit').textContent = formatCurrency(eventShip2Profit);
     updateProfitStyle('event-ship2-profit-row', eventShip2Profit);
+
+    // Update Summary Table
+    updateSummaryRow('regular-ship1', regularShip1Total, regularShip1Profit, sellPrice);
+    updateSummaryRow('regular-ship2', regularShip2Total, regularShip2Profit, sellPrice);
+    updateSummaryRow('event-ship1', eventShip1Total, eventShip1Profit, sellPrice);
+    updateSummaryRow('event-ship2', eventShip2Total, eventShip2Profit, sellPrice);
+}
+
+// Update summary table row
+function updateSummaryRow(prefix, totalFee, profit, sellPrice) {
+    document.getElementById(`summary-${prefix}-total`).textContent = formatCurrency(totalFee);
+    
+    const profitElement = document.getElementById(`summary-${prefix}-profit`);
+    profitElement.textContent = formatCurrency(profit);
+    
+    // Update profit color
+    if (profit < 0) {
+        profitElement.classList.remove('text-success');
+        profitElement.classList.add('text-danger');
+    } else {
+        profitElement.classList.remove('text-danger');
+        profitElement.classList.add('text-success');
+    }
+
+    // Calculate and update margin
+    const marginElement = document.getElementById(`summary-${prefix}-margin`);
+    if (sellPrice > 0) {
+        const margin = (profit / sellPrice) * 100;
+        marginElement.textContent = margin.toFixed(1) + '%';
+        
+        if (margin < 0) {
+            marginElement.classList.remove('text-muted', 'text-success');
+            marginElement.classList.add('text-danger');
+        } else {
+            marginElement.classList.remove('text-danger', 'text-muted');
+            marginElement.classList.add('text-success');
+        }
+    } else {
+        marginElement.textContent = '0%';
+        marginElement.classList.remove('text-danger', 'text-success');
+        marginElement.classList.add('text-muted');
+    }
 }
 
 // Update cashback row visibility and value
