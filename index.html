@@ -29,7 +29,7 @@
             background: white;
             border-radius: 20px;
             box-shadow: 0 10px 40px rgba(0,0,0,0.08);
-            padding: 40px;
+            padding: 20px;
             margin: 0 auto;
             max-width: 1200px;
             border: 1px solid rgba(0,0,0,0.02);
@@ -181,6 +181,21 @@
             border-color: var(--primary);
             box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
         }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 20px 0;
+            }
+            .main-container {
+                padding: 15px;
+            }
+            .input-section {
+                padding: 20px;
+            }
+            .header h1 {
+                font-size: 1.8rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -233,11 +248,14 @@
                 <div class="row mt-3">
                     <div class="col-12">
                         <label class="form-label">
-                            <i class="bi bi-coin"></i> 參加蝦幣回饋方案 <a href="https://help.shopee.tw/portal/4/article/139826-[%E6%A2%9D%E6%AC%BE%E8%88%87%E6%94%BF%E7%AD%96]-%E8%9D%A6%E5%B9%A3%E5%9B%9E%E9%A5%8B%E6%96%B9%E6%A1%88%E7%B4%84%E5%AE%9A%E6%A2%9D%E6%AC%BE" target="_blank" class="text-decoration-none">
-                                <i class="bi bi-info-circle"></i> 查看詳情
-                            </a>
+                            <i class="bi bi-coin"></i> 參加蝦幣回饋方案 
+                            <small class="text-muted">
+                                <a href="https://help.shopee.tw/portal/4/article/139826-[%E6%A2%9D%E6%AC%BE%E8%88%87%E6%94%BF%E7%AD%96]-%E8%9D%A6%E5%B9%A3%E5%9B%9E%E9%A5%8B%E6%96%B9%E6%A1%88%E7%B4%84%E5%AE%9A%E6%A2%9D%E6%AC%BE" target="_blank" class="text-decoration-none">
+                                    <i class="bi bi-info-circle"></i> 查看詳情
+                                </a>
+                            </small>
                         </label>
-                        <div class="d-flex flex-wrap gap-3">
+                        <div class="d-flex flex-column flex-md-row gap-3">
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="cashbackProgram" id="noCashback" value="0" checked>
                                 <label class="form-check-label" for="noCashback">
@@ -423,7 +441,7 @@
             </div>
 
             <div class="text-center text-muted mt-4">
-                <small>💡 所有金額以新台幣整數計算</small>
+                <small>💡 此計算器僅供參考，實際手續費以蝦皮官方公告為準。</small>
             </div>
         </div>
 
