@@ -285,3 +285,33 @@ floatingHeader.addEventListener('click', () => {
 
 // Initial calculation
 calculateFees();
+
+// Theme Toggle Logic
+const themeToggle = document.getElementById('themeToggle');
+const themeIcon = document.getElementById('themeIcon');
+const htmlElement = document.documentElement;
+
+// Check for saved theme preference or system preference
+const savedTheme = localStorage.getItem('theme');
+const currentTheme = savedTheme || 'light';
+
+// Apply initial theme
+applyTheme(currentTheme);
+
+// Toggle theme on button click
+themeToggle.addEventListener('click', () => {
+    const newTheme = htmlElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    applyTheme(newTheme);
+    localStorage.setItem('theme', newTheme);
+});
+
+function applyTheme(theme) {
+    htmlElement.setAttribute('data-theme', theme);
+    if (theme === 'dark') {
+        themeIcon.classList.remove('bi-moon-fill');
+        themeIcon.classList.add('bi-sun-fill');
+    } else {
+        themeIcon.classList.remove('bi-sun-fill');
+        themeIcon.classList.add('bi-moon-fill');
+    }
+}
