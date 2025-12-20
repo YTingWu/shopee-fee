@@ -353,6 +353,41 @@
                         </div>
                     </div>
                 </div>
+                
+                <!-- Tax Setting -->
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <label class="form-label">
+                            <i class="bi bi-receipt"></i> 稅務設定
+                        </label>
+                        <div class="d-flex flex-column flex-md-row gap-3 flex-wrap">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="taxSetting" id="noTax" value="0" checked>
+                                <label class="form-check-label" for="noTax">
+                                    不設定
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="taxSetting" id="businessTax" value="1">
+                                <label class="form-check-label" for="businessTax">
+                                    營業登記 1%
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="taxSetting" id="invoiceTax" value="5">
+                                <label class="form-check-label" for="invoiceTax">
+                                    發票 5%
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="taxSetting" id="shopeeInvoice" value="5_plus">
+                                <label class="form-check-label" for="shopeeInvoice">
+                                    蝦皮代開發票 5% + 2.5元
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Event Day Info -->
@@ -403,6 +438,10 @@
                             <span class="fee-label">蝦幣回饋活動服務費</span>
                             <span class="fee-value" id="regular-ship1-cashback">$ 0</span>
                         </div>
+                        <div class="fee-item" id="regular-ship1-tax-row" style="display: none;">
+                            <span class="fee-label">稅金</span>
+                            <span class="fee-value" id="regular-ship1-tax">$ 0</span>
+                        </div>
                         <div class="fee-item total-row">
                             <span class="fee-label">總手續費</span>
                             <span class="fee-value" id="regular-ship1-total">$ 0</span>
@@ -433,6 +472,10 @@
                         <div class="fee-item" id="regular-ship2-cashback-row" style="display: none;">
                             <span class="fee-label">蝦幣回饋活動服務費</span>
                             <span class="fee-value" id="regular-ship2-cashback">$ 0</span>
+                        </div>
+                        <div class="fee-item" id="regular-ship2-tax-row" style="display: none;">
+                            <span class="fee-label">稅金</span>
+                            <span class="fee-value" id="regular-ship2-tax">$ 0</span>
                         </div>
                         <div class="fee-item total-row">
                             <span class="fee-label">總手續費</span>
@@ -469,6 +512,10 @@
                             <span class="fee-label">蝦幣回饋活動服務費</span>
                             <span class="fee-value" id="event-ship1-cashback">$ 0</span>
                         </div>
+                        <div class="fee-item" id="event-ship1-tax-row" style="display: none;">
+                            <span class="fee-label">稅金</span>
+                            <span class="fee-value" id="event-ship1-tax">$ 0</span>
+                        </div>
                         <div class="fee-item total-row">
                             <span class="fee-label">總手續費</span>
                             <span class="fee-value" id="event-ship1-total">$ 0</span>
@@ -503,6 +550,10 @@
                         <div class="fee-item" id="event-ship2-cashback-row" style="display: none;">
                             <span class="fee-label">蝦幣回饋活動服務費</span>
                             <span class="fee-value" id="event-ship2-cashback">$ 0</span>
+                        </div>
+                        <div class="fee-item" id="event-ship2-tax-row" style="display: none;">
+                            <span class="fee-label">稅金</span>
+                            <span class="fee-value" id="event-ship2-tax">$ 0</span>
                         </div>
                         <div class="fee-item total-row">
                             <span class="fee-label">總手續費</span>

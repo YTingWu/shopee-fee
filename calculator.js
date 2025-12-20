@@ -5,6 +5,7 @@ const transactionFeeInput = document.getElementById('transactionFee');
 
 // Get cashback program radio buttons
 const cashbackRadios = document.querySelectorAll('input[name="cashbackProgram"]');
+const taxRadios = document.querySelectorAll('input[name="taxSetting"]');
 
 // Format number with thousand separators and no decimals
 function formatCurrency(amount) {
@@ -30,6 +31,24 @@ function calculateFees() {
     });
     const hasCashback = cashbackRate > 0;
 
+    // Get selected tax setting
+    let taxFee = 0;
+    let hasTax = false;
+    taxRadios.forEach(radio => {
+        if (radio.checked) {
+            if (radio.value === '1') {
+                taxFee = Math.round(sellPrice * 0.01);
+                hasTax = true;
+            } else if (radio.value === '5') {
+                taxFee = Math.round(sellPrice * 0.05);
+                hasTax = true;
+            } else if (radio.value === '5_plus') {
+                taxFee = Math.round(sellPrice * 0.05 + 2.5);
+                hasTax = true;
+            }
+        }
+    });
+
     // Base fees
     const transactionPriceLimit = 35000;
     const transactionFee = Math.round(Math.min(sellPrice, transactionPriceLimit) * (transactionFeeRate / 100));
@@ -41,19 +60,19 @@ function calculateFees() {
     const cashbackFee = Math.round(sellPrice * (cashbackRate / 100));
 
     // Regular Day + Shipping Option 1
-    const regularShip1Total = transactionFee + paymentFee + ship1Fee + cashbackFee;
+    const regularShip1Total = transactionFee + paymentFee + ship1Fee + cashbackFee + taxFee;
     const regularShip1Profit = sellPrice - costPrice - regularShip1Total;
 
     // Regular Day + Shipping Option 2
-    const regularShip2Total = transactionFee + paymentFee + ship2Fee + cashbackFee;
+    const regularShip2Total = transactionFee + paymentFee + ship2Fee + cashbackFee + taxFee;
     const regularShip2Profit = sellPrice - costPrice - regularShip2Total;
 
     // Event Day + Shipping Option 1
-    const eventShip1Total = transactionFee + paymentFee + eventSurcharge + ship1Fee + cashbackFee;
+    const eventShip1Total = transactionFee + paymentFee + eventSurcharge + ship1Fee + cashbackFee + taxFee;
     const eventShip1Profit = sellPrice - costPrice - eventShip1Total;
 
     // Event Day + Shipping Option 2
-    const eventShip2Total = transactionFee + paymentFee + eventSurcharge + ship2Fee + cashbackFee;
+    const eventShip2Total = transactionFee + paymentFee + eventSurcharge + ship2Fee + cashbackFee + taxFee;
     const eventShip2Profit = sellPrice - costPrice - eventShip2Total;
 
     // Update Regular Day + Shipping Option 1
@@ -61,6 +80,7 @@ function calculateFees() {
     document.getElementById('regular-ship1-payment').textContent = formatCurrency(paymentFee);
     document.getElementById('regular-ship1-shipping').textContent = formatCurrency(ship1Fee);
     updateCashbackRow('regular-ship1', hasCashback, cashbackFee);
+    updateTaxRow('regular-ship1', hasTax, taxFee);
     document.getElementById('regular-ship1-total').textContent = formatCurrency(regularShip1Total);
     document.getElementById('regular-ship1-profit').textContent = formatCurrency(regularShip1Profit);
     updateProfitStyle('regular-ship1-profit-row', regularShip1Profit);
@@ -70,6 +90,7 @@ function calculateFees() {
     document.getElementById('regular-ship2-payment').textContent = formatCurrency(paymentFee);
     document.getElementById('regular-ship2-shipping').textContent = formatCurrency(ship2Fee);
     updateCashbackRow('regular-ship2', hasCashback, cashbackFee);
+    updateTaxRow('regular-ship2', hasTax, taxFee);
     document.getElementById('regular-ship2-total').textContent = formatCurrency(regularShip2Total);
     document.getElementById('regular-ship2-profit').textContent = formatCurrency(regularShip2Profit);
     updateProfitStyle('regular-ship2-profit-row', regularShip2Profit);
@@ -80,6 +101,7 @@ function calculateFees() {
     document.getElementById('event-ship1-surcharge').textContent = formatCurrency(eventSurcharge);
     document.getElementById('event-ship1-shipping').textContent = formatCurrency(ship1Fee);
     updateCashbackRow('event-ship1', hasCashback, cashbackFee);
+    updateTaxRow('event-ship1', hasTax, taxFee);
     document.getElementById('event-ship1-total').textContent = formatCurrency(eventShip1Total);
     document.getElementById('event-ship1-profit').textContent = formatCurrency(eventShip1Profit);
     updateProfitStyle('event-ship1-profit-row', eventShip1Profit);
@@ -90,6 +112,7 @@ function calculateFees() {
     document.getElementById('event-ship2-surcharge').textContent = formatCurrency(eventSurcharge);
     document.getElementById('event-ship2-shipping').textContent = formatCurrency(ship2Fee);
     updateCashbackRow('event-ship2', hasCashback, cashbackFee);
+    updateTaxRow('event-ship2', hasTax, taxFee);
     document.getElementById('event-ship2-total').textContent = formatCurrency(eventShip2Total);
     document.getElementById('event-ship2-profit').textContent = formatCurrency(eventShip2Profit);
     updateProfitStyle('event-ship2-profit-row', eventShip2Profit);
@@ -162,6 +185,19 @@ function updateCashbackRow(prefix, hasCashback, cashbackFee) {
     }
 }
 
+// Update tax row visibility and value
+function updateTaxRow(prefix, hasTax, taxFee) {
+    const row = document.getElementById(`${prefix}-tax-row`);
+    const value = document.getElementById(`${prefix}-tax`);
+    
+    if (hasTax) {
+        row.style.display = '';
+        value.textContent = formatCurrency(taxFee);
+    } else {
+        row.style.display = 'none';
+    }
+}
+
 // Update profit row style based on positive/negative value
 function updateProfitStyle(elementId, profit) {
     const element = document.getElementById(elementId);
@@ -179,6 +215,11 @@ transactionFeeInput.addEventListener('input', calculateFees);
 
 // Add event listeners for cashback program radio buttons
 cashbackRadios.forEach(radio => {
+    radio.addEventListener('change', calculateFees);
+});
+
+// Add event listeners for tax setting radio buttons
+taxRadios.forEach(radio => {
     radio.addEventListener('change', calculateFees);
 });
 
