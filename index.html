@@ -267,6 +267,10 @@
                     <span class="fw-bold" id="floatSell">$ 0</span>
                 </div>
                 <div class="text-center">
+                    <small class="text-muted d-block" style="font-size: 0.7rem;">較長備貨</small>
+                    <span class="badge bg-secondary" id="floatPreOrder">否</span>
+                </div>
+                <div class="text-center">
                     <small class="text-muted d-block" style="font-size: 0.7rem;">蝦幣回饋</small>
                     <span class="badge bg-secondary" id="floatCashback">不參加</span>
                 </div>
@@ -314,9 +318,32 @@
                         <small class="text-muted">
                             依照分類不同而手續費不同
                             <a href="https://seller.shopee.tw/edu/article/26470" target="_blank" class="text-decoration-none">
-                                <i class="bi bi-info-circle"></i> 查看詳情
+                                <i class="bi bi-info-circle"></i> 詳情
                             </a>
                         </small>
+                    </div>
+                </div>
+
+                <!-- Pre-order Setting -->
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <label class="form-label">
+                            <i class="bi bi-clock-history"></i> 是否較長備貨
+                        </label>
+                        <div class="d-flex flex-column flex-md-row gap-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="preOrder" id="noPreOrder" value="0" checked>
+                                <label class="form-check-label" for="noPreOrder">
+                                    否
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="preOrder" id="isPreOrder" value="3">
+                                <label class="form-check-label" for="isPreOrder">
+                                    是 (3%)
+                                </label>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 
@@ -327,7 +354,7 @@
                             <i class="bi bi-coin"></i> 參加蝦幣回饋方案 
                             <small class="text-muted">
                                 <a href="https://help.shopee.tw/portal/4/article/139826-[%E6%A2%9D%E6%AC%BE%E8%88%87%E6%94%BF%E7%AD%96]-%E8%9D%A6%E5%B9%A3%E5%9B%9E%E9%A5%8B%E6%96%B9%E6%A1%88%E7%B4%84%E5%AE%9A%E6%A2%9D%E6%AC%BE" target="_blank" class="text-decoration-none">
-                                    <i class="bi bi-info-circle"></i> 查看詳情
+                                    <i class="bi bi-info-circle"></i> 詳情
                                 </a>
                             </small>
                         </label>
@@ -341,13 +368,13 @@
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="cashbackProgram" id="cashback5" value="1.5">
                                 <label class="form-check-label" for="cashback5">
-                                    5%蝦幣回饋方案
+                                    5%蝦幣回饋方案 (1.5%)
                                 </label>
                             </div>
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="cashbackProgram" id="cashback10" value="2.5">
                                 <label class="form-check-label" for="cashback10">
-                                    10%蝦幣回饋方案
+                                    10%蝦幣回饋方案 (2.5%)
                                 </label>
                             </div>
                         </div>
@@ -370,19 +397,19 @@
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="taxSetting" id="businessTax" value="1">
                                 <label class="form-check-label" for="businessTax">
-                                    營業登記 1%
+                                    營業登記 (1%)
                                 </label>
                             </div>
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="taxSetting" id="invoiceTax" value="5">
                                 <label class="form-check-label" for="invoiceTax">
-                                    發票 5%
+                                    發票 (5%)
                                 </label>
                             </div>
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="taxSetting" id="shopeeInvoice" value="5_plus">
                                 <label class="form-check-label" for="shopeeInvoice">
-                                    蝦皮代開發票 5% + 2.5元
+                                    蝦皮代開發票 (5% + 2.5元)
                                 </label>
                             </div>
                         </div>
@@ -430,6 +457,10 @@
                             <span class="fee-label">金流手續費 (2.5%)</span>
                             <span class="fee-value" id="regular-ship1-payment">$ 0</span>
                         </div>
+                        <div class="fee-item" id="regular-ship1-preorder-row" style="display: none;">
+                            <span class="fee-label">較長備貨手續費 (3%)</span>
+                            <span class="fee-value" id="regular-ship1-preorder">$ 0</span>
+                        </div>
                         <div class="fee-item">
                             <span class="fee-label">免運手續費 (6%)</span>
                             <span class="fee-value" id="regular-ship1-shipping">$ 0</span>
@@ -464,6 +495,10 @@
                         <div class="fee-item">
                             <span class="fee-label">金流手續費 (2.5%)</span>
                             <span class="fee-value" id="regular-ship2-payment">$ 0</span>
+                        </div>
+                        <div class="fee-item" id="regular-ship2-preorder-row" style="display: none;">
+                            <span class="fee-label">較長備貨手續費 (3%)</span>
+                            <span class="fee-value" id="regular-ship2-preorder">$ 0</span>
                         </div>
                         <div class="fee-item">
                             <span class="fee-label">免運手續費 (+60元)</span>
@@ -504,6 +539,10 @@
                             <span class="fee-label">活動日加收 (2%)</span>
                             <span class="fee-value" id="event-ship1-surcharge">$ 0</span>
                         </div>
+                        <div class="fee-item" id="event-ship1-preorder-row" style="display: none;">
+                            <span class="fee-label">較長備貨手續費 (3%)</span>
+                            <span class="fee-value" id="event-ship1-preorder">$ 0</span>
+                        </div>
                         <div class="fee-item">
                             <span class="fee-label">免運手續費 (6%)</span>
                             <span class="fee-value" id="event-ship1-shipping">$ 0</span>
@@ -542,6 +581,10 @@
                         <div class="fee-item">
                             <span class="fee-label">活動日加收 (2%)</span>
                             <span class="fee-value" id="event-ship2-surcharge">$ 0</span>
+                        </div>
+                        <div class="fee-item" id="event-ship2-preorder-row" style="display: none;">
+                            <span class="fee-label">較長備貨手續費 (3%)</span>
+                            <span class="fee-value" id="event-ship2-preorder">$ 0</span>
                         </div>
                         <div class="fee-item">
                             <span class="fee-label">免運手續費 (+60元)</span>

@@ -6,6 +6,7 @@ const transactionFeeInput = document.getElementById('transactionFee');
 // Get cashback program radio buttons
 const cashbackRadios = document.querySelectorAll('input[name="cashbackProgram"]');
 const taxRadios = document.querySelectorAll('input[name="taxSetting"]');
+const preOrderRadios = document.querySelectorAll('input[name="preOrder"]');
 
 // Format number with thousand separators and no decimals
 function formatCurrency(amount) {
@@ -30,6 +31,17 @@ function calculateFees() {
         }
     });
     const hasCashback = cashbackRate > 0;
+
+    // Get selected pre-order rate
+    let preOrderRate = 0;
+    let preOrderLabel = '否';
+    preOrderRadios.forEach(radio => {
+        if (radio.checked) {
+            preOrderRate = parseFloat(radio.value);
+            preOrderLabel = radio.value === '0' ? '否' : '是';
+        }
+    });
+    const hasPreOrder = preOrderRate > 0;
 
     // Get selected tax setting
     let taxFee = 0;
@@ -58,21 +70,22 @@ function calculateFees() {
     const ship1Fee = Math.round(sellPrice * 0.06);
     const ship2Fee = 60;
     const cashbackFee = Math.round(sellPrice * (cashbackRate / 100));
+    const preOrderFee = Math.round(sellPrice * (preOrderRate / 100));
 
     // Regular Day + Shipping Option 1
-    const regularShip1Total = transactionFee + paymentFee + ship1Fee + cashbackFee + taxFee;
+    const regularShip1Total = transactionFee + paymentFee + ship1Fee + cashbackFee + taxFee + preOrderFee;
     const regularShip1Profit = sellPrice - costPrice - regularShip1Total;
 
     // Regular Day + Shipping Option 2
-    const regularShip2Total = transactionFee + paymentFee + ship2Fee + cashbackFee + taxFee;
+    const regularShip2Total = transactionFee + paymentFee + ship2Fee + cashbackFee + taxFee + preOrderFee;
     const regularShip2Profit = sellPrice - costPrice - regularShip2Total;
 
     // Event Day + Shipping Option 1
-    const eventShip1Total = transactionFee + paymentFee + eventSurcharge + ship1Fee + cashbackFee + taxFee;
+    const eventShip1Total = transactionFee + paymentFee + eventSurcharge + ship1Fee + cashbackFee + taxFee + preOrderFee;
     const eventShip1Profit = sellPrice - costPrice - eventShip1Total;
 
     // Event Day + Shipping Option 2
-    const eventShip2Total = transactionFee + paymentFee + eventSurcharge + ship2Fee + cashbackFee + taxFee;
+    const eventShip2Total = transactionFee + paymentFee + eventSurcharge + ship2Fee + cashbackFee + taxFee + preOrderFee;
     const eventShip2Profit = sellPrice - costPrice - eventShip2Total;
 
     // Update Regular Day + Shipping Option 1
@@ -80,6 +93,7 @@ function calculateFees() {
     document.getElementById('regular-ship1-payment').textContent = formatCurrency(paymentFee);
     document.getElementById('regular-ship1-shipping').textContent = formatCurrency(ship1Fee);
     updateCashbackRow('regular-ship1', hasCashback, cashbackFee);
+    updatePreOrderRow('regular-ship1', hasPreOrder, preOrderFee);
     updateTaxRow('regular-ship1', hasTax, taxFee);
     document.getElementById('regular-ship1-total').textContent = formatCurrency(regularShip1Total);
     document.getElementById('regular-ship1-profit').textContent = formatCurrency(regularShip1Profit);
@@ -90,6 +104,7 @@ function calculateFees() {
     document.getElementById('regular-ship2-payment').textContent = formatCurrency(paymentFee);
     document.getElementById('regular-ship2-shipping').textContent = formatCurrency(ship2Fee);
     updateCashbackRow('regular-ship2', hasCashback, cashbackFee);
+    updatePreOrderRow('regular-ship2', hasPreOrder, preOrderFee);
     updateTaxRow('regular-ship2', hasTax, taxFee);
     document.getElementById('regular-ship2-total').textContent = formatCurrency(regularShip2Total);
     document.getElementById('regular-ship2-profit').textContent = formatCurrency(regularShip2Profit);
@@ -101,6 +116,7 @@ function calculateFees() {
     document.getElementById('event-ship1-surcharge').textContent = formatCurrency(eventSurcharge);
     document.getElementById('event-ship1-shipping').textContent = formatCurrency(ship1Fee);
     updateCashbackRow('event-ship1', hasCashback, cashbackFee);
+    updatePreOrderRow('event-ship1', hasPreOrder, preOrderFee);
     updateTaxRow('event-ship1', hasTax, taxFee);
     document.getElementById('event-ship1-total').textContent = formatCurrency(eventShip1Total);
     document.getElementById('event-ship1-profit').textContent = formatCurrency(eventShip1Profit);
@@ -112,6 +128,7 @@ function calculateFees() {
     document.getElementById('event-ship2-surcharge').textContent = formatCurrency(eventSurcharge);
     document.getElementById('event-ship2-shipping').textContent = formatCurrency(ship2Fee);
     updateCashbackRow('event-ship2', hasCashback, cashbackFee);
+    updatePreOrderRow('event-ship2', hasPreOrder, preOrderFee);
     updateTaxRow('event-ship2', hasTax, taxFee);
     document.getElementById('event-ship2-total').textContent = formatCurrency(eventShip2Total);
     document.getElementById('event-ship2-profit').textContent = formatCurrency(eventShip2Profit);
@@ -127,6 +144,14 @@ function calculateFees() {
     document.getElementById('floatCost').textContent = formatCurrency(costPrice);
     document.getElementById('floatSell').textContent = formatCurrency(sellPrice);
     
+    const floatPreOrder = document.getElementById('floatPreOrder');
+    floatPreOrder.textContent = preOrderLabel;
+    if (hasPreOrder) {
+        floatPreOrder.className = 'badge bg-warning text-dark';
+    } else {
+        floatPreOrder.className = 'badge bg-secondary';
+    }
+
     const floatCashback = document.getElementById('floatCashback');
     floatCashback.textContent = cashbackLabel;
     if (cashbackRate > 0) {
@@ -185,6 +210,19 @@ function updateCashbackRow(prefix, hasCashback, cashbackFee) {
     }
 }
 
+// Update pre-order row visibility and value
+function updatePreOrderRow(prefix, hasPreOrder, preOrderFee) {
+    const row = document.getElementById(`${prefix}-preorder-row`);
+    const value = document.getElementById(`${prefix}-preorder`);
+    
+    if (hasPreOrder) {
+        row.style.display = '';
+        value.textContent = formatCurrency(preOrderFee);
+    } else {
+        row.style.display = 'none';
+    }
+}
+
 // Update tax row visibility and value
 function updateTaxRow(prefix, hasTax, taxFee) {
     const row = document.getElementById(`${prefix}-tax-row`);
@@ -220,6 +258,11 @@ cashbackRadios.forEach(radio => {
 
 // Add event listeners for tax setting radio buttons
 taxRadios.forEach(radio => {
+    radio.addEventListener('change', calculateFees);
+});
+
+// Add event listeners for pre-order radio buttons
+preOrderRadios.forEach(radio => {
     radio.addEventListener('change', calculateFees);
 });
 
