@@ -271,13 +271,9 @@ const floatingHeader = document.getElementById('floatingHeader');
 const inputSection = document.querySelector('.input-section');
 
 window.addEventListener('scroll', () => {
-    if (window.innerWidth <= 768) { // Only for mobile
-        const inputRect = inputSection.getBoundingClientRect();
-        if (inputRect.bottom < 0) {
-            floatingHeader.classList.add('visible');
-        } else {
-            floatingHeader.classList.remove('visible');
-        }
+    const inputRect = inputSection.getBoundingClientRect();
+    if (inputRect.bottom < 0) {
+        floatingHeader.classList.add('visible');
     } else {
         floatingHeader.classList.remove('visible');
     }
