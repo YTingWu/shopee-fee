@@ -39,9 +39,13 @@
                     <small class="text-muted d-block" style="font-size: 0.7rem;">進價</small>
                     <span class="fw-bold" id="floatCost">$ 0</span>
                 </div>
-                <div class="text-center">
+                <div class="text-center" id="floatSellContainer">
                     <small class="text-muted d-block" style="font-size: 0.7rem;">售價</small>
                     <span class="fw-bold" id="floatSell">$ 0</span>
+                </div>
+                <div class="text-center" id="floatMarginContainer" style="display: none;">
+                    <small class="text-muted d-block" style="font-size: 0.7rem;">獲利率</small>
+                    <span class="fw-bold" id="floatMargin">0%</span>
                 </div>
                 <div class="text-center">
                     <small class="text-muted d-block" style="font-size: 0.7rem;">較長備貨</small>
@@ -68,6 +72,16 @@
 
             <!-- Input Section -->
             <div class="input-section">
+                <div class="row mb-3">
+                    <div class="col-12">
+                        <div class="btn-group w-100" role="group">
+                            <input type="radio" class="btn-check" name="calcMode" id="modeProfit" value="profit" checked>
+                            <label class="btn btn-outline-primary" for="modeProfit">用售價算獲利</label>
+                            <input type="radio" class="btn-check" name="calcMode" id="modePrice" value="price">
+                            <label class="btn btn-outline-primary" for="modePrice">用獲利率算售價</label>
+                        </div>
+                    </div>
+                </div>
                 <div class="row g-3">
                     <div class="col-md-4">
                         <label for="costPrice" class="form-label">
@@ -78,13 +92,22 @@
                             <input type="number" class="form-control" id="costPrice" placeholder="0" min="0">
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-4" id="sellPriceContainer">
                         <label for="sellPrice" class="form-label">
                             <i class="bi bi-cash-stack"></i> 蝦皮價格（售價）
                         </label>
                         <div class="input-group">
                             <span class="input-group-text">$</span>
                             <input type="number" class="form-control" id="sellPrice" placeholder="0" min="0">
+                        </div>
+                    </div>
+                    <div class="col-md-4" id="profitMarginContainer" style="display: none;">
+                        <label for="profitMargin" class="form-label">
+                            <i class="bi bi-graph-up-arrow"></i> 預期獲利率
+                        </label>
+                        <div class="input-group">
+                            <input type="number" class="form-control" id="profitMargin" placeholder="20" min="0" max="100" step="0.1">
+                            <span class="input-group-text">%</span>
                         </div>
                     </div>
                     <div class="col-md-4">
@@ -236,6 +259,10 @@
                 <div class="col-md-6 col-lg-6">
                     <div class="result-card regular">
                         <h5><i class="bi bi-calendar-check"></i> 一般日 + 免運方案一 (6%)</h5>
+                        <div class="fee-item suggested-price-row" style="display: none;">
+                            <span class="fee-label fw-bold text-primary">建議售價</span>
+                            <span class="fee-value fw-bold text-primary" id="regular-ship1-suggested-price">$ 0</span>
+                        </div>
                         <div class="fee-item">
                             <span class="fee-label">成交手續費</span>
                             <span class="fee-value" id="regular-ship1-transaction">$ 0</span>
@@ -275,6 +302,10 @@
                 <div class="col-md-6 col-lg-6">
                     <div class="result-card regular">
                         <h5><i class="bi bi-calendar-check"></i> 一般日 + 免運方案二 (+60元)</h5>
+                        <div class="fee-item suggested-price-row" style="display: none;">
+                            <span class="fee-label fw-bold text-primary">建議售價</span>
+                            <span class="fee-value fw-bold text-primary" id="regular-ship2-suggested-price">$ 0</span>
+                        </div>
                         <div class="fee-item">
                             <span class="fee-label">成交手續費</span>
                             <span class="fee-value" id="regular-ship2-transaction">$ 0</span>
@@ -314,6 +345,10 @@
                 <div class="col-md-6 col-lg-6">
                     <div class="result-card event">
                         <h5><i class="bi bi-star-fill"></i> 活動日 + 免運方案一 (6%)</h5>
+                        <div class="fee-item suggested-price-row" style="display: none;">
+                            <span class="fee-label fw-bold text-primary">建議售價</span>
+                            <span class="fee-value fw-bold text-primary" id="event-ship1-suggested-price">$ 0</span>
+                        </div>
                         <div class="fee-item">
                             <span class="fee-label">成交手續費</span>
                             <span class="fee-value" id="event-ship1-transaction">$ 0</span>
@@ -357,6 +392,10 @@
                 <div class="col-md-6 col-lg-6">
                     <div class="result-card event">
                         <h5><i class="bi bi-star-fill"></i> 活動日 + 免運方案二 (+60元)</h5>
+                        <div class="fee-item suggested-price-row" style="display: none;">
+                            <span class="fee-label fw-bold text-primary">建議售價</span>
+                            <span class="fee-value fw-bold text-primary" id="event-ship2-suggested-price">$ 0</span>
+                        </div>
                         <div class="fee-item">
                             <span class="fee-label">成交手續費</span>
                             <span class="fee-value" id="event-ship2-transaction">$ 0</span>
@@ -409,6 +448,7 @@
                                 <thead class="table-light">
                                     <tr>
                                         <th scope="col" class="py-3 text-start ps-3">情境</th>
+                                        <th scope="col" class="py-3 text-nowrap suggested-price-column" style="display: none;">建議售價</th>
                                         <th scope="col" class="py-3 text-nowrap">總手續費</th>
                                         <th scope="col" class="py-3 text-nowrap">獲利</th>
                                         <th scope="col" class="py-3 text-nowrap">獲利率</th>
@@ -420,6 +460,7 @@
                                             <span class="badge bg-primary me-2">一般日</span>
                                             <span class="d-inline-block">免運方案一</span>
                                         </td>
+                                        <td class="fw-bold text-primary text-nowrap suggested-price-column" style="display: none;" id="summary-regular-ship1-suggested">$ 0</td>
                                         <td class="fw-bold text-primary text-nowrap" id="summary-regular-ship1-total">$ 0</td>
                                         <td class="fw-bold text-success text-nowrap" id="summary-regular-ship1-profit">$ 0</td>
                                         <td class="text-muted text-nowrap" id="summary-regular-ship1-margin">0%</td>
@@ -429,6 +470,7 @@
                                             <span class="badge bg-primary me-2">一般日</span>
                                             <span class="d-inline-block">免運方案二</span>
                                         </td>
+                                        <td class="fw-bold text-primary text-nowrap suggested-price-column" style="display: none;" id="summary-regular-ship2-suggested">$ 0</td>
                                         <td class="fw-bold text-primary text-nowrap" id="summary-regular-ship2-total">$ 0</td>
                                         <td class="fw-bold text-success text-nowrap" id="summary-regular-ship2-profit">$ 0</td>
                                         <td class="text-muted text-nowrap" id="summary-regular-ship2-margin">0%</td>
@@ -438,6 +480,7 @@
                                             <span class="badge bg-warning text-dark me-2">活動日</span>
                                             <span class="d-inline-block">免運方案一</span>
                                         </td>
+                                        <td class="fw-bold text-primary text-nowrap suggested-price-column" style="display: none;" id="summary-event-ship1-suggested">$ 0</td>
                                         <td class="fw-bold text-primary text-nowrap" id="summary-event-ship1-total">$ 0</td>
                                         <td class="fw-bold text-success text-nowrap" id="summary-event-ship1-profit">$ 0</td>
                                         <td class="text-muted text-nowrap" id="summary-event-ship1-margin">0%</td>
@@ -447,6 +490,7 @@
                                             <span class="badge bg-warning text-dark me-2">活動日</span>
                                             <span class="d-inline-block">免運方案二</span>
                                         </td>
+                                        <td class="fw-bold text-primary text-nowrap suggested-price-column" style="display: none;" id="summary-event-ship2-suggested">$ 0</td>
                                         <td class="fw-bold text-primary text-nowrap" id="summary-event-ship2-total">$ 0</td>
                                         <td class="fw-bold text-success text-nowrap" id="summary-event-ship2-profit">$ 0</td>
                                         <td class="text-muted text-nowrap" id="summary-event-ship2-margin">0%</td>
