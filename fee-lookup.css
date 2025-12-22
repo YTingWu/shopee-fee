@@ -1,5 +1,27 @@
 /* Fee Lookup Modal Styles */
 
+/* Lookup button styling */
+#lookupFeeBtn {
+    border-color: var(--border-color);
+}
+
+#lookupFeeBtn:hover {
+    background-color: var(--bg-input-group);
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] #lookupFeeBtn {
+    background-color: var(--bg-input-group);
+    border-color: var(--border-color);
+    color: var(--text-main);
+}
+
+[data-theme="dark"] #lookupFeeBtn:hover {
+    background-color: var(--bg-input);
+    border-color: var(--border-color);
+    color: var(--text-main);
+}
+
 /* Modal header fix */
 .modal-header.border-0 {
     position: relative;
@@ -223,6 +245,8 @@
 
 #categorySearch {
     padding-right: 35px;
+    border-top-right-radius: 0.375rem;
+    border-bottom-right-radius: 0.375rem;
 }
 
 /* Smooth transitions */
