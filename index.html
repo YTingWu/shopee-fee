@@ -29,6 +29,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="fee-lookup.css">
 </head>
 <body>
     <!-- Floating Header (Hidden by default) -->
@@ -117,6 +118,9 @@
                         <div class="input-group">
                             <input type="number" class="form-control" id="transactionFee" value="6" min="0" max="100" step="0.1">
                             <span class="input-group-text">%</span>
+                            <button class="btn btn-outline-secondary" type="button" id="lookupFeeBtn" data-bs-toggle="modal" data-bs-target="#feeLookupModal">
+                                <i class="bi bi-search"></i> 查詢
+                            </button>
                         </div>
                         <small class="text-muted">
                             依照分類不同而手續費不同
@@ -526,7 +530,40 @@
         </footer>
     </div>
 
+    <!-- Fee Lookup Modal -->
+    <div class="modal fade" id="feeLookupModal" tabindex="-1" aria-labelledby="feeLookupModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header border-0 pb-0">
+                    <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body pt-0">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text"><i class="bi bi-search"></i></span>
+                        <input type="text" class="form-control" id="categorySearch" placeholder="搜尋類別 (例如: 手機)...">
+                    </div>
+                    
+                    <nav aria-label="breadcrumb" id="breadcrumbNav" style="display: none;">
+                        <ol class="breadcrumb" id="categoryBreadcrumb">
+                            <!-- Breadcrumbs will be injected here -->
+                        </ol>
+                    </nav>
+    
+                    <div class="list-group list-group-flush" id="categoryList">
+                        <!-- Categories will be injected here -->
+                        <div class="text-center py-3">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="calculator.js?20251221"></script>
+    <script src="fee-lookup.js"></script>
 </body>
 </html>
