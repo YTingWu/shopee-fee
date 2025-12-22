@@ -411,3 +411,26 @@ function applyTheme(theme) {
 
 // Initial calculation
 calculateFees();
+
+// Initialize Bootstrap tooltips
+document.addEventListener('DOMContentLoaded', function() {
+    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl, {
+            trigger: 'click hover',
+            html: true
+        });
+    });
+    
+    // Close tooltip when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('[data-bs-toggle="tooltip"]')) {
+            tooltipTriggerList.forEach(function(tooltipTriggerEl) {
+                const tooltip = bootstrap.Tooltip.getInstance(tooltipTriggerEl);
+                if (tooltip) {
+                    tooltip.hide();
+                }
+            });
+        }
+    });
+});

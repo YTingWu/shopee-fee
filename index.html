@@ -6,7 +6,7 @@
     <meta name="google-adsense-account" content="ca-pub-7220444464281913">
     
     <!-- SEO Meta Tags -->
-    <meta name="description" content="2026最新蝦皮手續費計算機，快速計算蝦皮成交手續費、金流服務費、免運方案成本與實際獲利。支援一般日與活動日手續費計算，賣家必備工具。">
+    <meta name="description" content="2026最新蝦皮手續費計算機，快速計算蝦皮成交手續費、金流服務費、免運方案成本與實際獲利。支援一般日與促銷檔期手續費計算，賣家必備工具。">
     <meta name="keywords" content="蝦皮手續費, 蝦皮手續費計算機, 蝦皮計算機, 蝦皮成本, 蝦皮利潤, 蝦皮免運, 蝦皮活動日, 蝦皮賣家工具, 手續費計算, 蝦皮抽成">
     
     <!-- Open Graph / Facebook -->
@@ -49,7 +49,7 @@
                     <span class="fw-bold" id="floatMargin">0%</span>
                 </div>
                 <div class="text-center">
-                    <small class="text-muted d-block" style="font-size: 0.7rem;">較長備貨</small>
+                    <small class="text-muted d-block" style="font-size: 0.7rem;">預購訂單</small>
                     <span class="badge bg-secondary" id="floatPreOrder">否</span>
                 </div>
                 <div class="text-center">
@@ -137,7 +137,7 @@
                     <div class="row">
                         <div class="col-12">
                             <label class="form-label">
-                                <i class="bi bi-clock-history"></i> 是否較長備貨
+                                <i class="bi bi-clock-history"></i> 預購訂單(較長備貨)
                             </label>
                             <div class="d-flex flex-column flex-md-row gap-3">
                                 <div class="form-check">
@@ -186,6 +186,7 @@
                                     <input class="form-check-input" type="radio" name="cashbackProgram" id="cashback10" value="2.5">
                                     <label class="form-check-label" for="cashback10">
                                         10%蝦幣回饋方案 (2.5%)
+                                        <i class="bi bi-info-circle text-muted" data-bs-toggle="tooltip" data-bs-placement="top" title="原為3%，因同時參加免運活動，可折抵0.5%" style="cursor: help;"></i>
                                     </label>
                                 </div>
                             </div>
@@ -211,18 +212,21 @@
                                     <input class="form-check-input" type="radio" name="taxSetting" id="businessTax" value="1">
                                     <label class="form-check-label" for="businessTax">
                                         稅籍登記 (1%)
+                                        <i class="bi bi-info-circle text-muted" data-bs-toggle="tooltip" data-bs-placement="top" title="每月營業額超過10萬元，需向國稅局辦理稅籍登記，每季繳納1%的稅。" style="cursor: help;"></i>
                                     </label>
                                 </div>
                                 <div class="form-check">
                                     <input class="form-check-input" type="radio" name="taxSetting" id="invoiceTax" value="5">
                                     <label class="form-check-label" for="invoiceTax">
                                         發票 (5%)
+                                        <i class="bi bi-info-circle text-muted" data-bs-toggle="tooltip" data-bs-placement="top" title="每月營業額超過20萬元，需辦理開發票。" style="cursor: help;"></i>
                                     </label>
                                 </div>
                                 <div class="form-check">
                                     <input class="form-check-input" type="radio" name="taxSetting" id="shopeeInvoice" value="5_plus">
                                     <label class="form-check-label" for="shopeeInvoice">
                                         蝦皮代開發票 (5% + 2.5元)
+                                        <i class="bi bi-info-circle text-muted" data-bs-toggle="tooltip" data-bs-placement="top" title="可申請蝦皮代開發票服務，每張需加收2.5元，每月統計。這裡因為是單筆統計，所以每筆會四捨五入為3元，實際以全部張數計算。" style="cursor: help;"></i>
                                     </label>
                                 </div>
                             </div>
@@ -234,7 +238,7 @@
             <!-- Event Day Info -->
             <div class="event-info">
                 <h6 style="cursor: pointer;" data-bs-toggle="collapse" data-bs-target="#eventDayDetails" aria-expanded="false" aria-controls="eventDayDetails">
-                    <i class="bi bi-calendar-event"></i> <strong>活動日說明（手續費額外 +2%）</strong>
+                    <i class="bi bi-calendar-event"></i> <strong>2026年促銷檔期（手續費2%）</strong>
                     <i class="bi bi-chevron-down float-end"></i>
                 </h6>
                 <div class="collapse" id="eventDayDetails">
@@ -253,6 +257,11 @@
                                 <li>六月：6/6；6/18-6/19；6/25</li>
                             </ul>
                         </div>
+                    </div>
+                    <div class="mt-3 text-center">
+                        <a href="webcal://p39-caldav.icloud.com/published/2/ODEyNzcxNTEzMzgxMjc3McUGBC3fUHVRi6-Ah4xGQymiQBXbg98Y3YkR3E22KPH1TccpJUKoCrtTPu50R2xcHbmP9A4Xamp-o0x0HDoIETI" class="btn btn-sm btn-warning fw-bold text-dark" target="_blank">
+                            <i class="bi bi-calendar-plus"></i> 訂閱活動日行事曆
+                        </a>
                     </div>
                 </div>
             </div>
@@ -276,7 +285,7 @@
                             <span class="fee-value" id="regular-ship1-payment">$ 0</span>
                         </div>
                         <div class="fee-item" id="regular-ship1-preorder-row" style="display: none;">
-                            <span class="fee-label">較長備貨手續費 (3%)</span>
+                            <span class="fee-label">預購訂單手續費 (3%)</span>
                             <span class="fee-value" id="regular-ship1-preorder">$ 0</span>
                         </div>
                         <div class="fee-item">
@@ -319,7 +328,7 @@
                             <span class="fee-value" id="regular-ship2-payment">$ 0</span>
                         </div>
                         <div class="fee-item" id="regular-ship2-preorder-row" style="display: none;">
-                            <span class="fee-label">較長備貨手續費 (3%)</span>
+                            <span class="fee-label">預購訂單手續費 (3%)</span>
                             <span class="fee-value" id="regular-ship2-preorder">$ 0</span>
                         </div>
                         <div class="fee-item">
@@ -366,7 +375,7 @@
                             <span class="fee-value" id="event-ship1-surcharge">$ 0</span>
                         </div>
                         <div class="fee-item" id="event-ship1-preorder-row" style="display: none;">
-                            <span class="fee-label">較長備貨手續費 (3%)</span>
+                            <span class="fee-label">預購訂單手續費 (3%)</span>
                             <span class="fee-value" id="event-ship1-preorder">$ 0</span>
                         </div>
                         <div class="fee-item">
@@ -413,7 +422,7 @@
                             <span class="fee-value" id="event-ship2-surcharge">$ 0</span>
                         </div>
                         <div class="fee-item" id="event-ship2-preorder-row" style="display: none;">
-                            <span class="fee-label">較長備貨手續費 (3%)</span>
+                            <span class="fee-label">預購訂單手續費 (3%)</span>
                             <span class="fee-value" id="event-ship2-preorder">$ 0</span>
                         </div>
                         <div class="fee-item">
@@ -563,7 +572,7 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="calculator.js?20251221"></script>
+    <script src="calculator.js?20251222"></script>
     <script src="fee-lookup.js"></script>
 </body>
 </html>
