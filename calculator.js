@@ -30,12 +30,132 @@ function formatCurrency(amount) {
     return '$ ' + Math.round(amount).toLocaleString('zh-TW');
 }
 
+// URL Query String Management
+function getQueryParams() {
+    const params = new URLSearchParams(window.location.search);
+    return {
+        mode: params.get('mode') || 'profit',
+        shipping: params.get('shipping') || 'both',
+        cost: params.get('cost') || '',
+        sell: params.get('sell') || '',
+        margin: params.get('margin') || '5',
+        fee: params.get('fee') || '6',
+        preorder: params.get('preorder') || '0',
+        cashback: params.get('cashback') || '0',
+        tax: params.get('tax') || '0'
+    };
+}
+
+function updateQueryString() {
+    const params = new URLSearchParams();
+    
+    // Mode
+    params.set('mode', currentMode);
+    
+    // Shipping Option
+    params.set('shipping', currentShippingOption);
+    
+    // Cost Price
+    if (costPriceInput.value) params.set('cost', costPriceInput.value);
+    
+    // Sell Price or Margin
+    if (currentMode === 'profit' && sellPriceInput.value) {
+        params.set('sell', sellPriceInput.value);
+    } else if (currentMode === 'price' && profitMarginInput.value) {
+        params.set('margin', profitMarginInput.value);
+    }
+    
+    // Transaction Fee
+    if (transactionFeeInput.value) params.set('fee', transactionFeeInput.value);
+    
+    // Pre-order
+    let preOrderValue = '0';
+    preOrderRadios.forEach(radio => {
+        if (radio.checked) preOrderValue = radio.value;
+    });
+    params.set('preorder', preOrderValue);
+    
+    // Cashback
+    let cashbackValue = '0';
+    cashbackRadios.forEach(radio => {
+        if (radio.checked) cashbackValue = radio.value;
+    });
+    params.set('cashback', cashbackValue);
+    
+    // Tax
+    let taxValue = '0';
+    taxRadios.forEach(radio => {
+        if (radio.checked) taxValue = radio.value;
+    });
+    params.set('tax', taxValue);
+    
+    // Update URL without reloading
+    const newUrl = window.location.pathname + '?' + params.toString();
+    window.history.replaceState({}, '', newUrl);
+}
+
+function loadFromQueryString() {
+    const params = getQueryParams();
+    
+    // Set Mode
+    currentMode = params.mode;
+    document.getElementById(params.mode === 'profit' ? 'modeProfit' : 'modePrice').checked = true;
+    
+    // Set Shipping Option
+    currentShippingOption = params.shipping;
+    if (params.shipping === 'ship1') {
+        document.getElementById('shipOne').checked = true;
+    } else if (params.shipping === 'ship2') {
+        document.getElementById('shipTwo').checked = true;
+    } else {
+        document.getElementById('shipBoth').checked = true;
+    }
+    
+    // Set Cost Price
+    if (params.cost) costPriceInput.value = params.cost;
+    
+    // Set Sell Price or Margin
+    if (params.sell) sellPriceInput.value = params.sell;
+    if (params.margin) profitMarginInput.value = params.margin;
+    
+    // Set Transaction Fee
+    if (params.fee) transactionFeeInput.value = params.fee;
+    
+    // Set Pre-order
+    if (params.preorder === '3') {
+        document.getElementById('isPreOrder').checked = true;
+    } else {
+        document.getElementById('noPreOrder').checked = true;
+    }
+    
+    // Set Cashback
+    if (params.cashback === '1.5') {
+        document.getElementById('cashback5').checked = true;
+    } else if (params.cashback === '2.5') {
+        document.getElementById('cashback10').checked = true;
+    } else {
+        document.getElementById('noCashback').checked = true;
+    }
+    
+    // Set Tax
+    if (params.tax === '1') {
+        document.getElementById('businessTax').checked = true;
+    } else if (params.tax === '5') {
+        document.getElementById('invoiceTax').checked = true;
+    } else if (params.tax === '5_plus') {
+        document.getElementById('shopeeInvoice').checked = true;
+    } else {
+        document.getElementById('noTax').checked = true;
+    }
+}
+
 // Mode switching logic
 modeRadios.forEach(radio => {
     radio.addEventListener('change', (e) => {
         currentMode = e.target.value;
         updateModeUI();
         calculateFees();
+        updateQueryString();
     });
 });
 
@@ -44,6 +164,7 @@ shippingOptionRadios.forEach(radio => {
     radio.addEventListener('change', (e) => {
         currentShippingOption = e.target.value;
         updateShippingOptionUI();
+        updateQueryString();
     });
 });
 
@@ -396,24 +517,45 @@ function updateProfitStyle(elementId, profit) {
 }
 
 // Add event listeners for real-time calculation
-costPriceInput.addEventListener('input', calculateFees);
-sellPriceInput.addEventListener('input', calculateFees);
-profitMarginInput.addEventListener('input', calculateFees);
-transactionFeeInput.addEventListener('input', calculateFees);
+costPriceInput.addEventListener('input', () => {
+    calculateFees();
+    updateQueryString();
+});
+sellPriceInput.addEventListener('input', () => {
+    calculateFees();
+    updateQueryString();
+});
+profitMarginInput.addEventListener('input', () => {
+    calculateFees();
+    updateQueryString();
+});
+transactionFeeInput.addEventListener('input', () => {
+    calculateFees();
+    updateQueryString();
+});
 
 // Add event listeners for cashback program radio buttons
 cashbackRadios.forEach(radio => {
-    radio.addEventListener('change', calculateFees);
+    radio.addEventListener('change', () => {
+        calculateFees();
+        updateQueryString();
+    });
 });
 
 // Add event listeners for tax setting radio buttons
 taxRadios.forEach(radio => {
-    radio.addEventListener('change', calculateFees);
+    radio.addEventListener('change', () => {
+        calculateFees();
+        updateQueryString();
+    });
 });
 
 // Add event listeners for pre-order radio buttons
 preOrderRadios.forEach(radio => {
-    radio.addEventListener('change', calculateFees);
+    radio.addEventListener('change', () => {
+        calculateFees();
+        updateQueryString();
+    });
 });
 
 // Floating Header Logic
@@ -464,6 +606,8 @@ function applyTheme(theme) {
 }
 
 // Initial calculation
+loadFromQueryString();
+updateModeUI();
 updateShippingOptionUI();
 calculateFees();
 
