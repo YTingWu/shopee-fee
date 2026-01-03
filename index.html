@@ -105,11 +105,29 @@
             <div class="input-section">
                 <div class="row mb-3">
                     <div class="col-12">
+                        <label class="form-label">
+                            <i class="bi bi-gear"></i> 模式
+                        </label>
                         <div class="btn-group w-100" role="group">
                             <input type="radio" class="btn-check" name="calcMode" id="modeProfit" value="profit" checked>
                             <label class="btn btn-outline-primary" for="modeProfit">用售價算獲利</label>
                             <input type="radio" class="btn-check" name="calcMode" id="modePrice" value="price">
                             <label class="btn btn-outline-primary" for="modePrice">用獲利率算售價</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-12">
+                        <label class="form-label">
+                            <i class="bi bi-truck"></i> 免運方案
+                        </label>
+                        <div class="btn-group w-100" role="group">
+                            <input type="radio" class="btn-check" name="shippingOption" id="shipBoth" value="both" checked>
+                            <label class="btn btn-outline-secondary" for="shipBoth">兩者比較</label>
+                            <input type="radio" class="btn-check" name="shippingOption" id="shipOne" value="ship1">
+                            <label class="btn btn-outline-secondary" for="shipOne">方案一</label>
+                            <input type="radio" class="btn-check" name="shippingOption" id="shipTwo" value="ship2">
+                            <label class="btn btn-outline-secondary" for="shipTwo">方案二</label>
                         </div>
                     </div>
                 </div>
@@ -192,7 +210,7 @@
                     <div class="row">
                         <div class="col-12">
                             <label class="form-label">
-                                <i class="bi bi-coin"></i> 參加蝦幣回饋方案 
+                                <i class="bi bi-coin"></i> 蝦幣回饋方案 
                                 <small class="text-muted">
                                     <a href="https://help.shopee.tw/portal/4/article/139826-[%E6%A2%9D%E6%AC%BE%E8%88%87%E6%94%BF%E7%AD%96]-%E8%9D%A6%E5%B9%A3%E5%9B%9E%E9%A5%8B%E6%96%B9%E6%A1%88%E7%B4%84%E5%AE%9A%E6%A2%9D%E6%AC%BE" target="_blank" class="text-decoration-none">
                                         <i class="bi bi-info-circle"></i> 詳情
@@ -203,7 +221,7 @@
                                 <div class="form-check">
                                     <input class="form-check-input" type="radio" name="cashbackProgram" id="noCashback" value="0" checked>
                                     <label class="form-check-label" for="noCashback">
-                                        不參加
+                                        無參加
                                     </label>
                                 </div>
                                 <div class="form-check">
@@ -235,7 +253,7 @@
                                 <div class="form-check">
                                     <input class="form-check-input" type="radio" name="taxSetting" id="noTax" value="0" checked>
                                     <label class="form-check-label" for="noTax">
-                                        不設定
+                                        無
                                     </label>
                                 </div>
                                 <div class="form-check">

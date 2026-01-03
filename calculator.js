@@ -7,6 +7,7 @@ const transactionFeeInput = document.getElementById('transactionFee');
 const sellPriceContainer = document.getElementById('sellPriceContainer');
 const profitMarginContainer = document.getElementById('profitMarginContainer');
 const modeRadios = document.querySelectorAll('input[name="calcMode"]');
+const shippingOptionRadios = document.querySelectorAll('input[name="shippingOption"]');
 const suggestedPriceRows = document.querySelectorAll('.suggested-price-row');
 
 // Floating Header Elements
@@ -22,6 +23,7 @@ const taxRadios = document.querySelectorAll('input[name="taxSetting"]');
 const preOrderRadios = document.querySelectorAll('input[name="preOrder"]');
 
 let currentMode = 'profit'; // 'profit' or 'price'
+let currentShippingOption = 'both'; // 'both', 'ship1', or 'ship2'
 
 // Format number with thousand separators and no decimals
 function formatCurrency(amount) {
@@ -34,6 +36,14 @@ modeRadios.forEach(radio => {
         currentMode = e.target.value;
         updateModeUI();
         calculateFees();
+    });
+});
+
+// Shipping option switching logic
+shippingOptionRadios.forEach(radio => {
+    radio.addEventListener('change', (e) => {
+        currentShippingOption = e.target.value;
+        updateShippingOptionUI();
     });
 });
 
@@ -66,6 +76,50 @@ function updateModeUI() {
         
         // Summary Table
         suggestedPriceColumns.forEach(col => col.style.display = '');
+    }
+}
+
+function updateShippingOptionUI() {
+    // Get all result cards
+    const regularShip1 = document.querySelector('.col-md-6:has(.result-card.regular):nth-of-type(1)');
+    const regularShip2 = document.querySelector('.col-md-6:has(.result-card.regular):nth-of-type(2)');
+    const eventShip1 = document.querySelector('.col-md-6:has(.result-card.event):nth-of-type(3)');
+    const eventShip2 = document.querySelector('.col-md-6:has(.result-card.event):nth-of-type(4)');
+    
+    // Get all summary table rows
+    const summaryRows = document.querySelectorAll('.table tbody tr');
+    
+    if (currentShippingOption === 'both') {
+        // Show all cards
+        if (regularShip1) regularShip1.style.display = '';
+        if (regularShip2) regularShip2.style.display = '';
+        if (eventShip1) eventShip1.style.display = '';
+        if (eventShip2) eventShip2.style.display = '';
+        
+        // Show all summary rows
+        summaryRows.forEach(row => row.style.display = '');
+    } else if (currentShippingOption === 'ship1') {
+        // Show only ship1 cards
+        if (regularShip1) regularShip1.style.display = '';
+        if (regularShip2) regularShip2.style.display = 'none';
+        if (eventShip1) eventShip1.style.display = '';
+        if (eventShip2) eventShip2.style.display = 'none';
+        
+        // Show only ship1 summary rows (row 0 and 2)
+        summaryRows.forEach((row, index) => {
+            row.style.display = (index === 0 || index === 2) ? '' : 'none';
+        });
+    } else if (currentShippingOption === 'ship2') {
+        // Show only ship2 cards
+        if (regularShip1) regularShip1.style.display = 'none';
+        if (regularShip2) regularShip2.style.display = '';
+        if (eventShip1) eventShip1.style.display = 'none';
+        if (eventShip2) eventShip2.style.display = '';
+        
+        // Show only ship2 summary rows (row 1 and 3)
+        summaryRows.forEach((row, index) => {
+            row.style.display = (index === 1 || index === 3) ? '' : 'none';
+        });
     }
 }
 
@@ -410,6 +464,7 @@ function applyTheme(theme) {
 }
 
 // Initial calculation
+updateShippingOptionUI();
 calculateFees();
 
 // Initialize Bootstrap tooltips
