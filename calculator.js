@@ -8,6 +8,7 @@ const sellPriceContainer = document.getElementById('sellPriceContainer');
 const profitMarginContainer = document.getElementById('profitMarginContainer');
 const modeRadios = document.querySelectorAll('input[name="calcMode"]');
 const shippingOptionRadios = document.querySelectorAll('input[name="shippingOption"]');
+const sellerTypeRadios = document.querySelectorAll('input[name="sellerType"]');
 const suggestedPriceRows = document.querySelectorAll('.suggested-price-row');
 
 // Floating Header Elements
@@ -24,6 +25,7 @@ const preOrderRadios = document.querySelectorAll('input[name="preOrder"]');
 
 let currentMode = 'profit'; // 'profit' or 'price'
 let currentShippingOption = 'both'; // 'both', 'ship1', or 'ship2'
+let currentSellerType = 'general'; // 'general' or 'mall'
 
 // Format number with thousand separators and no decimals
 function formatCurrency(amount) {
@@ -36,6 +38,7 @@ function getQueryParams() {
     return {
         mode: params.get('mode') || 'profit',
         shipping: params.get('shipping') || 'both',
+        seller: params.get('seller') || 'general',
         cost: params.get('cost') || '',
         sell: params.get('sell') || '',
         margin: params.get('margin') || '5',
@@ -54,6 +57,9 @@ function updateQueryString() {
     
     // Shipping Option
     params.set('shipping', currentShippingOption);
+    
+    // Seller Type
+    params.set('seller', currentSellerType);
     
     // Cost Price
     if (costPriceInput.value) params.set('cost', costPriceInput.value);
@@ -111,6 +117,14 @@ function loadFromQueryString() {
         document.getElementById('shipBoth').checked = true;
     }
     
+    // Set Seller Type
+    currentSellerType = params.seller;
+    if (params.seller === 'mall') {
+        document.getElementById('sellerMall').checked = true;
+    } else {
+        document.getElementById('sellerGeneral').checked = true;
+    }
+    
     // Set Cost Price
     if (params.cost) costPriceInput.value = params.cost;
     
@@ -164,6 +178,15 @@ shippingOptionRadios.forEach(radio => {
     radio.addEventListener('change', (e) => {
         currentShippingOption = e.target.value;
         updateShippingOptionUI();
+        updateQueryString();
+    });
+});
+
+// Seller type switching logic
+sellerTypeRadios.forEach(radio => {
+    radio.addEventListener('change', (e) => {
+        currentSellerType = e.target.value;
+        calculateFees();
         updateQueryString();
     });
 });
@@ -245,10 +268,11 @@ function updateShippingOptionUI() {
 }
 
 // Calculate required price based on target margin
-function calculateRequiredPrice(cost, marginPercent, transactionFeeRate, cashbackRate, preOrderRate, taxSetting, isEvent, isShip2) {
+function calculateRequiredPrice(cost, marginPercent, transactionFeeRate, cashbackRate, preOrderRate, taxSetting, isEvent, isShip2, isMall) {
     const margin = marginPercent / 100;
-    // For event days with no cashback program, add 2% to transaction fee
-    const effectiveTransactionRate = (isEvent && cashbackRate === 0) ? transactionFeeRate + 2 : transactionFeeRate;
+    // For event days with no cashback program, add 2% (general) or 3% (mall) to transaction fee
+    const eventFeeIncrease = isMall ? 3 : 2;
+    const effectiveTransactionRate = (isEvent && cashbackRate === 0) ? transactionFeeRate + eventFeeIncrease : transactionFeeRate;
     const transRate = effectiveTransactionRate / 100;
     const paymentRate = 0.025;
     const shipRate = isShip2 ? 0 : 0.06; // Ship1 is 6%, Ship2 is fixed
@@ -270,6 +294,14 @@ function calculateRequiredPrice(cost, marginPercent, transactionFeeRate, cashbac
     const totalRateOther = paymentRate + shipRate + cashbackRateVal + preOrderRateVal + taxRate;
     const totalFixed = shipFixed + taxFixed;
 
+    // Mall seller: no limit
+    if (isMall) {
+        const denominator = 1 - transRate - totalRateOther - margin;
+        if (denominator <= 0) return 0;
+        return Math.ceil((cost + totalFixed) / denominator);
+    }
+
+    // General seller: 35000 limit
     // Case 1: Price <= 35000
     // P = (C + Fixed) / (1 - TransRate - OtherRate - Margin)
     const denominator1 = 1 - transRate - totalRateOther - margin;
@@ -326,6 +358,7 @@ function calculateFees() {
 
     // Determine Prices
     let prices = {};
+    const isMall = currentSellerType === 'mall';
     if (currentMode === 'profit') {
         const p = parseFloat(sellPriceInput.value) || 0;
         prices = {
@@ -337,10 +370,10 @@ function calculateFees() {
     } else {
         const margin = parseFloat(profitMarginInput.value) || 0;
         prices = {
-            'regular-ship1': calculateRequiredPrice(costPrice, margin, transactionFeeRate, cashbackRate, preOrderRate, taxSetting, false, false),
-            'regular-ship2': calculateRequiredPrice(costPrice, margin, transactionFeeRate, cashbackRate, preOrderRate, taxSetting, false, true),
-            'event-ship1': calculateRequiredPrice(costPrice, margin, transactionFeeRate, cashbackRate, preOrderRate, taxSetting, true, false),
-            'event-ship2': calculateRequiredPrice(costPrice, margin, transactionFeeRate, cashbackRate, preOrderRate, taxSetting, true, true)
+            'regular-ship1': calculateRequiredPrice(costPrice, margin, transactionFeeRate, cashbackRate, preOrderRate, taxSetting, false, false, isMall),
+            'regular-ship2': calculateRequiredPrice(costPrice, margin, transactionFeeRate, cashbackRate, preOrderRate, taxSetting, false, true, isMall),
+            'event-ship1': calculateRequiredPrice(costPrice, margin, transactionFeeRate, cashbackRate, preOrderRate, taxSetting, true, false, isMall),
+            'event-ship2': calculateRequiredPrice(costPrice, margin, transactionFeeRate, cashbackRate, preOrderRate, taxSetting, true, true, isMall)
         };
         
         // Update Suggested Price UI in Result Cards
@@ -357,10 +390,10 @@ function calculateFees() {
     }
 
     // Calculate and Update Scenarios
-    calculateScenario('regular-ship1', prices['regular-ship1'], costPrice, transactionFeeRate, cashbackRate, preOrderRate, taxSetting, false, false);
-    calculateScenario('regular-ship2', prices['regular-ship2'], costPrice, transactionFeeRate, cashbackRate, preOrderRate, taxSetting, false, true);
-    calculateScenario('event-ship1', prices['event-ship1'], costPrice, transactionFeeRate, cashbackRate, preOrderRate, taxSetting, true, false);
-    calculateScenario('event-ship2', prices['event-ship2'], costPrice, transactionFeeRate, cashbackRate, preOrderRate, taxSetting, true, true);
+    calculateScenario('regular-ship1', prices['regular-ship1'], costPrice, transactionFeeRate, cashbackRate, preOrderRate, taxSetting, false, false, isMall);
+    calculateScenario('regular-ship2', prices['regular-ship2'], costPrice, transactionFeeRate, cashbackRate, preOrderRate, taxSetting, false, true, isMall);
+    calculateScenario('event-ship1', prices['event-ship1'], costPrice, transactionFeeRate, cashbackRate, preOrderRate, taxSetting, true, false, isMall);
+    calculateScenario('event-ship2', prices['event-ship2'], costPrice, transactionFeeRate, cashbackRate, preOrderRate, taxSetting, true, true, isMall);
 
     // Update Floating Header
     document.getElementById('floatCost').textContent = formatCurrency(costPrice);
@@ -380,19 +413,25 @@ function calculateFees() {
     floatCashback.className = cashbackRate > 0 ? 'badge bg-warning text-dark' : 'badge bg-secondary';
     
     // Update event day transaction fee labels based on cashback participation
-    const eventTransactionSuffix = (cashbackRate === 0) ? ' (+2%)' : '';
+    const eventTransactionSuffix = (cashbackRate === 0) ? (isMall ? ' (+3%)' : ' (+2%)') : '';
     const eventShip1Label = document.getElementById('event-ship1-transaction-label');
     const eventShip2Label = document.getElementById('event-ship2-transaction-label');
     if (eventShip1Label) eventShip1Label.textContent = '成交手續費' + eventTransactionSuffix;
     if (eventShip2Label) eventShip2Label.textContent = '成交手續費' + eventTransactionSuffix;
 }
 
-function calculateScenario(prefix, sellPrice, costPrice, transactionFeeRate, cashbackRate, preOrderRate, taxSetting, isEvent, isShip2) {
+function calculateScenario(prefix, sellPrice, costPrice, transactionFeeRate, cashbackRate, preOrderRate, taxSetting, isEvent, isShip2, isMall) {
     // Base fees
     const transactionPriceLimit = 35000;
-    // For event days with no cashback program, add 2% to transaction fee
-    const effectiveTransactionRate = (isEvent && cashbackRate === 0) ? transactionFeeRate + 2 : transactionFeeRate;
-    const transactionFee = Math.round(Math.min(sellPrice, transactionPriceLimit) * (effectiveTransactionRate / 100));
+    // For event days with no cashback program, add 2% (general) or 3% (mall) to transaction fee
+    const eventFeeIncrease = isMall ? 3 : 2;
+    const effectiveTransactionRate = (isEvent && cashbackRate === 0) ? transactionFeeRate + eventFeeIncrease : transactionFeeRate;
+    
+    // Mall seller: no limit, General seller: 35000 limit
+    const transactionFee = isMall ? 
+        Math.round(sellPrice * (effectiveTransactionRate / 100)) :
+        Math.round(Math.min(sellPrice, transactionPriceLimit) * (effectiveTransactionRate / 100));
+    
     const paymentFee = Math.round(sellPrice * 0.025);
     
     // Shipping Fee

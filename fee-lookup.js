@@ -67,12 +67,13 @@
                     const newPath = [...path, key];
                     
                     if (value && typeof value === 'object') {
-                        if (value.general_seller_fee) {
+                        if (value.general_seller_fee || value.mall_seller_fee) {
                             // This is a leaf category
                             result.push({
                                 path: newPath,
                                 name: key,
-                                fee: value.general_seller_fee,
+                                general_fee: value.general_seller_fee,
+                                mall_fee: value.mall_seller_fee,
                                 fullPath: newPath.join(' > ')
                             });
                         } else {
@@ -110,6 +111,9 @@
         // Update breadcrumbs
         renderBreadcrumbs();
 
+        // Get current seller type
+        const isMall = document.querySelector('input[name="sellerType"]:checked')?.value === 'mall';
+
         // Get categories at current level
         const categories = [];
         
@@ -122,12 +126,13 @@
                         hasChildren: true,
                         fee: null
                     });
-                } else if (value && value.general_seller_fee) {
+                } else if (value && (value.general_seller_fee || value.mall_seller_fee)) {
                     // This is a leaf category with fee
+                    const fee = isMall ? value.mall_seller_fee : value.general_seller_fee;
                     categories.push({
                         name: key,
                         hasChildren: false,
-                        fee: value.general_seller_fee
+                        fee: fee
                     });
                 }
             }
@@ -258,6 +263,9 @@
             return;
         }
 
+        // Get current seller type
+        const isMall = document.querySelector('input[name="sellerType"]:checked')?.value === 'mall';
+
         // Search in flattened categories
         const results = flattenedCategories.filter(cat => 
             cat.name.toLowerCase().includes(searchTerm) || 
@@ -282,17 +290,18 @@
         elements.categoryList.innerHTML = results.map(cat => {
             const highlightedName = highlightText(cat.name, searchTerm);
             const highlightedPath = highlightText(cat.fullPath, searchTerm);
+            const fee = isMall ? cat.mall_fee : cat.general_fee;
             
             return `
                 <button type="button" 
                         class="list-group-item list-group-item-action category-item leaf-category"
-                        data-fee="${cat.fee}"
+                        data-fee="${fee}"
                         data-path="${cat.path.join(',')}">
                     <div>
                         <div>${highlightedName}</div>
                         <small class="text-muted d-block">${highlightedPath}</small>
                     </div>
-                    <span class="category-fee">${cat.fee}</span>
+                    <span class="category-fee">${fee}</span>
                 </button>
             `;
         }).join('');
