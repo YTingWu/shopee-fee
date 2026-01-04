@@ -247,9 +247,10 @@ function updateShippingOptionUI() {
 // Calculate required price based on target margin
 function calculateRequiredPrice(cost, marginPercent, transactionFeeRate, cashbackRate, preOrderRate, taxSetting, isEvent, isShip2) {
     const margin = marginPercent / 100;
-    const transRate = transactionFeeRate / 100;
+    // For event days with no cashback program, add 2% to transaction fee
+    const effectiveTransactionRate = (isEvent && cashbackRate === 0) ? transactionFeeRate + 2 : transactionFeeRate;
+    const transRate = effectiveTransactionRate / 100;
     const paymentRate = 0.025;
-    const eventRate = (isEvent && cashbackRate === 0) ? 0.02 : 0; // Event surcharge logic
     const shipRate = isShip2 ? 0 : 0.06; // Ship1 is 6%, Ship2 is fixed
     const cashbackRateVal = cashbackRate / 100;
     const preOrderRateVal = preOrderRate / 100;
@@ -266,7 +267,7 @@ function calculateRequiredPrice(cost, marginPercent, transactionFeeRate, cashbac
 
     const shipFixed = isShip2 ? 60 : 0;
     
-    const totalRateOther = paymentRate + eventRate + shipRate + cashbackRateVal + preOrderRateVal + taxRate;
+    const totalRateOther = paymentRate + shipRate + cashbackRateVal + preOrderRateVal + taxRate;
     const totalFixed = shipFixed + taxFixed;
 
     // Case 1: Price <= 35000
@@ -377,6 +378,13 @@ function calculateFees() {
     const floatCashback = document.getElementById('floatCashback');
     floatCashback.textContent = cashbackLabel;
     floatCashback.className = cashbackRate > 0 ? 'badge bg-warning text-dark' : 'badge bg-secondary';
+    
+    // Update event day transaction fee labels based on cashback participation
+    const eventTransactionSuffix = (cashbackRate === 0) ? ' (+2%)' : '';
+    const eventShip1Label = document.getElementById('event-ship1-transaction-label');
+    const eventShip2Label = document.getElementById('event-ship2-transaction-label');
+    if (eventShip1Label) eventShip1Label.textContent = '成交手續費' + eventTransactionSuffix;
+    if (eventShip2Label) eventShip2Label.textContent = '成交手續費' + eventTransactionSuffix;
 }
 
 function calculateScenario(prefix, sellPrice, costPrice, transactionFeeRate, cashbackRate, preOrderRate, taxSetting, isEvent, isShip2) {
