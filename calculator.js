@@ -382,11 +382,10 @@ function calculateFees() {
 function calculateScenario(prefix, sellPrice, costPrice, transactionFeeRate, cashbackRate, preOrderRate, taxSetting, isEvent, isShip2) {
     // Base fees
     const transactionPriceLimit = 35000;
-    const transactionFee = Math.round(Math.min(sellPrice, transactionPriceLimit) * (transactionFeeRate / 100));
+    // For event days with no cashback program, add 2% to transaction fee
+    const effectiveTransactionRate = (isEvent && cashbackRate === 0) ? transactionFeeRate + 2 : transactionFeeRate;
+    const transactionFee = Math.round(Math.min(sellPrice, transactionPriceLimit) * (effectiveTransactionRate / 100));
     const paymentFee = Math.round(sellPrice * 0.025);
-    
-    // Event surcharge
-    const eventSurcharge = (isEvent && cashbackRate === 0) ? Math.round(sellPrice * 0.02) : 0;
     
     // Shipping Fee
     const shipFee = isShip2 ? 60 : Math.round(sellPrice * 0.06);
@@ -407,16 +406,12 @@ function calculateScenario(prefix, sellPrice, costPrice, transactionFeeRate, cas
         taxFee = Math.round(sellPrice * 0.05 + 2.5);
     }
 
-    const totalFee = transactionFee + paymentFee + eventSurcharge + shipFee + cashbackFee + taxFee + preOrderFee;
+    const totalFee = transactionFee + paymentFee + shipFee + cashbackFee + taxFee + preOrderFee;
     const profit = sellPrice - costPrice - totalFee;
 
     // Update UI
     document.getElementById(`${prefix}-transaction`).textContent = formatCurrency(transactionFee);
     document.getElementById(`${prefix}-payment`).textContent = formatCurrency(paymentFee);
-    
-    if (isEvent) {
-        document.getElementById(`${prefix}-surcharge`).textContent = formatCurrency(eventSurcharge);
-    }
     
     document.getElementById(`${prefix}-shipping`).textContent = formatCurrency(shipFee);
     
