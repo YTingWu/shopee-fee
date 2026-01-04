@@ -351,12 +351,22 @@ body {
 }
 
 .seller-type-toggle .btn-check:checked + .btn-outline-primary {
-    background: linear-gradient(135deg, var(--primary) 0%, #224abe 100%);
-    color: white;
-    box-shadow: 0 4px 12px rgba(78, 115, 223, 0.3);
+    background: linear-gradient(135deg, var(--primary) 0%, #224abe 100%) !important;
+    color: white !important;
+    box-shadow: 0 4px 12px rgba(78, 115, 223, 0.3) !important;
 }
 
-.seller-type-toggle .btn-outline-primary:hover:not(:has(+ input:checked)) {
+.seller-type-toggle .btn-check:checked + .btn-outline-primary i {
+    color: white !important;
+}
+
+.seller-type-toggle .btn-check:checked + .btn-outline-primary:hover {
+    background: linear-gradient(135deg, var(--primary) 0%, #224abe 100%) !important;
+    color: white !important;
+    box-shadow: 0 4px 12px rgba(78, 115, 223, 0.3) !important;
+}
+
+.seller-type-toggle .btn-outline-primary:hover:not(.active) {
     background-color: var(--bg-input-group);
     color: var(--primary);
 }
