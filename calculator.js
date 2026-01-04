@@ -427,6 +427,12 @@ function calculateScenario(prefix, sellPrice, costPrice, transactionFeeRate, cas
     updatePreOrderRow(prefix, preOrderRate > 0, preOrderFee);
     updateTaxRow(prefix, taxSetting !== '0', taxFee);
     
+    // Calculate fee percentage and update label
+    const feePercentage = sellPrice > 0 ? (totalFee / sellPrice * 100).toFixed(1) : '0.0';
+    const totalLabel = document.getElementById(`${prefix}-total-label`);
+    if (totalLabel) {
+        totalLabel.textContent = `總手續費 (${feePercentage}%)`;
+    }
     document.getElementById(`${prefix}-total`).textContent = formatCurrency(totalFee);
     document.getElementById(`${prefix}-profit`).textContent = formatCurrency(profit);
     updateProfitStyle(`${prefix}-profit-row`, profit);
