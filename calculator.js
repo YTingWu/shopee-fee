@@ -1,5 +1,8 @@
 // Get all input elements
 const costPriceInput = document.getElementById('costPrice');
+const costTaxTypeInput = document.getElementById('costTaxType');
+const costTaxLabel = document.getElementById('costTaxLabel');
+const costTaxSuffix = document.getElementById('costTaxSuffix');
 const sellPriceInput = document.getElementById('sellPrice');
 const profitMarginInput = document.getElementById('profitMargin');
 const transactionFeeInput = document.getElementById('transactionFee');
@@ -45,7 +48,8 @@ function getQueryParams() {
         fee: params.get('fee') || '6',
         preorder: params.get('preorder') || '0',
         cashback: params.get('cashback') || '0',
-        tax: params.get('tax') || '0'
+        tax: params.get('tax') || '0',
+        costTax: params.get('costTax') || 'inc'
     };
 }
 
@@ -64,6 +68,9 @@ function updateQueryString() {
     // Cost Price
     if (costPriceInput.value) params.set('cost', costPriceInput.value);
     
+    // Cost Tax
+    params.set('costTax', costTaxTypeInput.checked ? 'inc' : 'exc');
+
     // Sell Price or Margin
     if (currentMode === 'profit' && sellPriceInput.value) {
         params.set('sell', sellPriceInput.value);
@@ -128,6 +135,17 @@ function loadFromQueryString() {
     // Set Cost Price
     if (params.cost) costPriceInput.value = params.cost;
     
+    // Set Cost Tax
+    if (params.costTax === 'exc') {
+        costTaxTypeInput.checked = false;
+        costTaxLabel.textContent = '未稅';
+        costTaxSuffix.textContent = '(未稅)';
+    } else {
+        costTaxTypeInput.checked = true;
+        costTaxLabel.textContent = '含稅';
+        costTaxSuffix.textContent = '(含稅)';
+    }
+
     // Set Sell Price or Margin
     if (params.sell) sellPriceInput.value = params.sell;
     if (params.margin) profitMarginInput.value = params.margin;
@@ -322,7 +340,13 @@ function calculateRequiredPrice(cost, marginPercent, transactionFeeRate, cashbac
 
 // Calculate fees and profit
 function calculateFees() {
-    const costPrice = parseFloat(costPriceInput.value) || 0;
+    let costPrice = parseFloat(costPriceInput.value) || 0;
+    
+    // Adjust cost based on tax setting
+    if (!costTaxTypeInput.checked) {
+        costPrice = costPrice * 1.05;
+    }
+
     const transactionFeeRate = parseFloat(transactionFeeInput.value) || 0;
     
     // Get selected cashback program rate
@@ -566,6 +590,13 @@ function updateProfitStyle(elementId, profit) {
 
 // Add event listeners for real-time calculation
 costPriceInput.addEventListener('input', () => {
+    calculateFees();
+    updateQueryString();
+});
+costTaxTypeInput.addEventListener('change', (e) => {
+    const isChecked = e.target.checked;
+    costTaxLabel.textContent = isChecked ? '含稅' : '未稅';
+    costTaxSuffix.textContent = isChecked ? '(含稅)' : '(未稅)';
     calculateFees();
     updateQueryString();
 });

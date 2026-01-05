@@ -411,3 +411,25 @@ body {
     background-color: var(--bg-input-group) !important;
     color: var(--text-main) !important;
 }
+
+/* Custom Switch Styling */
+.form-switch .form-check-input {
+    width: 2.5em;
+    height: 1.25em;
+    cursor: pointer;
+}
+
+.form-switch .form-check-input:checked {
+    background-color: var(--success);
+    border-color: var(--success);
+}
+
+#costTaxLabel {
+    font-weight: 600;
+    min-width: 45px;
+    transition: color 0.3s ease;
+}
+
+[data-theme="dark"] #costTaxLabel {
+    color: var(--text-main) !important;
+}

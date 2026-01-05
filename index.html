@@ -58,7 +58,7 @@
     </script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="style.css?v=20240606">
+    <link rel="stylesheet" href="style.css?v=20260106">
     <link rel="stylesheet" href="fee-lookup.css">
 </head>
 <body>
@@ -151,12 +151,21 @@
                 </div>
                 <div class="row g-3">
                     <div class="col-md-4">
-                        <label for="costPrice" class="form-label">
-                            <i class="bi bi-tag"></i> 進價（成本）
-                        </label>
-                        <div class="input-group">
+                        <div class="d-flex align-items-center gap-2">
+                            <label for="costPrice" class="form-label mb-0">
+                                <i class="bi bi-tag"></i> 進價（成本）
+                            </label>
+                            <div class="d-flex align-items-center">
+                                <div class="form-check form-switch m-0">
+                                    <input class="form-check-input" type="checkbox" role="switch" id="costTaxType" checked>
+                                </div>
+                                <span class="small text-muted ms-1" id="costTaxLabel">含稅</span>
+                            </div>
+                        </div>
+                        <div class="input-group mt-2">
                             <span class="input-group-text">$</span>
                             <input type="number" class="form-control" id="costPrice" placeholder="0" min="0">
+                            <span class="input-group-text text-muted" id="costTaxSuffix" style="font-size: 0.9rem;">(含稅)</span>
                         </div>
                     </div>
                     <div class="col-md-4" id="sellPriceContainer">
@@ -578,6 +587,7 @@
                 <div class="col-12">
                     <div class="text-center mb-2">
                         <small class="text-muted">贊助廣告</small>
+                        <i class="bi bi-info-circle text-muted ms-1" data-bs-toggle="tooltip" data-bs-placement="top" title="歡迎以商品互惠方式贊助本網站，意者請私訊 下方 IG" style="cursor: help;"></i>
                     </div>
                     <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
                         <a href="https://caudabe.qdm.tw/" target="_blank" rel="noopener noreferrer" 
@@ -604,7 +614,8 @@
 
         <!-- Footer -->
         <footer class="text-center mt-4 pb-2">
-            <p class="text-secondary mb-1">Author: <strong>Bruce Wu</strong></p>
+            <p class="text-secondary small mb-2">v1.0.5</p>
+            <p class="text-secondary mb-2">Author: <strong>Bruce Wu</strong></p>
             <div class="d-flex justify-content-center gap-3 fs-4">
                 <a href="https://www.instagram.com/bruce_baseball_" target="_blank" class="text-decoration-none" title="Instagram">
                     <i class="bi bi-instagram"></i>
@@ -652,7 +663,7 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="calculator.js?2026010402"></script>
+    <script src="calculator.js?20260106"></script>
     <script src="fee-lookup.js?2026010402"></script>
 </body>
 </html>
