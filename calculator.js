@@ -26,6 +26,12 @@ const cashbackRadios = document.querySelectorAll('input[name="cashbackProgram"]'
 const taxRadios = document.querySelectorAll('input[name="taxSetting"]');
 const preOrderRadios = document.querySelectorAll('input[name="preOrder"]');
 
+// Get tax checkbox elements
+const hasInputInvoice = document.getElementById('hasInputInvoice');
+const canDeductFee = document.getElementById('canDeductFee');
+const inputInvoiceContainer = document.getElementById('inputInvoiceContainer');
+const feeDeductContainer = document.getElementById('feeDeductContainer');
+
 let currentMode = 'profit'; // 'profit' or 'price'
 let currentShippingOption = 'both'; // 'both', 'ship1', or 'ship2'
 let currentSellerType = 'general'; // 'general' or 'mall'
@@ -49,7 +55,9 @@ function getQueryParams() {
         preorder: params.get('preorder') || '0',
         cashback: params.get('cashback') || '0',
         tax: params.get('tax') || '0',
-        costTax: params.get('costTax') || 'inc'
+        costTax: params.get('costTax') || 'inc',
+        inputInv: params.get('inputInv') === '1',
+        deductFee: params.get('deductFee') === '1'
     };
 }
 
@@ -101,6 +109,16 @@ function updateQueryString() {
         if (radio.checked) taxValue = radio.value;
     });
     params.set('tax', taxValue);
+    
+    // Input Invoice (only if checked)
+    if (hasInputInvoice && hasInputInvoice.checked) {
+        params.set('inputInv', '1');
+    }
+    
+    // Fee Deduction (only if checked)
+    if (canDeductFee && canDeductFee.checked) {
+        params.set('deductFee', '1');
+    }
     
     // Update URL without reloading
     const newUrl = window.location.pathname + '?' + params.toString();
@@ -179,6 +197,19 @@ function loadFromQueryString() {
     } else {
         document.getElementById('noTax').checked = true;
     }
+    
+    // Set Input Invoice checkbox
+    if (hasInputInvoice) {
+        hasInputInvoice.checked = params.inputInv || false;
+    }
+    
+    // Set Fee Deduction checkbox
+    if (canDeductFee) {
+        canDeductFee.checked = params.deductFee || false;
+    }
+    
+    // Update tax checkbox visibility
+    updateTaxCheckboxVisibility();
 }
 
 // Mode switching logic
@@ -286,65 +317,105 @@ function updateShippingOptionUI() {
 }
 
 // Calculate required price based on target margin
-function calculateRequiredPrice(cost, marginPercent, transactionFeeRate, cashbackRate, preOrderRate, taxSetting, isEvent, isShip2, isMall) {
+function calculateRequiredPrice(cost, marginPercent, transactionFeeRate, cashbackRate, preOrderRate, taxSetting, isEvent, isShip2, isMall, hasInputInv, canDeduct, costTaxType) {
     const margin = marginPercent / 100;
-    // For event days with no cashback program, add 2% (general) or 3% (mall) to transaction fee
     const eventFeeIncrease = isMall ? 3 : 2;
     const effectiveTransactionRate = (isEvent && cashbackRate === 0) ? transactionFeeRate + eventFeeIncrease : transactionFeeRate;
     const transRate = effectiveTransactionRate / 100;
     const paymentRate = 0.025;
-    const shipRate = isShip2 ? 0 : 0.06; // Ship1 is 6%, Ship2 is fixed
+    const shipRate = isShip2 ? 0 : 0.06;
     const cashbackRateVal = cashbackRate / 100;
     const preOrderRateVal = preOrderRate / 100;
     
-    let taxRate = 0;
-    let taxFixed = 0;
-    
-    if (taxSetting === '1') taxRate = 0.01;
-    else if (taxSetting === '5') taxRate = 0.05;
-    else if (taxSetting === '5_plus') {
-        taxRate = 0.05;
-        taxFixed = 2.5;
-    }
-
     const shipFixed = isShip2 ? 60 : 0;
     
-    const totalRateOther = paymentRate + shipRate + cashbackRateVal + preOrderRateVal + taxRate;
-    const totalFixed = shipFixed + taxFixed;
-
-    // Mall seller: no limit
-    if (isMall) {
-        const denominator = 1 - transRate - totalRateOther - margin;
-        if (denominator <= 0) return 0;
-        return Math.ceil((cost + totalFixed) / denominator);
-    }
-
-    // General seller: 35000 limit
-    // Case 1: Price <= 35000
-    // P = (C + Fixed) / (1 - TransRate - OtherRate - Margin)
-    const denominator1 = 1 - transRate - totalRateOther - margin;
-    if (denominator1 <= 0) return 0; // Impossible to achieve margin
-    
-    let price = (cost + totalFixed) / denominator1;
-    
-    if (price > 35000) {
-        // Case 2: Price > 35000
-        // P = (C + 35000*TransRate + Fixed) / (1 - OtherRate - Margin)
-        const denominator2 = 1 - totalRateOther - margin;
-        if (denominator2 <= 0) return 0;
-        price = (cost + 35000 * transRate + totalFixed) / denominator2;
+    // For tax籍登記, use simple 1% tax
+    if (taxSetting === '1') {
+        const totalRateOther = paymentRate + shipRate + cashbackRateVal + preOrderRateVal + 0.01;
+        const totalFixed = shipFixed;
+        
+        if (isMall) {
+            const denominator = 1 - transRate - totalRateOther - margin;
+            if (denominator <= 0) return 0;
+            return Math.ceil((cost + totalFixed) / denominator);
+        }
+        
+        const denominator1 = 1 - transRate - totalRateOther - margin;
+        if (denominator1 <= 0) return 0;
+        let price = (cost + totalFixed) / denominator1;
+        
+        if (price > 35000) {
+            const denominator2 = 1 - totalRateOther - margin;
+            if (denominator2 <= 0) return 0;
+            price = (cost + 35000 * transRate + totalFixed) / denominator2;
+        }
+        return Math.ceil(price);
     }
     
-    return Math.ceil(price); // Round up to ensure margin
+    // For invoice tax (5% or 5_plus), use iterative calculation
+    // Because input tax depends on fees, which depend on price
+    let price = cost / (margin); // Initial guess
+    
+    for (let iteration = 0; iteration < 10; iteration++) {
+        const oldPrice = price;
+        
+        // Calculate fees before tax
+        const transactionFee = isMall ? price * transRate : Math.min(price, 35000) * transRate;
+        const paymentFee = price * paymentRate;
+        const shipFee = isShip2 ? shipFixed : price * shipRate;
+        const cashbackFee = price * cashbackRateVal;
+        const preOrderFee = price * preOrderRateVal;
+        const totalFeeBeforeTax = transactionFee + paymentFee + shipFee + cashbackFee + preOrderFee;
+        
+        // Calculate output tax (sales tax)
+        let outputTax = 0;
+        if (taxSetting === '5' || taxSetting === '5_plus') {
+            outputTax = price / 1.05 * 0.05;
+            if (taxSetting === '5_plus') {
+                outputTax += 3; // Shopee invoice fee
+            }
+        }
+        
+        // Calculate input tax (deductible)
+        let inputTax = 0;
+        if (hasInputInv && (taxSetting === '5' || taxSetting === '5_plus')) {
+            // Cost input tax
+            const costInput = costTaxType ? (cost / 1.05 * 0.05) : (cost * 0.05);
+            inputTax = costInput;
+            
+            // Fee input tax (if deductible)
+            if (canDeduct) {
+                inputTax += totalFeeBeforeTax / 1.05 * 0.05;
+            }
+        }
+        
+        // Net tax
+        const netTax = outputTax - inputTax;
+        
+        // Calculate required price
+        // price = cost + totalFeeBeforeTax + netTax + margin * price
+        // price * (1 - margin) = cost + totalFeeBeforeTax + netTax
+        const totalCostAndFee = cost + totalFeeBeforeTax + netTax;
+        price = totalCostAndFee / (1 - margin);
+        
+        // Check convergence
+        if (Math.abs(price - oldPrice) < 0.01) {
+            break;
+        }
+    }
+    
+    return Math.ceil(price);
 }
 
 // Calculate fees and profit
 function calculateFees() {
     let costPrice = parseFloat(costPriceInput.value) || 0;
+    const costTaxType = costTaxTypeInput.checked; // true = include tax, false = exclude tax
     
-    // Adjust cost based on tax setting
-    if (!costTaxTypeInput.checked) {
-        costPrice = costPrice * 1.05;
+    // Adjust cost based on tax setting for profit calculation
+    let adjustedCost = costPrice;
+    if (!costTaxType) {
+        adjustedCost = costPrice * 1.05;
     }
 
     const transactionFeeRate = parseFloat(transactionFeeInput.value) || 0;
@@ -378,7 +449,10 @@ function calculateFees() {
     taxRadios.forEach(radio => {
         if (radio.checked) taxSetting = radio.value;
     });
-    const hasTax = taxSetting !== '0';
+
+    // Get tax checkbox states
+    const hasInputInv = hasInputInvoice ? hasInputInvoice.checked : false;
+    const canDeduct = canDeductFee ? canDeductFee.checked : false;
 
     // Determine Prices
     let prices = {};
@@ -394,10 +468,10 @@ function calculateFees() {
     } else {
         const margin = parseFloat(profitMarginInput.value) || 0;
         prices = {
-            'regular-ship1': calculateRequiredPrice(costPrice, margin, transactionFeeRate, cashbackRate, preOrderRate, taxSetting, false, false, isMall),
-            'regular-ship2': calculateRequiredPrice(costPrice, margin, transactionFeeRate, cashbackRate, preOrderRate, taxSetting, false, true, isMall),
-            'event-ship1': calculateRequiredPrice(costPrice, margin, transactionFeeRate, cashbackRate, preOrderRate, taxSetting, true, false, isMall),
-            'event-ship2': calculateRequiredPrice(costPrice, margin, transactionFeeRate, cashbackRate, preOrderRate, taxSetting, true, true, isMall)
+            'regular-ship1': calculateRequiredPrice(adjustedCost, margin, transactionFeeRate, cashbackRate, preOrderRate, taxSetting, false, false, isMall, hasInputInv, canDeduct, costTaxType),
+            'regular-ship2': calculateRequiredPrice(adjustedCost, margin, transactionFeeRate, cashbackRate, preOrderRate, taxSetting, false, true, isMall, hasInputInv, canDeduct, costTaxType),
+            'event-ship1': calculateRequiredPrice(adjustedCost, margin, transactionFeeRate, cashbackRate, preOrderRate, taxSetting, true, false, isMall, hasInputInv, canDeduct, costTaxType),
+            'event-ship2': calculateRequiredPrice(adjustedCost, margin, transactionFeeRate, cashbackRate, preOrderRate, taxSetting, true, true, isMall, hasInputInv, canDeduct, costTaxType)
         };
         
         // Update Suggested Price UI in Result Cards
@@ -414,13 +488,13 @@ function calculateFees() {
     }
 
     // Calculate and Update Scenarios
-    calculateScenario('regular-ship1', prices['regular-ship1'], costPrice, transactionFeeRate, cashbackRate, preOrderRate, taxSetting, false, false, isMall);
-    calculateScenario('regular-ship2', prices['regular-ship2'], costPrice, transactionFeeRate, cashbackRate, preOrderRate, taxSetting, false, true, isMall);
-    calculateScenario('event-ship1', prices['event-ship1'], costPrice, transactionFeeRate, cashbackRate, preOrderRate, taxSetting, true, false, isMall);
-    calculateScenario('event-ship2', prices['event-ship2'], costPrice, transactionFeeRate, cashbackRate, preOrderRate, taxSetting, true, true, isMall);
+    calculateScenario('regular-ship1', prices['regular-ship1'], adjustedCost, costPrice, transactionFeeRate, cashbackRate, preOrderRate, taxSetting, false, false, isMall, hasInputInv, canDeduct, costTaxType);
+    calculateScenario('regular-ship2', prices['regular-ship2'], adjustedCost, costPrice, transactionFeeRate, cashbackRate, preOrderRate, taxSetting, false, true, isMall, hasInputInv, canDeduct, costTaxType);
+    calculateScenario('event-ship1', prices['event-ship1'], adjustedCost, costPrice, transactionFeeRate, cashbackRate, preOrderRate, taxSetting, true, false, isMall, hasInputInv, canDeduct, costTaxType);
+    calculateScenario('event-ship2', prices['event-ship2'], adjustedCost, costPrice, transactionFeeRate, cashbackRate, preOrderRate, taxSetting, true, true, isMall, hasInputInv, canDeduct, costTaxType);
 
     // Update Floating Header
-    document.getElementById('floatCost').textContent = formatCurrency(costPrice);
+    document.getElementById('floatCost').textContent = formatCurrency(adjustedCost);
     
     if (currentMode === 'profit') {
         document.getElementById('floatSell').textContent = formatCurrency(prices['regular-ship1']);
@@ -444,10 +518,9 @@ function calculateFees() {
     if (eventShip2Label) eventShip2Label.textContent = '成交手續費' + eventTransactionSuffix;
 }
 
-function calculateScenario(prefix, sellPrice, costPrice, transactionFeeRate, cashbackRate, preOrderRate, taxSetting, isEvent, isShip2, isMall) {
+function calculateScenario(prefix, sellPrice, adjustedCostPrice, originalCostPrice, transactionFeeRate, cashbackRate, preOrderRate, taxSetting, isEvent, isShip2, isMall, hasInputInv, canDeduct, costTaxType) {
     // Base fees
     const transactionPriceLimit = 35000;
-    // For event days with no cashback program, add 2% (general) or 3% (mall) to transaction fee
     const eventFeeIncrease = isMall ? 3 : 2;
     const effectiveTransactionRate = (isEvent && cashbackRate === 0) ? transactionFeeRate + eventFeeIncrease : transactionFeeRate;
     
@@ -467,28 +540,56 @@ function calculateScenario(prefix, sellPrice, costPrice, transactionFeeRate, cas
     // PreOrder Fee
     const preOrderFee = Math.round(sellPrice * (preOrderRate / 100));
     
-    // Tax Fee
+    // Calculate fees before tax (for input tax calculation)
+    const totalFeeBeforeTax = transactionFee + paymentFee + shipFee + cashbackFee + preOrderFee;
+    
+    // Tax Calculation
     let taxFee = 0;
+    let outputTax = 0;
+    let inputTax = 0;
+    
     if (taxSetting === '1') {
+        // 稅籍登記 - simple 1% tax
         taxFee = Math.round(sellPrice * 0.01);
-    } else if (taxSetting === '5') {
-        taxFee = Math.round(sellPrice * 0.05);
-    } else if (taxSetting === '5_plus') {
-        taxFee = Math.round(sellPrice * 0.05 + 2.5);
+    } else if (taxSetting === '5' || taxSetting === '5_plus') {
+        // 發票 or 蝦皮代開發票 - calculate output and input tax
+        
+        // Output tax (sales tax from selling price)
+        outputTax = Math.round(sellPrice / 1.05 * 0.05);
+        if (taxSetting === '5_plus') {
+            outputTax += 3; // Shopee invoice service fee (rounded from 2.5)
+        }
+        
+        // Input tax (deductible tax)
+        if (hasInputInv) {
+            // Cost input tax
+            const costInputTax = costTaxType ? 
+                Math.round(originalCostPrice / 1.05 * 0.05) : 
+                Math.round(originalCostPrice * 0.05);
+            inputTax = costInputTax;
+            
+            // Fee input tax (if deductible)
+            if (canDeduct) {
+                const feeInputTax = Math.round(totalFeeBeforeTax / 1.05 * 0.05);
+                inputTax += feeInputTax;
+            }
+        }
+        
+        // Net tax to pay
+        taxFee = outputTax - inputTax;
     }
 
-    const totalFee = transactionFee + paymentFee + shipFee + cashbackFee + taxFee + preOrderFee;
-    const profit = sellPrice - costPrice - totalFee;
+    const totalFee = totalFeeBeforeTax + taxFee;
+    const profit = sellPrice - adjustedCostPrice - totalFee;
 
     // Update UI
     document.getElementById(`${prefix}-transaction`).textContent = formatCurrency(transactionFee);
     document.getElementById(`${prefix}-payment`).textContent = formatCurrency(paymentFee);
-    
     document.getElementById(`${prefix}-shipping`).textContent = formatCurrency(shipFee);
     
     updateCashbackRow(prefix, cashbackRate > 0, cashbackFee);
     updatePreOrderRow(prefix, preOrderRate > 0, preOrderFee);
-    updateTaxRow(prefix, taxSetting !== '0', taxFee);
+    updateTaxRows(prefix, taxSetting, outputTax, inputTax, taxFee);
     
     // Calculate fee percentage and update label
     const feePercentage = sellPrice > 0 ? (totalFee / sellPrice * 100).toFixed(1) : '0.0';
@@ -565,16 +666,41 @@ function updatePreOrderRow(prefix, hasPreOrder, preOrderFee) {
     }
 }
 
-// Update tax row visibility and value
-function updateTaxRow(prefix, hasTax, taxFee) {
-    const row = document.getElementById(`${prefix}-tax-row`);
-    const value = document.getElementById(`${prefix}-tax`);
+// Update tax row(s) visibility and value
+function updateTaxRows(prefix, taxSetting, outputTax, inputTax, netTax) {
+    const taxRow = document.getElementById(`${prefix}-tax-row`);
+    const taxValue = document.getElementById(`${prefix}-tax`);
+    const outputTaxRow = document.getElementById(`${prefix}-output-tax-row`);
+    const outputTaxValue = document.getElementById(`${prefix}-output-tax`);
+    const inputTaxRow = document.getElementById(`${prefix}-input-tax-row`);
+    const inputTaxValue = document.getElementById(`${prefix}-input-tax`);
     
-    if (hasTax) {
-        row.style.display = '';
-        value.textContent = formatCurrency(taxFee);
+    if (taxSetting === '1') {
+        // 稅籍登記 - show single tax row
+        if (taxRow && taxValue) {
+            taxRow.style.display = '';
+            taxValue.textContent = formatCurrency(netTax);
+        }
+        if (outputTaxRow) outputTaxRow.style.display = 'none';
+        if (inputTaxRow) inputTaxRow.style.display = 'none';
+    } else if (taxSetting === '5' || taxSetting === '5_plus') {
+        // 發票 or 蝦皮代開發票 - show output and input tax rows
+        if (taxRow) taxRow.style.display = 'none';
+        
+        if (outputTaxRow && outputTaxValue) {
+            outputTaxRow.style.display = '';
+            outputTaxValue.textContent = '-' + formatCurrency(outputTax).substring(2); // Remove "$ " and add "-"
+        }
+        
+        if (inputTaxRow && inputTaxValue) {
+            inputTaxRow.style.display = '';
+            inputTaxValue.textContent = '+' + formatCurrency(inputTax).substring(2); // Remove "$ " and add "+"
+        }
     } else {
-        row.style.display = 'none';
+        // 無稅 - hide all tax rows
+        if (taxRow) taxRow.style.display = 'none';
+        if (outputTaxRow) outputTaxRow.style.display = 'none';
+        if (inputTaxRow) inputTaxRow.style.display = 'none';
     }
 }
 
@@ -624,10 +750,52 @@ cashbackRadios.forEach(radio => {
 // Add event listeners for tax setting radio buttons
 taxRadios.forEach(radio => {
     radio.addEventListener('change', () => {
+        updateTaxCheckboxVisibility();
         calculateFees();
         updateQueryString();
     });
 });
+
+// Update tax checkbox visibility based on selected tax setting
+function updateTaxCheckboxVisibility() {
+    let selectedTax = '0';
+    taxRadios.forEach(radio => {
+        if (radio.checked) selectedTax = radio.value;
+    });
+    
+    // Show/hide input invoice checkbox (for "無" option)
+    if (inputInvoiceContainer) {
+        if (selectedTax === '0') {
+            inputInvoiceContainer.style.display = '';
+        } else {
+            inputInvoiceContainer.style.display = 'none';
+        }
+    }
+    
+    // Show/hide fee deduction checkbox (for "發票" and "蝦皮代開發票" options)
+    if (feeDeductContainer) {
+        if (selectedTax === '5' || selectedTax === '5_plus') {
+            feeDeductContainer.style.display = '';
+        } else {
+            feeDeductContainer.style.display = 'none';
+        }
+    }
+}
+
+// Add event listeners for tax checkboxes
+if (hasInputInvoice) {
+    hasInputInvoice.addEventListener('change', () => {
+        calculateFees();
+        updateQueryString();
+    });
+}
+
+if (canDeductFee) {
+    canDeductFee.addEventListener('change', () => {
+        calculateFees();
+        updateQueryString();
+    });
+}
 
 // Add event listeners for pre-order radio buttons
 preOrderRadios.forEach(radio => {
