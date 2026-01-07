@@ -14,28 +14,31 @@ const shippingOptionRadios = document.querySelectorAll('input[name="shippingOpti
 const sellerTypeRadios = document.querySelectorAll('input[name="sellerType"]');
 const suggestedPriceRows = document.querySelectorAll('.suggested-price-row');
 
+// Tax Options
+const inputTaxOptions = document.getElementById('inputTaxOptions');
+const hasProductInvoiceInput = document.getElementById('hasProductInvoice');
+const hasFeeInvoiceInput = document.getElementById('hasFeeInvoice');
+
 // Floating Header Elements
 const floatSellContainer = document.getElementById('floatSellContainer');
 const floatMarginContainer = document.getElementById('floatMarginContainer');
-
-// Summary Table Elements
 const suggestedPriceColumns = document.querySelectorAll('.suggested-price-column');
 
-// Get cashback program radio buttons
+// Radio Groups
 const cashbackRadios = document.querySelectorAll('input[name="cashbackProgram"]');
 const taxRadios = document.querySelectorAll('input[name="taxSetting"]');
 const preOrderRadios = document.querySelectorAll('input[name="preOrder"]');
 
-let currentMode = 'profit'; // 'profit' or 'price'
-let currentShippingOption = 'both'; // 'both', 'ship1', or 'ship2'
-let currentSellerType = 'general'; // 'general' or 'mall'
+let currentMode = 'profit'; 
+let currentShippingOption = 'both'; 
+let currentSellerType = 'general'; 
 
-// Format number with thousand separators and no decimals
+// Format number
 function formatCurrency(amount) {
     return '$ ' + Math.round(amount).toLocaleString('zh-TW');
 }
 
-// URL Query String Management
+// URL Management
 function getQueryParams() {
     const params = new URLSearchParams(window.location.search);
     return {
@@ -49,60 +52,45 @@ function getQueryParams() {
         preorder: params.get('preorder') || '0',
         cashback: params.get('cashback') || '0',
         tax: params.get('tax') || '0',
-        costTax: params.get('costTax') || 'inc'
+        costTax: params.get('costTax') || 'inc',
+        hasProdInv: params.get('hasProdInv') === '1',
+        hasFeeInv: params.get('hasFeeInv') === '1'
     };
 }
 
 function updateQueryString() {
     const params = new URLSearchParams();
-    
-    // Mode
     params.set('mode', currentMode);
-    
-    // Shipping Option
     params.set('shipping', currentShippingOption);
-    
-    // Seller Type
     params.set('seller', currentSellerType);
-    
-    // Cost Price
     if (costPriceInput.value) params.set('cost', costPriceInput.value);
-    
-    // Cost Tax
     params.set('costTax', costTaxTypeInput.checked ? 'inc' : 'exc');
 
-    // Sell Price or Margin
     if (currentMode === 'profit' && sellPriceInput.value) {
         params.set('sell', sellPriceInput.value);
     } else if (currentMode === 'price' && profitMarginInput.value) {
         params.set('margin', profitMarginInput.value);
     }
     
-    // Transaction Fee
     if (transactionFeeInput.value) params.set('fee', transactionFeeInput.value);
     
-    // Pre-order
     let preOrderValue = '0';
-    preOrderRadios.forEach(radio => {
-        if (radio.checked) preOrderValue = radio.value;
-    });
+    preOrderRadios.forEach(r => { if(r.checked) preOrderValue = r.value; });
     params.set('preorder', preOrderValue);
     
-    // Cashback
     let cashbackValue = '0';
-    cashbackRadios.forEach(radio => {
-        if (radio.checked) cashbackValue = radio.value;
-    });
+    cashbackRadios.forEach(r => { if(r.checked) cashbackValue = r.value; });
     params.set('cashback', cashbackValue);
     
-    // Tax
     let taxValue = '0';
-    taxRadios.forEach(radio => {
-        if (radio.checked) taxValue = radio.value;
-    });
+    taxRadios.forEach(r => { if(r.checked) taxValue = r.value; });
     params.set('tax', taxValue);
+
+    if (taxValue === '5' || taxValue === '5_plus') {
+        if (hasProductInvoiceInput.checked) params.set('hasProdInv', '1');
+        if (hasFeeInvoiceInput.checked) params.set('hasFeeInv', '1');
+    }
     
-    // Update URL without reloading
     const newUrl = window.location.pathname + '?' + params.toString();
     window.history.replaceState({}, '', newUrl);
 }
@@ -110,32 +98,19 @@ function updateQueryString() {
 function loadFromQueryString() {
     const params = getQueryParams();
     
-    // Set Mode
     currentMode = params.mode;
     document.getElementById(params.mode === 'profit' ? 'modeProfit' : 'modePrice').checked = true;
     
-    // Set Shipping Option
     currentShippingOption = params.shipping;
-    if (params.shipping === 'ship1') {
-        document.getElementById('shipOne').checked = true;
-    } else if (params.shipping === 'ship2') {
-        document.getElementById('shipTwo').checked = true;
-    } else {
-        document.getElementById('shipBoth').checked = true;
-    }
+    if (params.shipping === 'ship1') document.getElementById('shipOne').checked = true;
+    else if (params.shipping === 'ship2') document.getElementById('shipTwo').checked = true;
+    else document.getElementById('shipBoth').checked = true;
     
-    // Set Seller Type
     currentSellerType = params.seller;
-    if (params.seller === 'mall') {
-        document.getElementById('sellerMall').checked = true;
-    } else {
-        document.getElementById('sellerGeneral').checked = true;
-    }
+    document.getElementById(params.seller === 'mall' ? 'sellerMall' : 'sellerGeneral').checked = true;
     
-    // Set Cost Price
     if (params.cost) costPriceInput.value = params.cost;
     
-    // Set Cost Tax
     if (params.costTax === 'exc') {
         costTaxTypeInput.checked = false;
         costTaxLabel.textContent = '未稅';
@@ -146,569 +121,449 @@ function loadFromQueryString() {
         costTaxSuffix.textContent = '(含稅)';
     }
 
-    // Set Sell Price or Margin
     if (params.sell) sellPriceInput.value = params.sell;
     if (params.margin) profitMarginInput.value = params.margin;
-    
-    // Set Transaction Fee
     if (params.fee) transactionFeeInput.value = params.fee;
     
-    // Set Pre-order
-    if (params.preorder === '3') {
-        document.getElementById('isPreOrder').checked = true;
-    } else {
-        document.getElementById('noPreOrder').checked = true;
-    }
+    if (params.preorder === '3') document.getElementById('isPreOrder').checked = true;
+    else document.getElementById('noPreOrder').checked = true;
     
-    // Set Cashback
-    if (params.cashback === '1.5') {
-        document.getElementById('cashback5').checked = true;
-    } else if (params.cashback === '2.5') {
-        document.getElementById('cashback10').checked = true;
-    } else {
-        document.getElementById('noCashback').checked = true;
-    }
+    if (params.cashback === '1.5') document.getElementById('cashback5').checked = true;
+    else if (params.cashback === '2.5') document.getElementById('cashback10').checked = true;
+    else document.getElementById('noCashback').checked = true;
     
-    // Set Tax
-    if (params.tax === '1') {
-        document.getElementById('businessTax').checked = true;
-    } else if (params.tax === '5') {
-        document.getElementById('invoiceTax').checked = true;
-    } else if (params.tax === '5_plus') {
-        document.getElementById('shopeeInvoice').checked = true;
+    if (params.tax === '1') document.getElementById('businessTax').checked = true;
+    else if (params.tax === '5') document.getElementById('invoiceTax').checked = true;
+    else if (params.tax === '5_plus') document.getElementById('shopeeInvoice').checked = true;
+    else document.getElementById('noTax').checked = true;
+
+    hasProductInvoiceInput.checked = params.hasProdInv;
+    hasFeeInvoiceInput.checked = params.hasFeeInv;
+    
+    updateTaxOptionsVisibility();
+}
+
+function updateTaxOptionsVisibility() {
+    let taxVal = '0';
+    taxRadios.forEach(r => { if(r.checked) taxVal = r.value; });
+    
+    if (taxVal === '5' || taxVal === '5_plus') {
+        inputTaxOptions.style.display = 'block';
     } else {
-        document.getElementById('noTax').checked = true;
+        inputTaxOptions.style.display = 'none';
+        // Hide only if not active, but keep state for now.
     }
 }
 
-// Mode switching logic
-modeRadios.forEach(radio => {
-    radio.addEventListener('change', (e) => {
-        currentMode = e.target.value;
-        updateModeUI();
-        calculateFees();
-        updateQueryString();
-    });
+// Event Listeners
+modeRadios.forEach(r => r.addEventListener('change', (e) => {
+    currentMode = e.target.value;
+    updateModeUI();
+    calculateFees();
+    updateQueryString();
+}));
+shippingOptionRadios.forEach(r => r.addEventListener('change', (e) => {
+    currentShippingOption = e.target.value;
+    updateShippingOptionUI();
+    updateQueryString();
+}));
+sellerTypeRadios.forEach(r => r.addEventListener('change', (e) => {
+    currentSellerType = e.target.value;
+    calculateFees();
+    updateQueryString();
+}));
+taxRadios.forEach(r => r.addEventListener('change', () => {
+    updateTaxOptionsVisibility();
+    calculateFees();
+    updateQueryString();
+}));
+
+[costPriceInput, sellPriceInput, profitMarginInput, transactionFeeInput, costTaxTypeInput, hasProductInvoiceInput, hasFeeInvoiceInput].forEach(el => {
+    if (el === costTaxTypeInput) {
+        el.addEventListener('change', (e) => {
+            const isChecked = e.target.checked;
+            costTaxLabel.textContent = isChecked ? '含稅' : '未稅';
+            costTaxSuffix.textContent = isChecked ? '(含稅)' : '(未稅)';
+            calculateFees();
+            updateQueryString();
+        });
+    } else if (el === hasProductInvoiceInput || el === hasFeeInvoiceInput) {
+        el.addEventListener('change', () => {
+            calculateFees();
+            updateQueryString();
+        });
+    } else {
+        el.addEventListener('input', () => {
+            calculateFees();
+            updateQueryString();
+        });
+    }
 });
 
-// Shipping option switching logic
-shippingOptionRadios.forEach(radio => {
-    radio.addEventListener('change', (e) => {
-        currentShippingOption = e.target.value;
-        updateShippingOptionUI();
-        updateQueryString();
-    });
-});
-
-// Seller type switching logic
-sellerTypeRadios.forEach(radio => {
-    radio.addEventListener('change', (e) => {
-        currentSellerType = e.target.value;
-        calculateFees();
-        updateQueryString();
-    });
-});
+cashbackRadios.forEach(r => r.addEventListener('change', () => {
+    calculateFees();
+    updateQueryString();
+}));
+preOrderRadios.forEach(r => r.addEventListener('change', () => {
+    calculateFees();
+    updateQueryString();
+}));
 
 function updateModeUI() {
     if (currentMode === 'profit') {
-        // Input Section
         sellPriceContainer.style.display = '';
         profitMarginContainer.style.display = 'none';
-        
-        // Result Cards
         suggestedPriceRows.forEach(row => row.style.display = 'none');
-        
-        // Floating Header
         floatSellContainer.style.display = '';
         floatMarginContainer.style.display = 'none';
-        
-        // Summary Table
         suggestedPriceColumns.forEach(col => col.style.display = 'none');
     } else {
-        // Input Section
         sellPriceContainer.style.display = 'none';
         profitMarginContainer.style.display = '';
-        
-        // Result Cards
         suggestedPriceRows.forEach(row => row.style.display = '');
-        
-        // Floating Header
         floatSellContainer.style.display = 'none';
         floatMarginContainer.style.display = '';
-        
-        // Summary Table
         suggestedPriceColumns.forEach(col => col.style.display = '');
     }
 }
 
 function updateShippingOptionUI() {
-    // Get all result cards
-    const regularShip1 = document.querySelector('.col-md-6:has(.result-card.regular):nth-of-type(1)');
-    const regularShip2 = document.querySelector('.col-md-6:has(.result-card.regular):nth-of-type(2)');
-    const eventShip1 = document.querySelector('.col-md-6:has(.result-card.event):nth-of-type(3)');
-    const eventShip2 = document.querySelector('.col-md-6:has(.result-card.event):nth-of-type(4)');
-    
-    // Get all summary table rows
+    const cards = [
+        document.querySelector('.col-md-6:has(.result-card.regular):nth-of-type(1)'),
+        document.querySelector('.col-md-6:has(.result-card.regular):nth-of-type(2)'),
+        document.querySelector('.col-md-6:has(.result-card.event):nth-of-type(3)'),
+        document.querySelector('.col-md-6:has(.result-card.event):nth-of-type(4)')
+    ];
     const summaryRows = document.querySelectorAll('.table tbody tr');
     
-    if (currentShippingOption === 'both') {
-        // Show all cards
-        if (regularShip1) regularShip1.style.display = '';
-        if (regularShip2) regularShip2.style.display = '';
-        if (eventShip1) eventShip1.style.display = '';
-        if (eventShip2) eventShip2.style.display = '';
-        
-        // Show all summary rows
-        summaryRows.forEach(row => row.style.display = '');
-    } else if (currentShippingOption === 'ship1') {
-        // Show only ship1 cards
-        if (regularShip1) regularShip1.style.display = '';
-        if (regularShip2) regularShip2.style.display = 'none';
-        if (eventShip1) eventShip1.style.display = '';
-        if (eventShip2) eventShip2.style.display = 'none';
-        
-        // Show only ship1 summary rows (row 0 and 2)
-        summaryRows.forEach((row, index) => {
-            row.style.display = (index === 0 || index === 2) ? '' : 'none';
-        });
-    } else if (currentShippingOption === 'ship2') {
-        // Show only ship2 cards
-        if (regularShip1) regularShip1.style.display = 'none';
-        if (regularShip2) regularShip2.style.display = '';
-        if (eventShip1) eventShip1.style.display = 'none';
-        if (eventShip2) eventShip2.style.display = '';
-        
-        // Show only ship2 summary rows (row 1 and 3)
-        summaryRows.forEach((row, index) => {
-            row.style.display = (index === 1 || index === 3) ? '' : 'none';
-        });
-    }
+    const show = [true, true, true, true];
+    if (currentShippingOption === 'ship1') show[1] = show[3] = false;
+    else if (currentShippingOption === 'ship2') show[0] = show[2] = false;
+
+    cards.forEach((card, i) => { if(card) card.style.display = show[i] ? '' : 'none'; });
+    summaryRows.forEach((row, i) => { row.style.display = show[i] ? '' : 'none'; });
 }
 
-// Calculate required price based on target margin
-function calculateRequiredPrice(cost, marginPercent, transactionFeeRate, cashbackRate, preOrderRate, taxSetting, isEvent, isShip2, isMall) {
+function calculateRequiredPrice(cost, marginPercent, transactionFeeRate, cashbackRate, preOrderRate, taxSetting, isEvent, isShip2, isMall, hasProdInv, hasFeeInv, isCostInc) {
     const margin = marginPercent / 100;
-    // For event days with no cashback program, add 2% (general) or 3% (mall) to transaction fee
     const eventFeeIncrease = isMall ? 3 : 2;
     const effectiveTransactionRate = (isEvent && cashbackRate === 0) ? transactionFeeRate + eventFeeIncrease : transactionFeeRate;
     const transRate = effectiveTransactionRate / 100;
     const paymentRate = 0.025;
-    const shipRate = isShip2 ? 0 : 0.06; // Ship1 is 6%, Ship2 is fixed
+    const shipRate = isShip2 ? 0 : 0.06;
     const cashbackRateVal = cashbackRate / 100;
     const preOrderRateVal = preOrderRate / 100;
-    
-    let taxRate = 0;
-    let taxFixed = 0;
-    
-    if (taxSetting === '1') taxRate = 0.01;
-    else if (taxSetting === '5') taxRate = 0.05;
-    else if (taxSetting === '5_plus') {
-        taxRate = 0.05;
-        taxFixed = 2.5;
-    }
-
     const shipFixed = isShip2 ? 60 : 0;
     
-    const totalRateOther = paymentRate + shipRate + cashbackRateVal + preOrderRateVal + taxRate;
-    const totalFixed = shipFixed + taxFixed;
+    // Agent Fee
+    const agentFee = (taxSetting === '5_plus') ? 2.5 : 0;
 
-    // Mall seller: no limit
-    if (isMall) {
-        const denominator = 1 - transRate - totalRateOther - margin;
-        if (denominator <= 0) return 0;
-        return Math.ceil((cost + totalFixed) / denominator);
-    }
+    // Shopee Fee Rate (Ratio of Price)
+    const feeRate = transRate + paymentRate + shipRate + cashbackRateVal + preOrderRateVal;
+    
+    // Tax Rates
+    let outputTaxRate = 0;
+    if (taxSetting === '1') outputTaxRate = 0.01;
+    else if (taxSetting === '5' || taxSetting === '5_plus') outputTaxRate = 0.05 / 1.05;
 
-    // General seller: 35000 limit
-    // Case 1: Price <= 35000
-    // P = (C + Fixed) / (1 - TransRate - OtherRate - Margin)
-    const denominator1 = 1 - transRate - totalRateOther - margin;
-    if (denominator1 <= 0) return 0; // Impossible to achieve margin
-    
-    let price = (cost + totalFixed) / denominator1;
-    
-    if (price > 35000) {
-        // Case 2: Price > 35000
-        // P = (C + 35000*TransRate + Fixed) / (1 - OtherRate - Margin)
-        const denominator2 = 1 - totalRateOther - margin;
-        if (denominator2 <= 0) return 0;
-        price = (cost + 35000 * transRate + totalFixed) / denominator2;
+    // Input Tax Deductions
+    let productInputTax = 0;
+    if (hasProdInv && (taxSetting === '5' || taxSetting === '5_plus')) {
+        if (isCostInc) productInputTax = cost / 1.05 * 0.05;
+        else productInputTax = cost * 0.05;
     }
     
-    return Math.ceil(price); // Round up to ensure margin
+    let feeInputTaxRate = 0;
+    let feeInputTaxFixed = 0;
+    if (hasFeeInv && (taxSetting === '5' || taxSetting === '5_plus')) {
+        const factor = 0.05 / 1.05;
+        feeInputTaxRate = feeRate * factor;
+        feeInputTaxFixed = shipFixed * factor;
+    }
+
+    // Cash Out Cost
+    const cashOutCost = isCostInc ? cost : cost * 1.05;
+
+    // Formula Check
+    const taxRateLinear = outputTaxRate - feeInputTaxRate;
+    const taxFixedDeduction = productInputTax + feeInputTaxFixed;
+    
+    const denominator_linear = 1 - margin - feeRate - taxRateLinear;
+    const numerator_linear = cashOutCost + shipFixed - taxFixedDeduction + agentFee;
+
+    if (denominator_linear <= 0) return 0; // Impossible
+    
+    // Check if simple calculation works (Linear assumption: Tax > 0)
+    let price1 = numerator_linear / denominator_linear;
+    
+    // Check Tax at price1
+    const taxAtP1 = (price1 * outputTaxRate) - productInputTax - (price1 * feeRate + shipFixed) * (0.05/1.05);
+    
+    // Case 2: Tax <= 0. Payable Tax is 0.
+    const price2_denom = 1 - margin - feeRate;
+    const price2_num = cashOutCost + shipFixed + agentFee;
+    let price2 = (price2_denom > 0) ? price2_num / price2_denom : 0;
+    
+    let usePrice = (taxAtP1 >= 0) ? price1 : price2;
+    
+    // Handle General Seller Limit (35000) for Transaction Fee
+    if (!isMall && usePrice > 35000) {
+        // Recalculate with Fixed Trans Fee
+        const fixedTransFee = 35000 * transRate;
+        const feeRate_capped = feeRate - transRate;
+        const feeFixed_capped = fixedTransFee + shipFixed;
+        
+        const feeInputTaxRate_capped = hasFeeInv ? feeRate_capped * (0.05/1.05) : 0;
+        const feeInputTaxFixed_capped = hasFeeInv ? feeFixed_capped * (0.05/1.05) : 0;
+        
+        const taxRateLinear_capped = outputTaxRate - feeInputTaxRate_capped;
+        const taxFixedDeduction_capped = productInputTax + feeInputTaxFixed_capped;
+        
+        const denom_capped = 1 - margin - feeRate_capped - taxRateLinear_capped;
+        const num_capped = cashOutCost + feeFixed_capped - taxFixedDeduction_capped + agentFee;
+        
+        if (denom_capped > 0) {
+             let price_capped_1 = num_capped / denom_capped;
+             const taxAtCapped1 = (price_capped_1 * outputTaxRate) - productInputTax - (price_capped_1 * feeRate_capped + feeFixed_capped) * (0.05/1.05);
+             if (taxAtCapped1 >= 0) {
+                 usePrice = price_capped_1;
+             } else {
+                 const denom_capped_2 = 1 - margin - feeRate_capped;
+                 const num_capped_2 = cashOutCost + feeFixed_capped + agentFee;
+                 if (denom_capped_2 > 0) usePrice = num_capped_2 / denom_capped_2;
+             }
+        }
+    }
+
+    return Math.ceil(usePrice);
 }
 
-// Calculate fees and profit
 function calculateFees() {
     let costPrice = parseFloat(costPriceInput.value) || 0;
-    
-    // Adjust cost based on tax setting
-    if (!costTaxTypeInput.checked) {
-        costPrice = costPrice * 1.05;
-    }
-
+    const isCostInc = costTaxTypeInput.checked;
     const transactionFeeRate = parseFloat(transactionFeeInput.value) || 0;
     
-    // Get selected cashback program rate
     let cashbackRate = 0;
     let cashbackLabel = '不參加';
-    cashbackRadios.forEach(radio => {
-        if (radio.checked) {
-            cashbackRate = parseFloat(radio.value);
-            if (radio.id === 'cashback5') cashbackLabel = '5%';
-            else if (radio.id === 'cashback10') cashbackLabel = '10%';
-            else cashbackLabel = '不參加';
+    cashbackRadios.forEach(r => {
+        if (r.checked) {
+            cashbackRate = parseFloat(r.value);
+            if (r.id === 'cashback5') cashbackLabel = '5%';
+            else if (r.id === 'cashback10') cashbackLabel = '10%';
         }
     });
-    const hasCashback = cashbackRate > 0;
 
-    // Get selected pre-order rate
     let preOrderRate = 0;
     let preOrderLabel = '否';
-    preOrderRadios.forEach(radio => {
-        if (radio.checked) {
-            preOrderRate = parseFloat(radio.value);
-            preOrderLabel = radio.value === '0' ? '否' : '是';
+    preOrderRadios.forEach(r => {
+        if (r.checked) {
+            preOrderRate = parseFloat(r.value);
+            if (preOrderRate > 0) preOrderLabel = '是';
         }
     });
-    const hasPreOrder = preOrderRate > 0;
 
-    // Get selected tax setting
     let taxSetting = '0';
-    taxRadios.forEach(radio => {
-        if (radio.checked) taxSetting = radio.value;
-    });
-    const hasTax = taxSetting !== '0';
+    taxRadios.forEach(r => { if(r.checked) taxSetting = r.value; });
+    
+    const hasProdInv = hasProductInvoiceInput.checked;
+    const hasFeeInv = hasFeeInvoiceInput.checked;
 
-    // Determine Prices
-    let prices = {};
     const isMall = currentSellerType === 'mall';
+    
+    let prices = {};
     if (currentMode === 'profit') {
         const p = parseFloat(sellPriceInput.value) || 0;
-        prices = {
-            'regular-ship1': p,
-            'regular-ship2': p,
-            'event-ship1': p,
-            'event-ship2': p
-        };
+        prices = { 'regular-ship1': p, 'regular-ship2': p, 'event-ship1': p, 'event-ship2': p };
     } else {
         const margin = parseFloat(profitMarginInput.value) || 0;
         prices = {
-            'regular-ship1': calculateRequiredPrice(costPrice, margin, transactionFeeRate, cashbackRate, preOrderRate, taxSetting, false, false, isMall),
-            'regular-ship2': calculateRequiredPrice(costPrice, margin, transactionFeeRate, cashbackRate, preOrderRate, taxSetting, false, true, isMall),
-            'event-ship1': calculateRequiredPrice(costPrice, margin, transactionFeeRate, cashbackRate, preOrderRate, taxSetting, true, false, isMall),
-            'event-ship2': calculateRequiredPrice(costPrice, margin, transactionFeeRate, cashbackRate, preOrderRate, taxSetting, true, true, isMall)
+            'regular-ship1': calculateRequiredPrice(costPrice, margin, transactionFeeRate, cashbackRate, preOrderRate, taxSetting, false, false, isMall, hasProdInv, hasFeeInv, isCostInc),
+            'regular-ship2': calculateRequiredPrice(costPrice, margin, transactionFeeRate, cashbackRate, preOrderRate, taxSetting, false, true, isMall, hasProdInv, hasFeeInv, isCostInc),
+            'event-ship1': calculateRequiredPrice(costPrice, margin, transactionFeeRate, cashbackRate, preOrderRate, taxSetting, true, false, isMall, hasProdInv, hasFeeInv, isCostInc),
+            'event-ship2': calculateRequiredPrice(costPrice, margin, transactionFeeRate, cashbackRate, preOrderRate, taxSetting, true, true, isMall, hasProdInv, hasFeeInv, isCostInc)
         };
         
-        // Update Suggested Price UI in Result Cards
-        document.getElementById('regular-ship1-suggested-price').textContent = formatCurrency(prices['regular-ship1']);
-        document.getElementById('regular-ship2-suggested-price').textContent = formatCurrency(prices['regular-ship2']);
-        document.getElementById('event-ship1-suggested-price').textContent = formatCurrency(prices['event-ship1']);
-        document.getElementById('event-ship2-suggested-price').textContent = formatCurrency(prices['event-ship2']);
-        
-        // Update Suggested Price UI in Summary Table
-        document.getElementById('summary-regular-ship1-suggested').textContent = formatCurrency(prices['regular-ship1']);
-        document.getElementById('summary-regular-ship2-suggested').textContent = formatCurrency(prices['regular-ship2']);
-        document.getElementById('summary-event-ship1-suggested').textContent = formatCurrency(prices['event-ship1']);
-        document.getElementById('summary-event-ship2-suggested').textContent = formatCurrency(prices['event-ship2']);
+        ['regular-ship1', 'regular-ship2', 'event-ship1', 'event-ship2'].forEach(key => {
+            const el = document.getElementById(`${key}-suggested-price`);
+            if(el) el.textContent = formatCurrency(prices[key]);
+            const elSum = document.getElementById(`summary-${key}-suggested`);
+            if(elSum) elSum.textContent = formatCurrency(prices[key]);
+        });
     }
 
-    // Calculate and Update Scenarios
-    calculateScenario('regular-ship1', prices['regular-ship1'], costPrice, transactionFeeRate, cashbackRate, preOrderRate, taxSetting, false, false, isMall);
-    calculateScenario('regular-ship2', prices['regular-ship2'], costPrice, transactionFeeRate, cashbackRate, preOrderRate, taxSetting, false, true, isMall);
-    calculateScenario('event-ship1', prices['event-ship1'], costPrice, transactionFeeRate, cashbackRate, preOrderRate, taxSetting, true, false, isMall);
-    calculateScenario('event-ship2', prices['event-ship2'], costPrice, transactionFeeRate, cashbackRate, preOrderRate, taxSetting, true, true, isMall);
+    calculateScenario('regular-ship1', prices['regular-ship1'], costPrice, transactionFeeRate, cashbackRate, preOrderRate, taxSetting, false, false, isMall, hasProdInv, hasFeeInv, isCostInc);
+    calculateScenario('regular-ship2', prices['regular-ship2'], costPrice, transactionFeeRate, cashbackRate, preOrderRate, taxSetting, false, true, isMall, hasProdInv, hasFeeInv, isCostInc);
+    calculateScenario('event-ship1', prices['event-ship1'], costPrice, transactionFeeRate, cashbackRate, preOrderRate, taxSetting, true, false, isMall, hasProdInv, hasFeeInv, isCostInc);
+    calculateScenario('event-ship2', prices['event-ship2'], costPrice, transactionFeeRate, cashbackRate, preOrderRate, taxSetting, true, true, isMall, hasProdInv, hasFeeInv, isCostInc);
 
-    // Update Floating Header
-    document.getElementById('floatCost').textContent = formatCurrency(costPrice);
+    // Floating Header
+    const cashOutCost = isCostInc ? costPrice : costPrice * 1.05;
+    document.getElementById('floatCost').textContent = formatCurrency(cashOutCost);
     
     if (currentMode === 'profit') {
         document.getElementById('floatSell').textContent = formatCurrency(prices['regular-ship1']);
     } else {
         document.getElementById('floatMargin').textContent = profitMarginInput.value + '%';
     }
+    const floatPre = document.getElementById('floatPreOrder');
+    floatPre.textContent = preOrderLabel;
+    floatPre.className = preOrderRate > 0 ? 'badge bg-warning text-dark' : 'badge bg-secondary';
     
-    const floatPreOrder = document.getElementById('floatPreOrder');
-    floatPreOrder.textContent = preOrderLabel;
-    floatPreOrder.className = hasPreOrder ? 'badge bg-warning text-dark' : 'badge bg-secondary';
-
-    const floatCashback = document.getElementById('floatCashback');
-    floatCashback.textContent = cashbackLabel;
-    floatCashback.className = cashbackRate > 0 ? 'badge bg-warning text-dark' : 'badge bg-secondary';
+    const floatCash = document.getElementById('floatCashback');
+    floatCash.textContent = cashbackLabel;
+    floatCash.className = cashbackRate > 0 ? 'badge bg-warning text-dark' : 'badge bg-secondary';
     
-    // Update event day transaction fee labels based on cashback participation
-    const eventTransactionSuffix = (cashbackRate === 0) ? (isMall ? ' (+3%)' : ' (+2%)') : '';
-    const eventShip1Label = document.getElementById('event-ship1-transaction-label');
-    const eventShip2Label = document.getElementById('event-ship2-transaction-label');
-    if (eventShip1Label) eventShip1Label.textContent = '成交手續費' + eventTransactionSuffix;
-    if (eventShip2Label) eventShip2Label.textContent = '成交手續費' + eventTransactionSuffix;
+    const eventFeeIncrease = isMall ? 3 : 2;
+    const suffix = (cashbackRate === 0) ? ` (+${eventFeeIncrease}%)` : '';
+    
+    ['regular-ship1', 'regular-ship2', 'event-ship1', 'event-ship2'].forEach(k => {
+        const l = document.getElementById(`${k}-transaction-label`);
+        if(l) {
+            if (k.startsWith('event')) {
+                l.textContent = '成交手續費' + suffix;
+            } else {
+                l.textContent = '成交手續費';
+            }
+        }
+    });
 }
 
-function calculateScenario(prefix, sellPrice, costPrice, transactionFeeRate, cashbackRate, preOrderRate, taxSetting, isEvent, isShip2, isMall) {
-    // Base fees
-    const transactionPriceLimit = 35000;
-    // For event days with no cashback program, add 2% (general) or 3% (mall) to transaction fee
+function calculateScenario(prefix, sellPrice, costPrice, transactionFeeRate, cashbackRate, preOrderRate, taxSetting, isEvent, isShip2, isMall, hasProdInv, hasFeeInv, isCostInc) {
+    // 1. Shopee Fees
+    const limit = 35000;
     const eventFeeIncrease = isMall ? 3 : 2;
-    const effectiveTransactionRate = (isEvent && cashbackRate === 0) ? transactionFeeRate + eventFeeIncrease : transactionFeeRate;
+    const effTransRate = (isEvent && cashbackRate === 0) ? transactionFeeRate + eventFeeIncrease : transactionFeeRate;
     
-    // Mall seller: no limit, General seller: 35000 limit
-    const transactionFee = isMall ? 
-        Math.round(sellPrice * (effectiveTransactionRate / 100)) :
-        Math.round(Math.min(sellPrice, transactionPriceLimit) * (effectiveTransactionRate / 100));
-    
-    const paymentFee = Math.round(sellPrice * 0.025);
-    
-    // Shipping Fee
+    const transFee = isMall ? 
+        Math.round(sellPrice * effTransRate / 100) : 
+        Math.round(Math.min(sellPrice, limit) * effTransRate / 100);
+        
+    const payFee = Math.round(sellPrice * 0.025);
     const shipFee = isShip2 ? 60 : Math.round(sellPrice * 0.06);
+    const cashFee = Math.round(sellPrice * cashbackRate / 100);
+    const preFee = Math.round(sellPrice * preOrderRate / 100);
     
-    // Cashback Fee
-    const cashbackFee = Math.round(sellPrice * (cashbackRate / 100));
+    const totalShopeeFee = transFee + payFee + shipFee + cashFee + preFee;
     
-    // PreOrder Fee
-    const preOrderFee = Math.round(sellPrice * (preOrderRate / 100));
+    // 2. Taxes
+    let outputTax = 0;
+    if (taxSetting === '1') outputTax = Math.round(sellPrice * 0.01);
+    else if (taxSetting === '5' || taxSetting === '5_plus') outputTax = Math.round(sellPrice / 1.05 * 0.05);
     
-    // Tax Fee
-    let taxFee = 0;
-    if (taxSetting === '1') {
-        taxFee = Math.round(sellPrice * 0.01);
-    } else if (taxSetting === '5') {
-        taxFee = Math.round(sellPrice * 0.05);
-    } else if (taxSetting === '5_plus') {
-        taxFee = Math.round(sellPrice * 0.05 + 2.5);
+    let inputTax = 0; // Product Input
+    if (hasProdInv && (taxSetting === '5' || taxSetting === '5_plus')) {
+         inputTax = isCostInc ? Math.round(costPrice / 1.05 * 0.05) : Math.round(costPrice * 0.05);
     }
-
-    const totalFee = transactionFee + paymentFee + shipFee + cashbackFee + taxFee + preOrderFee;
-    const profit = sellPrice - costPrice - totalFee;
-
-    // Update UI
-    document.getElementById(`${prefix}-transaction`).textContent = formatCurrency(transactionFee);
-    document.getElementById(`${prefix}-payment`).textContent = formatCurrency(paymentFee);
     
+    let feeInputTax = 0; // Fee Input
+    if (hasFeeInv && (taxSetting === '5' || taxSetting === '5_plus')) {
+         feeInputTax = Math.round(totalShopeeFee / 1.05 * 0.05);
+    }
+    
+    let payableTax = 0;
+    if (taxSetting !== '0') {
+         payableTax = Math.max(0, outputTax - inputTax - feeInputTax);
+    }
+    
+    // 3. Agent Fee
+    const agentFee = (taxSetting === '5_plus') ? 2.5 : 0;
+    
+    // 4. Profit
+    const cashOutCost = isCostInc ? costPrice : costPrice * 1.05;
+    const profit = sellPrice - cashOutCost - totalShopeeFee - payableTax - agentFee;
+
+    // --- Update UI ---
+    
+    // Group 1
+    document.getElementById(`${prefix}-transaction`).textContent = formatCurrency(transFee);
+    document.getElementById(`${prefix}-payment`).textContent = formatCurrency(payFee);
     document.getElementById(`${prefix}-shipping`).textContent = formatCurrency(shipFee);
     
-    updateCashbackRow(prefix, cashbackRate > 0, cashbackFee);
-    updatePreOrderRow(prefix, preOrderRate > 0, preOrderFee);
-    updateTaxRow(prefix, taxSetting !== '0', taxFee);
+    const elPre = document.getElementById(`${prefix}-preorder`);
+    const rowPre = document.getElementById(`${prefix}-preorder-row`);
+    if(preOrderRate > 0) { rowPre.style.display=''; elPre.textContent=formatCurrency(preFee); } else rowPre.style.display='none';
     
-    // Calculate fee percentage and update label
-    const feePercentage = sellPrice > 0 ? (totalFee / sellPrice * 100).toFixed(1) : '0.0';
-    const totalLabel = document.getElementById(`${prefix}-total-label`);
-    if (totalLabel) {
-        totalLabel.textContent = `總手續費 (${feePercentage}%)`;
-    }
-    document.getElementById(`${prefix}-total`).textContent = formatCurrency(totalFee);
-    document.getElementById(`${prefix}-profit`).textContent = formatCurrency(profit);
-    updateProfitStyle(`${prefix}-profit-row`, profit);
+    const elCash = document.getElementById(`${prefix}-cashback`);
+    const rowCash = document.getElementById(`${prefix}-cashback-row`);
+    if(cashbackRate > 0) { rowCash.style.display=''; elCash.textContent=formatCurrency(cashFee); } else rowCash.style.display='none';
     
-    updateSummaryRow(prefix, totalFee, profit, sellPrice);
-}
+    document.getElementById(`${prefix}-shopee-total`).textContent = formatCurrency(totalShopeeFee);
 
-// Update summary table row
-function updateSummaryRow(prefix, totalFee, profit, sellPrice) {
-    document.getElementById(`summary-${prefix}-total`).textContent = formatCurrency(totalFee);
+    // Group 2
+    document.getElementById(`${prefix}-payable-tax`).textContent = formatCurrency(payableTax);
     
-    const profitElement = document.getElementById(`summary-${prefix}-profit`);
-    profitElement.textContent = formatCurrency(profit);
-    
-    // Update profit color
-    if (profit < 0) {
-        profitElement.classList.remove('text-success');
-        profitElement.classList.add('text-danger');
+    const elOut = document.getElementById(`${prefix}-output-tax`);
+    const groupTax = document.getElementById(`collapse-${prefix}-tax`).closest('.fee-group');
+    if (taxSetting === '0') {
+        groupTax.style.display = 'none';
     } else {
-        profitElement.classList.remove('text-danger');
-        profitElement.classList.add('text-success');
-    }
-
-    // Calculate and update margin
-    const marginElement = document.getElementById(`summary-${prefix}-margin`);
-    if (sellPrice > 0) {
-        const margin = (profit / sellPrice) * 100;
-        marginElement.textContent = margin.toFixed(1) + '%';
+        groupTax.style.display = '';
+        elOut.textContent = formatCurrency(outputTax);
         
-        if (margin < 0) {
-            marginElement.classList.remove('text-muted', 'text-success');
-            marginElement.classList.add('text-danger');
-        } else {
-            marginElement.classList.remove('text-danger', 'text-muted');
-            marginElement.classList.add('text-success');
-        }
-    } else {
-        marginElement.textContent = '0%';
-        marginElement.classList.remove('text-danger', 'text-success');
-        marginElement.classList.add('text-muted');
+        const rowIn = document.getElementById(`${prefix}-input-tax-row`);
+        if(hasProdInv && (taxSetting === '5'||taxSetting === '5_plus')) { rowIn.style.display=''; document.getElementById(`${prefix}-input-tax`).textContent = '- ' + formatCurrency(inputTax); } else rowIn.style.display='none';
+        
+        const rowFeeIn = document.getElementById(`${prefix}-fee-input-tax-row`);
+        if(hasFeeInv && (taxSetting === '5'||taxSetting === '5_plus')) { rowFeeIn.style.display=''; document.getElementById(`${prefix}-fee-input-tax`).textContent = '- ' + formatCurrency(feeInputTax); } else rowFeeIn.style.display='none';
     }
-}
 
-// Update cashback row visibility and value
-function updateCashbackRow(prefix, hasCashback, cashbackFee) {
-    const row = document.getElementById(`${prefix}-cashback-row`);
-    const value = document.getElementById(`${prefix}-cashback`);
+    // Agent Fee
+    const rowAgent = document.getElementById(`${prefix}-agent-fee-row`);
+    if((taxSetting === '5_plus')) { rowAgent.style.display=''; document.getElementById(`${prefix}-agent-fee`).textContent = formatCurrency(agentFee); } else rowAgent.style.display='none';
+
+    // Profit
+    const elProfit = document.getElementById(`${prefix}-profit`);
+    elProfit.textContent = formatCurrency(profit);
+    const rowProfit = document.getElementById(`${prefix}-profit-row`);
+    if(profit < 0) rowProfit.classList.add('negative'); else rowProfit.classList.remove('negative');
     
-    if (hasCashback) {
-        row.style.display = '';
-        value.textContent = formatCurrency(cashbackFee);
-    } else {
-        row.style.display = 'none';
-    }
-}
-
-// Update pre-order row visibility and value
-function updatePreOrderRow(prefix, hasPreOrder, preOrderFee) {
-    const row = document.getElementById(`${prefix}-preorder-row`);
-    const value = document.getElementById(`${prefix}-preorder`);
+    // Summary
+    document.getElementById(`summary-${prefix}-total`).textContent = formatCurrency(totalShopeeFee + payableTax + agentFee);
+    document.getElementById(`summary-${prefix}-profit`).textContent = formatCurrency(profit);
     
-    if (hasPreOrder) {
-        row.style.display = '';
-        value.textContent = formatCurrency(preOrderFee);
-    } else {
-        row.style.display = 'none';
-    }
-}
-
-// Update tax row visibility and value
-function updateTaxRow(prefix, hasTax, taxFee) {
-    const row = document.getElementById(`${prefix}-tax-row`);
-    const value = document.getElementById(`${prefix}-tax`);
+    const profitEl = document.getElementById(`summary-${prefix}-profit`);
+    profitEl.className = profit < 0 ? 'fw-bold text-danger text-nowrap' : 'fw-bold text-success text-nowrap';
     
-    if (hasTax) {
-        row.style.display = '';
-        value.textContent = formatCurrency(taxFee);
+    const marginEl = document.getElementById(`summary-${prefix}-margin`);
+    if (sellPrice > 0) {
+        const m = (profit / sellPrice) * 100;
+        marginEl.textContent = m.toFixed(1) + '%';
+        marginEl.className = m < 0 ? 'text-danger text-nowrap' : 'text-success text-nowrap';
     } else {
-        row.style.display = 'none';
+        marginEl.textContent = '0%';
+        marginEl.className = 'text-muted text-nowrap';
     }
 }
 
-// Update profit row style based on positive/negative value
-function updateProfitStyle(elementId, profit) {
-    const element = document.getElementById(elementId);
-    if (profit < 0) {
-        element.classList.add('negative');
-    } else {
-        element.classList.remove('negative');
-    }
-}
-
-// Add event listeners for real-time calculation
-costPriceInput.addEventListener('input', () => {
-    calculateFees();
-    updateQueryString();
-});
-costTaxTypeInput.addEventListener('change', (e) => {
-    const isChecked = e.target.checked;
-    costTaxLabel.textContent = isChecked ? '含稅' : '未稅';
-    costTaxSuffix.textContent = isChecked ? '(含稅)' : '(未稅)';
-    calculateFees();
-    updateQueryString();
-});
-sellPriceInput.addEventListener('input', () => {
-    calculateFees();
-    updateQueryString();
-});
-profitMarginInput.addEventListener('input', () => {
-    calculateFees();
-    updateQueryString();
-});
-transactionFeeInput.addEventListener('input', () => {
-    calculateFees();
-    updateQueryString();
-});
-
-// Add event listeners for cashback program radio buttons
-cashbackRadios.forEach(radio => {
-    radio.addEventListener('change', () => {
-        calculateFees();
-        updateQueryString();
-    });
-});
-
-// Add event listeners for tax setting radio buttons
-taxRadios.forEach(radio => {
-    radio.addEventListener('change', () => {
-        calculateFees();
-        updateQueryString();
-    });
-});
-
-// Add event listeners for pre-order radio buttons
-preOrderRadios.forEach(radio => {
-    radio.addEventListener('change', () => {
-        calculateFees();
-        updateQueryString();
-    });
-});
-
-// Floating Header Logic
+// Styling & Init
 const floatingHeader = document.getElementById('floatingHeader');
 const inputSection = document.querySelector('.input-section');
-
 window.addEventListener('scroll', () => {
-    const inputRect = inputSection.getBoundingClientRect();
-    if (inputRect.bottom < 0) {
-        floatingHeader.classList.add('visible');
-    } else {
-        floatingHeader.classList.remove('visible');
-    }
+    if (inputSection.getBoundingClientRect().bottom < 0) floatingHeader.classList.add('visible');
+    else floatingHeader.classList.remove('visible');
 });
+floatingHeader.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
-floatingHeader.addEventListener('click', () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-});
-
-// Theme Toggle Logic
 const themeToggle = document.getElementById('themeToggle');
 const themeIcon = document.getElementById('themeIcon');
 const htmlElement = document.documentElement;
+let savedTheme = localStorage.getItem('theme') || 'light';
+function applyTheme(t){ htmlElement.setAttribute('data-theme', t); themeIcon.className = t==='dark'?'bi bi-sun-fill fs-4':'bi bi-moon-fill fs-4'; }
+applyTheme(savedTheme);
+themeToggle.addEventListener('click', () => { savedTheme = savedTheme==='dark'?'light':'dark'; applyTheme(savedTheme); localStorage.setItem('theme', savedTheme); });
 
-// Check for saved theme preference or system preference
-const savedTheme = localStorage.getItem('theme');
-const currentTheme = savedTheme || 'light';
-
-// Apply initial theme
-applyTheme(currentTheme);
-
-// Toggle theme on button click
-themeToggle.addEventListener('click', () => {
-    const newTheme = htmlElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-    applyTheme(newTheme);
-    localStorage.setItem('theme', newTheme);
+// Init Bootstrap Tooltips
+document.addEventListener('DOMContentLoaded', function() {
+    [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]')).map(el => new bootstrap.Tooltip(el));
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('[data-bs-toggle="tooltip"]')) {
+            [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]')).forEach(el => bootstrap.Tooltip.getInstance(el)?.hide());
+        }
+    });
 });
 
-function applyTheme(theme) {
-    htmlElement.setAttribute('data-theme', theme);
-    if (theme === 'dark') {
-        themeIcon.classList.remove('bi-moon-fill');
-        themeIcon.classList.add('bi-sun-fill');
-    } else {
-        themeIcon.classList.remove('bi-sun-fill');
-        themeIcon.classList.add('bi-moon-fill');
-    }
-}
-
-// Initial calculation
+// Start
 loadFromQueryString();
 updateModeUI();
 updateShippingOptionUI();
 calculateFees();
-
-// Initialize Bootstrap tooltips
-document.addEventListener('DOMContentLoaded', function() {
-    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-    tooltipTriggerList.map(function (tooltipTriggerEl) {
-        return new bootstrap.Tooltip(tooltipTriggerEl, {
-            trigger: 'click hover',
-            html: true
-        });
-    });
-    
-    // Close tooltip when clicking outside
-    document.addEventListener('click', function(e) {
-        if (!e.target.closest('[data-bs-toggle="tooltip"]')) {
-            tooltipTriggerList.forEach(function(tooltipTriggerEl) {
-                const tooltip = bootstrap.Tooltip.getInstance(tooltipTriggerEl);
-                if (tooltip) {
-                    tooltip.hide();
-                }
-            });
-        }
-    });
-});

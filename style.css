@@ -433,3 +433,65 @@ body {
 [data-theme="dark"] #costTaxLabel {
     color: var(--text-main) !important;
 }
+
+/* Tax Input Options */
+.input-tax-bg {
+    background-color: var(--light);
+}
+
+[data-theme="dark"] .input-tax-bg {
+    background-color: var(--bg-input-group);
+}
+
+/* Collapsible Fee Groups */
+.fee-group {
+    border-bottom: 1px solid var(--fee-border);
+}
+
+.fee-group-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 25px;
+    cursor: pointer;
+    font-weight: 700;
+    color: var(--text-main);
+    background-color: transparent;
+    transition: background-color 0.2s ease;
+}
+
+.fee-group-header:hover {
+    background-color: rgba(0,0,0,0.02);
+}
+
+[data-theme="dark"] .fee-group-header:hover {
+    background-color: rgba(255,255,255,0.02);
+}
+
+.fee-group-header .bi-chevron-down {
+    transition: transform 0.3s ease;
+}
+
+.fee-group-header[aria-expanded="true"] .bi-chevron-down {
+    transform: rotate(180deg);
+}
+
+.fee-subitem {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 25px 10px 45px;
+    align-items: center;
+    font-size: 0.95rem;
+    border-top: 1px dashed var(--fee-border);
+    color: var(--text-secondary);
+}
+
+.fee-subitem .fee-value {
+    color: var(--text-main);
+    font-weight: 600;
+}
+
+/* Color for deductions */
+.text-deduction {
+    color: var(--success) !important;
+}

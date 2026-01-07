@@ -10,6 +10,7 @@ Desktop.ini
 
 # Editor
 .vscode/
+.github/
 .idea/
 *.swp
 *.swo

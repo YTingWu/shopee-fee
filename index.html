@@ -307,6 +307,33 @@
                             </div>
                         </div>
                     </div>
+                    
+                    <!-- Input Tax Options (Hidden by default) -->
+                    <div class="row mt-3" id="inputTaxOptions" style="display: none;">
+                        <div class="col-12">
+                            <div class="p-3 rounded input-tax-bg border border-light-subtle">
+                                <label class="form-label mb-2" style="font-size: 0.9rem;">
+                                    <i class="bi bi-receipt-cutoff"></i> 進項發票設定 (扣抵稅額) <span style="color: red;">beta 測試中</span>
+                                </label>
+                                <div class="d-flex flex-column flex-md-row gap-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input rounded-circle" type="checkbox" id="hasProductInvoice">
+                                        <label class="form-check-label" for="hasProductInvoice">
+                                            有商品進項發票
+                                            <i class="bi bi-info-circle text-muted" data-bs-toggle="tooltip" data-bs-placement="top" title="進項稅額 = 進價(未稅) * 5%" style="cursor: help;"></i>
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input rounded-circle" type="checkbox" id="hasFeeInvoice">
+                                        <label class="form-check-label" for="hasFeeInvoice">
+                                            有手續費進項發票
+                                            <i class="bi bi-info-circle text-muted" data-bs-toggle="tooltip" data-bs-placement="top" title="手續費進項稅額 = 蝦皮手續費 / 1.05 * 5%" style="cursor: help;"></i>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -351,34 +378,72 @@
                             <span class="fee-label fw-bold text-primary">建議售價</span>
                             <span class="fee-value fw-bold text-primary" id="regular-ship1-suggested-price">$ 0</span>
                         </div>
-                        <div class="fee-item">
-                            <span class="fee-label">成交手續費</span>
-                            <span class="fee-value" id="regular-ship1-transaction">$ 0</span>
+                        
+                        <!-- Group 1: Shopee Fees -->
+                        <div class="fee-group">
+                            <div class="fee-group-header" data-bs-toggle="collapse" data-bs-target="#collapse-regular-ship1-fees" aria-expanded="true">
+                                <span>蝦皮手續費</span>
+                                <span>
+                                    <span id="regular-ship1-shopee-total">$ 0</span>
+                                    <i class="bi bi-chevron-down ms-2"></i>
+                                </span>
+                            </div>
+                            <div id="collapse-regular-ship1-fees" class="collapse show">
+                                <div class="fee-subitem">
+                                    <span id="regular-ship1-transaction-label">成交手續費</span>
+                                    <span class="fee-value" id="regular-ship1-transaction">$ 0</span>
+                                </div>
+                                <div class="fee-subitem">
+                                    <span>金流處理費 (2.5%)</span>
+                                    <span class="fee-value" id="regular-ship1-payment">$ 0</span>
+                                </div>
+                                <div class="fee-subitem" id="regular-ship1-preorder-row" style="display: none;">
+                                    <span>預購訂單手續費 (3%)</span>
+                                    <span class="fee-value" id="regular-ship1-preorder">$ 0</span>
+                                </div>
+                                <div class="fee-subitem">
+                                    <span>免運手續費 (6%)</span>
+                                    <span class="fee-value" id="regular-ship1-shipping">$ 0</span>
+                                </div>
+                                <div class="fee-subitem" id="regular-ship1-cashback-row" style="display: none;">
+                                    <span>蝦幣回饋活動服務費</span>
+                                    <span class="fee-value" id="regular-ship1-cashback">$ 0</span>
+                                </div>
+                            </div>
                         </div>
-                        <div class="fee-item">
-                            <span class="fee-label">金流處理費 (2.5%)</span>
-                            <span class="fee-value" id="regular-ship1-payment">$ 0</span>
+
+                        <!-- Group 2: Payable Tax -->
+                        <div class="fee-group">
+                            <div class="fee-group-header" data-bs-toggle="collapse" data-bs-target="#collapse-regular-ship1-tax" aria-expanded="true">
+                                <span>應繳營業稅</span>
+                                <span>
+                                    <span id="regular-ship1-payable-tax">$ 0</span>
+                                    <i class="bi bi-chevron-down ms-2"></i>
+                                </span>
+                            </div>
+                            <div id="collapse-regular-ship1-tax" class="collapse show">
+                                <div class="fee-subitem">
+                                    <span>銷項稅額</span>
+                                    <span class="fee-value" id="regular-ship1-output-tax">$ 0</span>
+                                </div>
+                                <div class="fee-subitem" id="regular-ship1-input-tax-row" style="display: none;">
+                                    <span class="text-deduction">- 商品進項稅額</span>
+                                    <span class="fee-value text-deduction" id="regular-ship1-input-tax">$ 0</span>
+                                </div>
+                                <div class="fee-subitem" id="regular-ship1-fee-input-tax-row" style="display: none;">
+                                    <span class="text-deduction">- 手續費進項稅額</span>
+                                    <span class="fee-value text-deduction" id="regular-ship1-fee-input-tax">$ 0</span>
+                                </div>
+                            </div>
                         </div>
-                        <div class="fee-item" id="regular-ship1-preorder-row" style="display: none;">
-                            <span class="fee-label">預購訂單手續費 (3%)</span>
-                            <span class="fee-value" id="regular-ship1-preorder">$ 0</span>
+
+                        <!-- Independent Fee -->
+                        <div class="fee-item" id="regular-ship1-agent-fee-row" style="display: none;">
+                            <span class="fee-label">蝦皮代開發票費</span>
+                            <span class="fee-value" id="regular-ship1-agent-fee">$ 0</span>
                         </div>
-                        <div class="fee-item">
-                            <span class="fee-label">免運手續費 (6%)</span>
-                            <span class="fee-value" id="regular-ship1-shipping">$ 0</span>
-                        </div>
-                        <div class="fee-item" id="regular-ship1-cashback-row" style="display: none;">
-                            <span class="fee-label">蝦幣回饋活動服務費</span>
-                            <span class="fee-value" id="regular-ship1-cashback">$ 0</span>
-                        </div>
-                        <div class="fee-item" id="regular-ship1-tax-row" style="display: none;">
-                            <span class="fee-label">稅金</span>
-                            <span class="fee-value" id="regular-ship1-tax">$ 0</span>
-                        </div>
-                        <div class="fee-item total-row">
-                            <span class="fee-label" id="regular-ship1-total-label">總手續費</span>
-                            <span class="fee-value" id="regular-ship1-total">$ 0</span>
-                        </div>
+                        
+                        <!-- Profit -->
                         <div class="fee-item profit-row" id="regular-ship1-profit-row">
                             <span class="fee-label">獲利</span>
                             <span class="fee-value" id="regular-ship1-profit">$ 0</span>
@@ -394,34 +459,72 @@
                             <span class="fee-label fw-bold text-primary">建議售價</span>
                             <span class="fee-value fw-bold text-primary" id="regular-ship2-suggested-price">$ 0</span>
                         </div>
-                        <div class="fee-item">
-                            <span class="fee-label">成交手續費</span>
-                            <span class="fee-value" id="regular-ship2-transaction">$ 0</span>
+
+                        <!-- Group 1: Shopee Fees -->
+                        <div class="fee-group">
+                            <div class="fee-group-header" data-bs-toggle="collapse" data-bs-target="#collapse-regular-ship2-fees" aria-expanded="true">
+                                <span>蝦皮手續費</span>
+                                <span>
+                                    <span id="regular-ship2-shopee-total">$ 0</span>
+                                    <i class="bi bi-chevron-down ms-2"></i>
+                                </span>
+                            </div>
+                            <div id="collapse-regular-ship2-fees" class="collapse show">
+                                <div class="fee-subitem">
+                                    <span id="regular-ship2-transaction-label">成交手續費</span>
+                                    <span class="fee-value" id="regular-ship2-transaction">$ 0</span>
+                                </div>
+                                <div class="fee-subitem">
+                                    <span>金流處理費 (2.5%)</span>
+                                    <span class="fee-value" id="regular-ship2-payment">$ 0</span>
+                                </div>
+                                <div class="fee-subitem" id="regular-ship2-preorder-row" style="display: none;">
+                                    <span>預購訂單手續費 (3%)</span>
+                                    <span class="fee-value" id="regular-ship2-preorder">$ 0</span>
+                                </div>
+                                <div class="fee-subitem">
+                                    <span>免運手續費 (+60元)</span>
+                                    <span class="fee-value" id="regular-ship2-shipping">$ 0</span>
+                                </div>
+                                <div class="fee-subitem" id="regular-ship2-cashback-row" style="display: none;">
+                                    <span>蝦幣回饋活動服務費</span>
+                                    <span class="fee-value" id="regular-ship2-cashback">$ 0</span>
+                                </div>
+                            </div>
                         </div>
-                        <div class="fee-item">
-                            <span class="fee-label">金流處理費 (2.5%)</span>
-                            <span class="fee-value" id="regular-ship2-payment">$ 0</span>
+
+                        <!-- Group 2: Payable Tax -->
+                        <div class="fee-group">
+                            <div class="fee-group-header" data-bs-toggle="collapse" data-bs-target="#collapse-regular-ship2-tax" aria-expanded="true">
+                                <span>應繳營業稅</span>
+                                <span>
+                                    <span id="regular-ship2-payable-tax">$ 0</span>
+                                    <i class="bi bi-chevron-down ms-2"></i>
+                                </span>
+                            </div>
+                            <div id="collapse-regular-ship2-tax" class="collapse show">
+                                <div class="fee-subitem">
+                                    <span>銷項稅額</span>
+                                    <span class="fee-value" id="regular-ship2-output-tax">$ 0</span>
+                                </div>
+                                <div class="fee-subitem" id="regular-ship2-input-tax-row" style="display: none;">
+                                    <span class="text-deduction">- 商品進項稅額</span>
+                                    <span class="fee-value text-deduction" id="regular-ship2-input-tax">$ 0</span>
+                                </div>
+                                <div class="fee-subitem" id="regular-ship2-fee-input-tax-row" style="display: none;">
+                                    <span class="text-deduction">- 手續費進項稅額</span>
+                                    <span class="fee-value text-deduction" id="regular-ship2-fee-input-tax">$ 0</span>
+                                </div>
+                            </div>
                         </div>
-                        <div class="fee-item" id="regular-ship2-preorder-row" style="display: none;">
-                            <span class="fee-label">預購訂單手續費 (3%)</span>
-                            <span class="fee-value" id="regular-ship2-preorder">$ 0</span>
+
+                        <!-- Independent Fee -->
+                        <div class="fee-item" id="regular-ship2-agent-fee-row" style="display: none;">
+                            <span class="fee-label">蝦皮代開發票費</span>
+                            <span class="fee-value" id="regular-ship2-agent-fee">$ 0</span>
                         </div>
-                        <div class="fee-item">
-                            <span class="fee-label">免運手續費 (+60元)</span>
-                            <span class="fee-value" id="regular-ship2-shipping">$ 0</span>
-                        </div>
-                        <div class="fee-item" id="regular-ship2-cashback-row" style="display: none;">
-                            <span class="fee-label">蝦幣回饋活動服務費</span>
-                            <span class="fee-value" id="regular-ship2-cashback">$ 0</span>
-                        </div>
-                        <div class="fee-item" id="regular-ship2-tax-row" style="display: none;">
-                            <span class="fee-label">稅金</span>
-                            <span class="fee-value" id="regular-ship2-tax">$ 0</span>
-                        </div>
-                        <div class="fee-item total-row">
-                            <span class="fee-label" id="regular-ship2-total-label">總手續費</span>
-                            <span class="fee-value" id="regular-ship2-total">$ 0</span>
-                        </div>
+                        
+                        <!-- Profit -->
                         <div class="fee-item profit-row" id="regular-ship2-profit-row">
                             <span class="fee-label">獲利</span>
                             <span class="fee-value" id="regular-ship2-profit">$ 0</span>
@@ -437,34 +540,72 @@
                             <span class="fee-label fw-bold text-primary">建議售價</span>
                             <span class="fee-value fw-bold text-primary" id="event-ship1-suggested-price">$ 0</span>
                         </div>
-                        <div class="fee-item">
-                            <span class="fee-label" id="event-ship1-transaction-label">成交手續費</span>
-                            <span class="fee-value" id="event-ship1-transaction">$ 0</span>
+
+                        <!-- Group 1: Shopee Fees -->
+                        <div class="fee-group">
+                            <div class="fee-group-header" data-bs-toggle="collapse" data-bs-target="#collapse-event-ship1-fees" aria-expanded="true">
+                                <span>蝦皮手續費</span>
+                                <span>
+                                    <span id="event-ship1-shopee-total">$ 0</span>
+                                    <i class="bi bi-chevron-down ms-2"></i>
+                                </span>
+                            </div>
+                            <div id="collapse-event-ship1-fees" class="collapse show">
+                                <div class="fee-subitem">
+                                    <span id="event-ship1-transaction-label">成交手續費</span>
+                                    <span class="fee-value" id="event-ship1-transaction">$ 0</span>
+                                </div>
+                                <div class="fee-subitem">
+                                    <span>金流處理費 (2.5%)</span>
+                                    <span class="fee-value" id="event-ship1-payment">$ 0</span>
+                                </div>
+                                <div class="fee-subitem" id="event-ship1-preorder-row" style="display: none;">
+                                    <span>預購訂單手續費 (3%)</span>
+                                    <span class="fee-value" id="event-ship1-preorder">$ 0</span>
+                                </div>
+                                <div class="fee-subitem">
+                                    <span>免運手續費 (6%)</span>
+                                    <span class="fee-value" id="event-ship1-shipping">$ 0</span>
+                                </div>
+                                <div class="fee-subitem" id="event-ship1-cashback-row" style="display: none;">
+                                    <span>蝦幣回饋活動服務費</span>
+                                    <span class="fee-value" id="event-ship1-cashback">$ 0</span>
+                                </div>
+                            </div>
                         </div>
-                        <div class="fee-item">
-                            <span class="fee-label">金流處理費 (2.5%)</span>
-                            <span class="fee-value" id="event-ship1-payment">$ 0</span>
+
+                        <!-- Group 2: Payable Tax -->
+                        <div class="fee-group">
+                            <div class="fee-group-header" data-bs-toggle="collapse" data-bs-target="#collapse-event-ship1-tax" aria-expanded="true">
+                                <span>應繳營業稅</span>
+                                <span>
+                                    <span id="event-ship1-payable-tax">$ 0</span>
+                                    <i class="bi bi-chevron-down ms-2"></i>
+                                </span>
+                            </div>
+                            <div id="collapse-event-ship1-tax" class="collapse show">
+                                <div class="fee-subitem">
+                                    <span>銷項稅額</span>
+                                    <span class="fee-value" id="event-ship1-output-tax">$ 0</span>
+                                </div>
+                                <div class="fee-subitem" id="event-ship1-input-tax-row" style="display: none;">
+                                    <span class="text-deduction">- 商品進項稅額</span>
+                                    <span class="fee-value text-deduction" id="event-ship1-input-tax">$ 0</span>
+                                </div>
+                                <div class="fee-subitem" id="event-ship1-fee-input-tax-row" style="display: none;">
+                                    <span class="text-deduction">- 手續費進項稅額</span>
+                                    <span class="fee-value text-deduction" id="event-ship1-fee-input-tax">$ 0</span>
+                                </div>
+                            </div>
                         </div>
-                        <div class="fee-item" id="event-ship1-preorder-row" style="display: none;">
-                            <span class="fee-label">預購訂單手續費 (3%)</span>
-                            <span class="fee-value" id="event-ship1-preorder">$ 0</span>
+
+                        <!-- Independent Fee -->
+                        <div class="fee-item" id="event-ship1-agent-fee-row" style="display: none;">
+                            <span class="fee-label">蝦皮代開發票費</span>
+                            <span class="fee-value" id="event-ship1-agent-fee">$ 0</span>
                         </div>
-                        <div class="fee-item">
-                            <span class="fee-label">免運手續費 (6%)</span>
-                            <span class="fee-value" id="event-ship1-shipping">$ 0</span>
-                        </div>
-                        <div class="fee-item" id="event-ship1-cashback-row" style="display: none;">
-                            <span class="fee-label">蝦幣回饋活動服務費</span>
-                            <span class="fee-value" id="event-ship1-cashback">$ 0</span>
-                        </div>
-                        <div class="fee-item" id="event-ship1-tax-row" style="display: none;">
-                            <span class="fee-label">稅金</span>
-                            <span class="fee-value" id="event-ship1-tax">$ 0</span>
-                        </div>
-                        <div class="fee-item total-row">
-                            <span class="fee-label" id="event-ship1-total-label">總手續費</span>
-                            <span class="fee-value" id="event-ship1-total">$ 0</span>
-                        </div>
+                        
+                        <!-- Profit -->
                         <div class="fee-item profit-row" id="event-ship1-profit-row">
                             <span class="fee-label">獲利</span>
                             <span class="fee-value" id="event-ship1-profit">$ 0</span>
@@ -480,34 +621,72 @@
                             <span class="fee-label fw-bold text-primary">建議售價</span>
                             <span class="fee-value fw-bold text-primary" id="event-ship2-suggested-price">$ 0</span>
                         </div>
-                        <div class="fee-item">
-                            <span class="fee-label" id="event-ship2-transaction-label">成交手續費</span>
-                            <span class="fee-value" id="event-ship2-transaction">$ 0</span>
+
+                        <!-- Group 1: Shopee Fees -->
+                        <div class="fee-group">
+                            <div class="fee-group-header" data-bs-toggle="collapse" data-bs-target="#collapse-event-ship2-fees" aria-expanded="true">
+                                <span>蝦皮手續費</span>
+                                <span>
+                                    <span id="event-ship2-shopee-total">$ 0</span>
+                                    <i class="bi bi-chevron-down ms-2"></i>
+                                </span>
+                            </div>
+                            <div id="collapse-event-ship2-fees" class="collapse show">
+                                <div class="fee-subitem">
+                                    <span id="event-ship2-transaction-label">成交手續費</span>
+                                    <span class="fee-value" id="event-ship2-transaction">$ 0</span>
+                                </div>
+                                <div class="fee-subitem">
+                                    <span>金流處理費 (2.5%)</span>
+                                    <span class="fee-value" id="event-ship2-payment">$ 0</span>
+                                </div>
+                                <div class="fee-subitem" id="event-ship2-preorder-row" style="display: none;">
+                                    <span>預購訂單手續費 (3%)</span>
+                                    <span class="fee-value" id="event-ship2-preorder">$ 0</span>
+                                </div>
+                                <div class="fee-subitem">
+                                    <span>免運手續費 (+60元)</span>
+                                    <span class="fee-value" id="event-ship2-shipping">$ 0</span>
+                                </div>
+                                <div class="fee-subitem" id="event-ship2-cashback-row" style="display: none;">
+                                    <span>蝦幣回饋活動服務費</span>
+                                    <span class="fee-value" id="event-ship2-cashback">$ 0</span>
+                                </div>
+                            </div>
                         </div>
-                        <div class="fee-item">
-                            <span class="fee-label">金流處理費 (2.5%)</span>
-                            <span class="fee-value" id="event-ship2-payment">$ 0</span>
+
+                        <!-- Group 2: Payable Tax -->
+                        <div class="fee-group">
+                            <div class="fee-group-header" data-bs-toggle="collapse" data-bs-target="#collapse-event-ship2-tax" aria-expanded="true">
+                                <span>應繳營業稅</span>
+                                <span>
+                                    <span id="event-ship2-payable-tax">$ 0</span>
+                                    <i class="bi bi-chevron-down ms-2"></i>
+                                </span>
+                            </div>
+                            <div id="collapse-event-ship2-tax" class="collapse show">
+                                <div class="fee-subitem">
+                                    <span>銷項稅額</span>
+                                    <span class="fee-value" id="event-ship2-output-tax">$ 0</span>
+                                </div>
+                                <div class="fee-subitem" id="event-ship2-input-tax-row" style="display: none;">
+                                    <span class="text-deduction">- 商品進項稅額</span>
+                                    <span class="fee-value text-deduction" id="event-ship2-input-tax">$ 0</span>
+                                </div>
+                                <div class="fee-subitem" id="event-ship2-fee-input-tax-row" style="display: none;">
+                                    <span class="text-deduction">- 手續費進項稅額</span>
+                                    <span class="fee-value text-deduction" id="event-ship2-fee-input-tax">$ 0</span>
+                                </div>
+                            </div>
                         </div>
-                        <div class="fee-item" id="event-ship2-preorder-row" style="display: none;">
-                            <span class="fee-label">預購訂單手續費 (3%)</span>
-                            <span class="fee-value" id="event-ship2-preorder">$ 0</span>
+
+                        <!-- Independent Fee -->
+                        <div class="fee-item" id="event-ship2-agent-fee-row" style="display: none;">
+                            <span class="fee-label">蝦皮代開發票費</span>
+                            <span class="fee-value" id="event-ship2-agent-fee">$ 0</span>
                         </div>
-                        <div class="fee-item">
-                            <span class="fee-label">免運手續費 (+60元)</span>
-                            <span class="fee-value" id="event-ship2-shipping">$ 0</span>
-                        </div>
-                        <div class="fee-item" id="event-ship2-cashback-row" style="display: none;">
-                            <span class="fee-label">蝦幣回饋活動服務費</span>
-                            <span class="fee-value" id="event-ship2-cashback">$ 0</span>
-                        </div>
-                        <div class="fee-item" id="event-ship2-tax-row" style="display: none;">
-                            <span class="fee-label">稅金</span>
-                            <span class="fee-value" id="event-ship2-tax">$ 0</span>
-                        </div>
-                        <div class="fee-item total-row">
-                            <span class="fee-label" id="event-ship2-total-label">總手續費</span>
-                            <span class="fee-value" id="event-ship2-total">$ 0</span>
-                        </div>
+                        
+                        <!-- Profit -->
                         <div class="fee-item profit-row" id="event-ship2-profit-row">
                             <span class="fee-label">獲利</span>
                             <span class="fee-value" id="event-ship2-profit">$ 0</span>
@@ -529,7 +708,7 @@
                                     <tr>
                                         <th scope="col" class="py-3 text-start ps-3">情境</th>
                                         <th scope="col" class="py-3 text-nowrap suggested-price-column" style="display: none;">建議售價</th>
-                                        <th scope="col" class="py-3 text-nowrap">總手續費</th>
+                                        <th scope="col" class="py-3 text-nowrap">總扣除額</th>
                                         <th scope="col" class="py-3 text-nowrap">獲利</th>
                                         <th scope="col" class="py-3 text-nowrap">獲利率</th>
                                     </tr>
@@ -614,7 +793,7 @@
 
         <!-- Footer -->
         <footer class="text-center mt-4 pb-2">
-            <p class="text-secondary small mb-2">v1.0.5</p>
+            <p class="text-secondary small mb-2">v1.1.0</p>
             <p class="text-secondary mb-2">Author: <strong>Bruce Wu</strong></p>
             <div class="d-flex justify-content-center gap-3 fs-4">
                 <a href="https://www.instagram.com/bruce_baseball_" target="_blank" class="text-decoration-none" title="Instagram">
