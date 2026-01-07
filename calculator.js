@@ -468,9 +468,12 @@ function calculateScenario(prefix, sellPrice, costPrice, transactionFeeRate, cas
     // 3. Agent Fee
     const agentFee = (taxSetting === '5_plus') ? 2.5 : 0;
     
+    // Total Deduction
+    const totalDeduction = totalShopeeFee + payableTax + agentFee;
+    
     // 4. Profit
     const cashOutCost = isCostInc ? costPrice : costPrice * 1.05;
-    const profit = sellPrice - cashOutCost - totalShopeeFee - payableTax - agentFee;
+    const profit = sellPrice - cashOutCost - totalDeduction;
 
     // --- Update UI ---
     
@@ -489,8 +492,28 @@ function calculateScenario(prefix, sellPrice, costPrice, transactionFeeRate, cas
     
     document.getElementById(`${prefix}-shopee-total`).textContent = formatCurrency(totalShopeeFee);
 
+    const shopeePercentEl = document.getElementById(`${prefix}-shopee-percent`);
+    if (shopeePercentEl) {
+        if (sellPrice > 0) {
+            const pct = (totalShopeeFee / sellPrice * 100).toFixed(1);
+            shopeePercentEl.textContent = `(${pct}%)`;
+        } else {
+            shopeePercentEl.textContent = '(0%)';
+        }
+    }
+
     // Group 2
     document.getElementById(`${prefix}-payable-tax`).textContent = formatCurrency(payableTax);
+
+    const taxPercentEl = document.getElementById(`${prefix}-tax-percent`);
+    if (taxPercentEl) {
+        if (sellPrice > 0) {
+            const pct = (payableTax / sellPrice * 100).toFixed(1);
+            taxPercentEl.textContent = `(${pct}%)`;
+        } else {
+            taxPercentEl.textContent = '(0%)';
+        }
+    }
     
     const elOut = document.getElementById(`${prefix}-output-tax`);
     const groupTax = document.getElementById(`collapse-${prefix}-tax`).closest('.fee-group');
@@ -511,6 +534,25 @@ function calculateScenario(prefix, sellPrice, costPrice, transactionFeeRate, cas
     const rowAgent = document.getElementById(`${prefix}-agent-fee-row`);
     if((taxSetting === '5_plus')) { rowAgent.style.display=''; document.getElementById(`${prefix}-agent-fee`).textContent = formatCurrency(agentFee); } else rowAgent.style.display='none';
 
+    // Total Deduction
+    document.getElementById(`${prefix}-deduction`).textContent = formatCurrency(totalDeduction);
+    const deductionPercentEl = document.getElementById(`${prefix}-deduction-percent`);
+    if (deductionPercentEl) {
+         if (sellPrice > 0) {
+            const pct = (totalDeduction / sellPrice * 100).toFixed(1);
+            deductionPercentEl.textContent = `(${pct}%)`;
+        } else {
+            deductionPercentEl.textContent = '(0%)';
+        }
+    }
+
+    const rowDeduction = document.getElementById(`${prefix}-deduction`).closest('.deduction-row');
+    if (taxSetting === '0') {
+        rowDeduction.style.display = 'none';
+    } else {
+        rowDeduction.style.display = 'flex';
+    }
+
     // Profit
     const elProfit = document.getElementById(`${prefix}-profit`);
     elProfit.textContent = formatCurrency(profit);
@@ -518,7 +560,7 @@ function calculateScenario(prefix, sellPrice, costPrice, transactionFeeRate, cas
     if(profit < 0) rowProfit.classList.add('negative'); else rowProfit.classList.remove('negative');
     
     // Summary
-    document.getElementById(`summary-${prefix}-total`).textContent = formatCurrency(totalShopeeFee + payableTax + agentFee);
+    document.getElementById(`summary-${prefix}-total`).textContent = formatCurrency(totalDeduction);
     document.getElementById(`summary-${prefix}-profit`).textContent = formatCurrency(profit);
     
     const profitEl = document.getElementById(`summary-${prefix}-profit`);

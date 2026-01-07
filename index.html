@@ -58,7 +58,7 @@
     </script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="style.css?v=20260106">
+    <link rel="stylesheet" href="style.css?v=20260107">
     <link rel="stylesheet" href="fee-lookup.css">
 </head>
 <body>
@@ -382,7 +382,7 @@
                         <!-- Group 1: Shopee Fees -->
                         <div class="fee-group">
                             <div class="fee-group-header" data-bs-toggle="collapse" data-bs-target="#collapse-regular-ship1-fees" aria-expanded="true">
-                                <span>蝦皮手續費</span>
+                                <span>蝦皮手續費 <small class="text-muted ms-1" id="regular-ship1-shopee-percent">(0%)</small></span>
                                 <span>
                                     <span id="regular-ship1-shopee-total">$ 0</span>
                                     <i class="bi bi-chevron-down ms-2"></i>
@@ -415,7 +415,7 @@
                         <!-- Group 2: Payable Tax -->
                         <div class="fee-group">
                             <div class="fee-group-header" data-bs-toggle="collapse" data-bs-target="#collapse-regular-ship1-tax" aria-expanded="true">
-                                <span>應繳營業稅</span>
+                                <span>應繳營業稅 <small class="text-muted ms-1" id="regular-ship1-tax-percent">(0%)</small></span>
                                 <span>
                                     <span id="regular-ship1-payable-tax">$ 0</span>
                                     <i class="bi bi-chevron-down ms-2"></i>
@@ -442,6 +442,12 @@
                             <span class="fee-label">蝦皮代開發票費</span>
                             <span class="fee-value" id="regular-ship1-agent-fee">$ 0</span>
                         </div>
+
+                        <!-- Total Deduction -->
+                        <div class="fee-item deduction-row">
+                            <span class="fee-label">總扣除額 <small class="text-muted ms-1" id="regular-ship1-deduction-percent">(0%)</small></span>
+                            <span class="fee-value" id="regular-ship1-deduction">$ 0</span>
+                        </div>
                         
                         <!-- Profit -->
                         <div class="fee-item profit-row" id="regular-ship1-profit-row">
@@ -463,7 +469,7 @@
                         <!-- Group 1: Shopee Fees -->
                         <div class="fee-group">
                             <div class="fee-group-header" data-bs-toggle="collapse" data-bs-target="#collapse-regular-ship2-fees" aria-expanded="true">
-                                <span>蝦皮手續費</span>
+                                <span>蝦皮手續費 <small class="text-muted ms-1" id="regular-ship2-shopee-percent">(0%)</small></span>
                                 <span>
                                     <span id="regular-ship2-shopee-total">$ 0</span>
                                     <i class="bi bi-chevron-down ms-2"></i>
@@ -496,7 +502,7 @@
                         <!-- Group 2: Payable Tax -->
                         <div class="fee-group">
                             <div class="fee-group-header" data-bs-toggle="collapse" data-bs-target="#collapse-regular-ship2-tax" aria-expanded="true">
-                                <span>應繳營業稅</span>
+                                <span>應繳營業稅 <small class="text-muted ms-1" id="regular-ship2-tax-percent">(0%)</small></span>
                                 <span>
                                     <span id="regular-ship2-payable-tax">$ 0</span>
                                     <i class="bi bi-chevron-down ms-2"></i>
@@ -523,6 +529,12 @@
                             <span class="fee-label">蝦皮代開發票費</span>
                             <span class="fee-value" id="regular-ship2-agent-fee">$ 0</span>
                         </div>
+
+                        <!-- Total Deduction -->
+                        <div class="fee-item deduction-row">
+                            <span class="fee-label">總扣除額 <small class="text-muted ms-1" id="regular-ship2-deduction-percent">(0%)</small></span>
+                            <span class="fee-value" id="regular-ship2-deduction">$ 0</span>
+                        </div>
                         
                         <!-- Profit -->
                         <div class="fee-item profit-row" id="regular-ship2-profit-row">
@@ -544,7 +556,7 @@
                         <!-- Group 1: Shopee Fees -->
                         <div class="fee-group">
                             <div class="fee-group-header" data-bs-toggle="collapse" data-bs-target="#collapse-event-ship1-fees" aria-expanded="true">
-                                <span>蝦皮手續費</span>
+                                <span>蝦皮手續費 <small class="text-muted ms-1" id="event-ship1-shopee-percent">(0%)</small></span>
                                 <span>
                                     <span id="event-ship1-shopee-total">$ 0</span>
                                     <i class="bi bi-chevron-down ms-2"></i>
@@ -577,7 +589,7 @@
                         <!-- Group 2: Payable Tax -->
                         <div class="fee-group">
                             <div class="fee-group-header" data-bs-toggle="collapse" data-bs-target="#collapse-event-ship1-tax" aria-expanded="true">
-                                <span>應繳營業稅</span>
+                                <span>應繳營業稅 <small class="text-muted ms-1" id="event-ship1-tax-percent">(0%)</small></span>
                                 <span>
                                     <span id="event-ship1-payable-tax">$ 0</span>
                                     <i class="bi bi-chevron-down ms-2"></i>
@@ -604,6 +616,12 @@
                             <span class="fee-label">蝦皮代開發票費</span>
                             <span class="fee-value" id="event-ship1-agent-fee">$ 0</span>
                         </div>
+
+                        <!-- Total Deduction -->
+                        <div class="fee-item deduction-row">
+                            <span class="fee-label">總扣除額 <small class="text-muted ms-1" id="event-ship1-deduction-percent">(0%)</small></span>
+                            <span class="fee-value" id="event-ship1-deduction">$ 0</span>
+                        </div>
                         
                         <!-- Profit -->
                         <div class="fee-item profit-row" id="event-ship1-profit-row">
@@ -625,7 +643,7 @@
                         <!-- Group 1: Shopee Fees -->
                         <div class="fee-group">
                             <div class="fee-group-header" data-bs-toggle="collapse" data-bs-target="#collapse-event-ship2-fees" aria-expanded="true">
-                                <span>蝦皮手續費</span>
+                                <span>蝦皮手續費 <small class="text-muted ms-1" id="event-ship2-shopee-percent">(0%)</small></span>
                                 <span>
                                     <span id="event-ship2-shopee-total">$ 0</span>
                                     <i class="bi bi-chevron-down ms-2"></i>
@@ -658,7 +676,7 @@
                         <!-- Group 2: Payable Tax -->
                         <div class="fee-group">
                             <div class="fee-group-header" data-bs-toggle="collapse" data-bs-target="#collapse-event-ship2-tax" aria-expanded="true">
-                                <span>應繳營業稅</span>
+                                <span>應繳營業稅 <small class="text-muted ms-1" id="event-ship2-tax-percent">(0%)</small></span>
                                 <span>
                                     <span id="event-ship2-payable-tax">$ 0</span>
                                     <i class="bi bi-chevron-down ms-2"></i>
@@ -684,6 +702,12 @@
                         <div class="fee-item" id="event-ship2-agent-fee-row" style="display: none;">
                             <span class="fee-label">蝦皮代開發票費</span>
                             <span class="fee-value" id="event-ship2-agent-fee">$ 0</span>
+                        </div>
+
+                        <!-- Total Deduction -->
+                        <div class="fee-item deduction-row">
+                            <span class="fee-label">總扣除額 <small class="text-muted ms-1" id="event-ship2-deduction-percent">(0%)</small></span>
+                            <span class="fee-value" id="event-ship2-deduction">$ 0</span>
                         </div>
                         
                         <!-- Profit -->
@@ -793,7 +817,7 @@
 
         <!-- Footer -->
         <footer class="text-center mt-4 pb-2">
-            <p class="text-secondary small mb-2">v1.1.0</p>
+            <p class="text-secondary small mb-2">v1.1.1</p>
             <p class="text-secondary mb-2">Author: <strong>Bruce Wu</strong></p>
             <div class="d-flex justify-content-center gap-3 fs-4">
                 <a href="https://www.instagram.com/bruce_baseball_" target="_blank" class="text-decoration-none" title="Instagram">
@@ -842,7 +866,7 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="calculator.js?20260106"></script>
-    <script src="fee-lookup.js?2026010402"></script>
+    <script src="calculator.js?20260107"></script>
+    <script src="fee-lookup.js?20260107"></script>
 </body>
 </html>
