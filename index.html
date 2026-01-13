@@ -59,7 +59,7 @@
     </script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="style.css?v=202601132">
+    <link rel="stylesheet" href="style.css?v=202601133">
     <link rel="stylesheet" href="fee-lookup.css">
 </head>
 
@@ -117,7 +117,7 @@
 
         <!-- Floating Sidebar Toggle Button -->
         <button id="floatingSidebarToggle" class="btn btn-primary rounded-circle shadow"
-            style="position: fixed; left: 20px; bottom: 20px; z-index: 1045; width: 50px; height: 50px;">
+            style="position: fixed; left: calc(20px + env(safe-area-inset-left, 0px)); bottom: calc(20px + env(safe-area-inset-bottom, 0px)); z-index: 1045; width: 50px; height: 50px;">
             <i class="bi bi-layout-sidebar-inset-reverse fs-5"></i>
         </button>
 
@@ -1026,7 +1026,7 @@
                             </div>
                             <!-- Version -->
                             <div class="text-muted small opacity-50">
-                                v1.1.4
+                                v1.1.5
                             </div>
                         </div>
                     </div>

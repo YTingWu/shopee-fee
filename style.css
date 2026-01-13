@@ -48,6 +48,7 @@ body {
     background-color: var(--bg-body);
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     height: 100vh;
+    height: 100dvh; /* Dynamic viewport height for modern browsers */
     overflow: hidden;
     padding: 0;
     color: var(--text-main);
@@ -270,9 +271,16 @@ body {
 @media (max-width: 768px) {
     body {
         padding: 0;
+        /* Match card background on mobile to bleed into safe areas nicely */
+        background-color: var(--bg-card); 
     }
     .main-container {
         padding: 15px;
+        padding-top: calc(15px + env(safe-area-inset-top)); /* Handle notch/top bars */
+        padding-bottom: calc(30px + env(safe-area-inset-bottom)); /* Handle home bar */
+        border-radius: 0; /* Flush on mobile for cleaner look */
+        box-shadow: none;
+        border: none;
     }
     .input-section {
         padding: 20px;
@@ -297,13 +305,13 @@ body {
     }
 
     #themeToggle {
-        top: 0 !important;
+        top: env(safe-area-inset-top) !important;
         right: 0 !important;
         margin: 5px !important;
     }
     
     .header {
-        margin-top: 25px;
+        margin-top: 40px; /* Increased to avoid coverage */
         padding-top: 10px;
     }
     
@@ -317,6 +325,18 @@ body {
         margin: 6px 0;
         font-size: 0.75rem;
         line-height: 1.4;
+    }
+
+    /* Mobile Sidebar Card Style */
+    #sidebar-wrapper {
+        border-radius: 0 20px 20px 0; /* Only right side rounded if full height */
+        top: 0;
+        bottom: 0;
+        height: 100dvh;
+        left: -85%;
+        width: 80%;
+        min-height: auto;
+        box-shadow: 5px 0 15px rgba(0,0,0,0.1);
     }
 }
 
@@ -538,6 +558,7 @@ body {
     display: flex;
     width: 100%;
     height: 100vh;
+    height: 100dvh;
     align-items: stretch;
 }
 
