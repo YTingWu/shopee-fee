@@ -351,17 +351,18 @@ body {
         top: 15px;
         bottom: 15px;
         height: calc(100dvh - 30px);
-        left: -90%;
+        left: -105%; /* Fully off-screen */
         width: 85%;
         border-radius: 20px;
         box-shadow: 10px 0 30px rgba(0,0,0,0.15);
-        margin-left: 10px;
+        margin-left: 0;
         z-index: 2000;
         border: 1px solid var(--border-color);
+        transition: left .3s cubic-bezier(0.4, 0, 0.2, 1);
     }
     
     body.toggled #sidebar-wrapper {
-        left: 0;
+        left: 10px; /* Floating gap from left */
     }
 
     #sidebar-wrapper .sidebar-heading {
