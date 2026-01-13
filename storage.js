@@ -1,7 +1,7 @@
 // storage.js - Handles saving/loading configurations and sidebar management
 
 const STORAGE_KEY = 'shopee_calculator_configs_v1';
-const TOGGLE_ID = 'sidebarToggle';
+const FLOATING_TOGGLE_ID = 'floatingSidebarToggle';
 const CLOSE_BTN_ID = 'sidebarCloseBtn';
 const OVERLAY_ID = 'sidebar-overlay'; // Must match HTML
 const LIST_ID = 'savedConfigsList';
@@ -9,8 +9,8 @@ const SAVE_BTN_ID = 'saveConfigBtn';
 
 let savedConfigs = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
 
-// DOM Elements (Lazy loaded or accessed directly when needed)
-const sidebarToggle = document.getElementById(TOGGLE_ID);
+// DOM Elements
+const floatingToggle = document.getElementById(FLOATING_TOGGLE_ID);
 const sidebarCloseBtn = document.getElementById(CLOSE_BTN_ID);
 const sidebarOverlay = document.getElementById(OVERLAY_ID);
 const sidebarList = document.getElementById(LIST_ID);
@@ -25,58 +25,86 @@ function saveSidebarState() {
     localStorage.setItem(SIDEBAR_STATE_KEY, JSON.stringify(sidebarState));
 }
 
-function toggleSidebar() {
-    // This is mainly for Mobile
-    document.body.classList.toggle('toggled');
+function handleSidebarToggle() {
+    const isMobile = window.innerWidth < 768;
+    
+    if (isMobile) {
+        document.body.classList.toggle('toggled');
+    } else {
+        toggleDesktopSidebar();
+    }
 }
 
 function toggleDesktopSidebar() {
     const wrapper = document.getElementById('wrapper');
-    const showBtn = document.getElementById('desktopShowSidebarBtn');
     
     sidebarState.collapsed = !sidebarState.collapsed;
     saveSidebarState();
 
     if (sidebarState.collapsed) {
         wrapper.classList.add('desktop-collapsed');
-        if (showBtn) showBtn.style.display = 'block';
     } else {
         wrapper.classList.remove('desktop-collapsed');
-        if (showBtn) showBtn.style.display = 'none';
     }
 }
 
 function initSidebarEvents() {
-    const toggle = document.getElementById(TOGGLE_ID); // Mobile Toggle
+    const floatingBtn = document.getElementById(FLOATING_TOGGLE_ID);
     const closeBtn = document.getElementById(CLOSE_BTN_ID); // Mobile Close
     const overlay = document.getElementById(OVERLAY_ID);
     
     // Desktop Elements
     const desktopCollapseBtn = document.getElementById('desktopSidebarCollapseBtn');
-    const desktopShowBtn = document.getElementById('desktopShowSidebarBtn');
     const resizer = document.getElementById('resizer');
 
-    // Mobile Events
-    if (toggle) toggle.addEventListener('click', (e) => {
-        e.stopPropagation();
-        toggleSidebar();
-    });
+    // Unified Floating Button Event
+    if (floatingBtn) {
+        floatingBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            handleSidebarToggle();
+        });
+    }
     
-    if (closeBtn) closeBtn.addEventListener('click', toggleSidebar);
+    if (closeBtn) closeBtn.addEventListener('click', () => {
+        document.body.classList.remove('toggled');
+    });
     
     if (overlay) overlay.addEventListener('click', () => {
         document.body.classList.remove('toggled');
     });
 
     const saveBtn = document.getElementById(SAVE_BTN_ID);
-    if (saveBtn) saveBtn.addEventListener('click', saveConfig);
+    if (saveBtn) saveBtn.addEventListener('click', openSaveModal);
+
+    // Save Modal Events
+    const clearNameBtn = document.getElementById('clearConfigNameBtn');
+    if (clearNameBtn) {
+        clearNameBtn.addEventListener('click', () => {
+            const input = document.getElementById('configNameInput');
+            if (input) {
+                input.value = '';
+                input.focus();
+            }
+        });
+    }
+
+    const confirmSaveBtn = document.getElementById('confirmSaveConfigBtn');
+    if (confirmSaveBtn) {
+        confirmSaveBtn.addEventListener('click', saveConfig);
+    }
+
+    const configNameInput = document.getElementById('configNameInput');
+    if (configNameInput) {
+        configNameInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                saveConfig();
+            }
+        });
+    }
 
     // Desktop Events
     if (desktopCollapseBtn) {
         desktopCollapseBtn.addEventListener('click', toggleDesktopSidebar);
-    }
-    if (desktopShowBtn) {
-        desktopShowBtn.addEventListener('click', toggleDesktopSidebar);
     }
 
     // Initialize Desktop State (Restore width and collapse state)
@@ -89,7 +117,6 @@ function initSidebarEvents() {
         // Restore Collapsed State
         if (sidebarState.collapsed) {
             wrapper.classList.add('desktop-collapsed');
-            if (desktopShowBtn) desktopShowBtn.style.display = 'block';
         }
     }
 
@@ -157,13 +184,12 @@ function getCurrentStateFromDOM() {
     return state;
 }
 
-function saveConfig() {
+function openSaveModal() {
     const costInput = document.getElementById('costPrice');
     const sellInput = document.getElementById('sellPrice');
     const cost = parseFloat(costInput?.value) || 0;
     
     // Attempt to find calculated sell price if in 'price' mode (margin mode)
-    // We look for the first scenario's suggested price text
     let sell = parseFloat(sellInput?.value) || 0;
     const mode = document.querySelector('input[name="calcMode"]:checked')?.value;
     
@@ -175,13 +201,45 @@ function saveConfig() {
         }
     }
 
-    // Dependency: formatCurrency is in calculator.js. If not available globally, we mock it.
     const currencyStr = (val) => '$ ' + Math.round(val).toLocaleString('zh-TW');
-
     const defaultTitle = `進價: ${currencyStr(cost)} 售價: ${currencyStr(sell)}`;
-    const title = prompt('請輸入設定名稱:', defaultTitle);
     
-    if (title === null) return; // Cancelled
+    const input = document.getElementById('configNameInput');
+    if (input) {
+        input.value = defaultTitle;
+    }
+
+    const saveModal = new bootstrap.Modal(document.getElementById('saveConfigModal'));
+    saveModal.show();
+
+    // Auto focus after modal shown
+    document.getElementById('saveConfigModal').addEventListener('shown.bs.modal', () => {
+        input.focus();
+        input.select();
+    }, { once: true });
+}
+
+function saveConfig() {
+    const input = document.getElementById('configNameInput');
+    const title = input ? input.value : '';
+    
+    const costInput = document.getElementById('costPrice');
+    const sellInput = document.getElementById('sellPrice');
+    const cost = parseFloat(costInput?.value) || 0;
+    
+    let sell = parseFloat(sellInput?.value) || 0;
+    const mode = document.querySelector('input[name="calcMode"]:checked')?.value;
+    
+    if (mode === 'price') {
+        const resultEl = document.getElementById('regular-ship1-suggested-price');
+        if (resultEl) {
+             const txt = resultEl.innerText.replace(/[^\d.-]/g, ''); 
+             sell = parseFloat(txt) || 0;
+        }
+    }
+
+    const currencyStr = (val) => '$ ' + Math.round(val).toLocaleString('zh-TW');
+    const defaultTitle = `進價: ${currencyStr(cost)} 售價: ${currencyStr(sell)}`;
     
     const currentState = getCurrentStateFromDOM();
     
@@ -197,6 +255,12 @@ function saveConfig() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(savedConfigs));
     
     renderSidebar();
+    
+    // Close modal
+    const modalEl = document.getElementById('saveConfigModal');
+    const modal = bootstrap.Modal.getInstance(modalEl);
+    if (modal) modal.hide();
+    
     showToast('已儲存設定');
 }
 

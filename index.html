@@ -59,7 +59,7 @@
     </script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="style.css?v=20260113">
+    <link rel="stylesheet" href="style.css?v=202601132">
     <link rel="stylesheet" href="fee-lookup.css">
 </head>
 
@@ -115,23 +115,14 @@
             <div id="resizer"></div>
         </div>
 
-        <!-- Desktop Show Sidebar Button -->
-        <button id="desktopShowSidebarBtn" class="btn btn-primary rounded-circle shadow"
-            style="position: fixed; left: 20px; bottom: 20px; z-index: 1040; display: none; width: 50px; height: 50px;">
+        <!-- Floating Sidebar Toggle Button -->
+        <button id="floatingSidebarToggle" class="btn btn-primary rounded-circle shadow"
+            style="position: fixed; left: 20px; bottom: 20px; z-index: 1045; width: 50px; height: 50px;">
             <i class="bi bi-layout-sidebar-inset-reverse fs-5"></i>
         </button>
 
         <!-- Page Content -->
         <div id="page-content-wrapper">
-            <!-- Mobile Navbar -->
-            <nav class="navbar navbar-light bg-light border-bottom d-md-none mb-3">
-                <div class="container-fluid">
-                    <button class="btn btn-outline-secondary" id="sidebarToggle">
-                        <i class="bi bi-list"></i>
-                    </button>
-                </div>
-            </nav>
-
             <div class="container">
                 <div class="main-container">
                     <button id="themeToggle" class="btn btn-link position-absolute top-0 end-0 m-3 text-decoration-none"
@@ -1035,7 +1026,7 @@
                             </div>
                             <!-- Version -->
                             <div class="text-muted small opacity-50">
-                                v1.1.3
+                                v1.1.4
                             </div>
                         </div>
                     </div>
@@ -1049,6 +1040,30 @@
 
     <!-- Toast Container -->
     <div class="toast-container position-fixed bottom-0 end-0 p-3" id="toastContainer"></div>
+
+    <!-- Save Config Modal -->
+    <div class="modal fade" id="saveConfigModal" tabindex="-1" aria-labelledby="saveConfigModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title" id="saveConfigModalLabel">儲存設定名稱</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="configNameInput" placeholder="輸入設定名稱">
+                        <button class="btn btn-outline-secondary" type="button" id="clearConfigNameBtn">
+                            <i class="bi bi-x-lg"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" id="confirmSaveConfigBtn">確定儲存</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Fee Lookup Modal -->
     <div class="modal fade" id="feeLookupModal" tabindex="-1" aria-labelledby="feeLookupModalLabel" aria-hidden="true">
@@ -1085,7 +1100,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="calculator.js?20260113"></script>
     <script src="fee-lookup.js?20260107"></script>
-    <script src="storage.js"></script>
+    <script src="storage.js?20260113"></script>
 </body>
 
 </html>
