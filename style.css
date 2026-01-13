@@ -47,12 +47,18 @@
 body {
     background-color: var(--bg-body);
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    height: 100vh;
-    height: 100dvh; /* Dynamic viewport height for modern browsers */
-    overflow: hidden;
-    padding: 0;
     color: var(--text-main);
     transition: background-color 0.3s ease, color 0.3s ease;
+    margin: 0;
+    padding: 0;
+}
+
+@media (min-width: 768px) {
+    body {
+        height: 100vh;
+        height: 100dvh;
+        overflow: hidden;
+    }
 }
 
 .main-container {
@@ -273,14 +279,27 @@ body {
         padding: 0;
         /* Match card background on mobile to bleed into safe areas nicely */
         background-color: var(--bg-card); 
+        overflow-x: hidden;
+        overflow-y: auto;
+        height: auto;
+    }
+    #wrapper {
+        display: block;
+        height: auto;
+    }
+    #page-content-wrapper {
+        height: auto;
+        overflow: visible;
+        padding-bottom: 0; /* Let main-container handle it */
     }
     .main-container {
         padding: 15px;
-        padding-top: calc(15px + env(safe-area-inset-top)); /* Handle notch/top bars */
-        padding-bottom: calc(30px + env(safe-area-inset-bottom)); /* Handle home bar */
+        padding-top: calc(20px + env(safe-area-inset-top)); /* Handle notch/top bars */
+        padding-bottom: calc(60px + env(safe-area-inset-bottom)); /* More padding at bottom for safari */
         border-radius: 0; /* Flush on mobile for cleaner look */
         box-shadow: none;
         border: none;
+        min-height: 100dvh; /* Ensure context fills screen */
     }
     .input-section {
         padding: 20px;
@@ -327,16 +346,27 @@ body {
         line-height: 1.4;
     }
 
-    /* Mobile Sidebar Card Style */
+    /* Mobile Sidebar Card Style - FLOAT STYLE */
     #sidebar-wrapper {
-        border-radius: 0 20px 20px 0; /* Only right side rounded if full height */
-        top: 0;
-        bottom: 0;
-        height: 100dvh;
-        left: -85%;
-        width: 80%;
-        min-height: auto;
-        box-shadow: 5px 0 15px rgba(0,0,0,0.1);
+        top: 15px;
+        bottom: 15px;
+        height: calc(100dvh - 30px);
+        left: -90%;
+        width: 85%;
+        border-radius: 20px;
+        box-shadow: 10px 0 30px rgba(0,0,0,0.15);
+        margin-left: 10px;
+        z-index: 2000;
+        border: 1px solid var(--border-color);
+    }
+    
+    body.toggled #sidebar-wrapper {
+        left: 0;
+    }
+
+    #sidebar-wrapper .sidebar-heading {
+        border-top-left-radius: 20px;
+        border-top-right-radius: 20px;
     }
 }
 
@@ -554,12 +584,17 @@ body {
 
 /* Wrapper & Layout */
 #wrapper {
-    overflow: hidden;
     display: flex;
     width: 100%;
-    height: 100vh;
-    height: 100dvh;
     align-items: stretch;
+}
+
+@media (min-width: 768px) {
+    #wrapper {
+        height: 100vh;
+        height: 100dvh;
+        overflow: hidden;
+    }
 }
 
 #sidebar-wrapper {

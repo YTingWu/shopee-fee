@@ -580,18 +580,25 @@ function calculateScenario(prefix, sellPrice, costPrice, transactionFeeRate, cas
 // Styling & Init
 const floatingHeader = document.getElementById('floatingHeader');
 const inputSection = document.querySelector('.input-section');
-const scrollContainer = document.getElementById('page-content-wrapper') || window;
 
-scrollContainer.addEventListener('scroll', () => {
+function handleScroll() {
     if (inputSection.getBoundingClientRect().bottom < 0) floatingHeader.classList.add('visible');
     else floatingHeader.classList.remove('visible');
-});
+}
+
+// Listen on both window and wrapper for across-device support
+window.addEventListener('scroll', handleScroll);
+const wrapperScroll = document.getElementById('page-content-wrapper');
+if (wrapperScroll) wrapperScroll.addEventListener('scroll', handleScroll);
 
 floatingHeader.addEventListener('click', () => {
-    if (scrollContainer === window) {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+    const wrapper = document.getElementById('page-content-wrapper');
+    // If wrapper is scrollable (Desktop)
+    if (wrapper && wrapper.scrollTop > 0) {
+        wrapper.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
-        scrollContainer.scrollTo({ top: 0, behavior: 'smooth' });
+        // Fallback or Mobile (natural scroll)
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 });
 
