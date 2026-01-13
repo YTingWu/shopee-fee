@@ -580,11 +580,20 @@ function calculateScenario(prefix, sellPrice, costPrice, transactionFeeRate, cas
 // Styling & Init
 const floatingHeader = document.getElementById('floatingHeader');
 const inputSection = document.querySelector('.input-section');
-window.addEventListener('scroll', () => {
+const scrollContainer = document.getElementById('page-content-wrapper') || window;
+
+scrollContainer.addEventListener('scroll', () => {
     if (inputSection.getBoundingClientRect().bottom < 0) floatingHeader.classList.add('visible');
     else floatingHeader.classList.remove('visible');
 });
-floatingHeader.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+floatingHeader.addEventListener('click', () => {
+    if (scrollContainer === window) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+        scrollContainer.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+});
 
 const themeToggle = document.getElementById('themeToggle');
 const themeIcon = document.getElementById('themeIcon');
