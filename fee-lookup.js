@@ -1,57 +1,102 @@
 // Fee Lookup Module
 (function() {
     'use strict';
+    
+    console.log('Fee lookup script loaded'); // Debug log
 
     let feeData = null;
     let currentPath = [];
     let flattenedCategories = [];
 
-    const elements = {
+    // Lazy getter for elements to ensure DOM is ready
+    const getElements = () => ({
         categoryList: document.getElementById('categoryList'),
         categorySearch: document.getElementById('categorySearch'),
         categoryBreadcrumb: document.getElementById('categoryBreadcrumb'),
         breadcrumbNav: document.getElementById('breadcrumbNav'),
         transactionFeeInput: document.getElementById('transactionFee'),
-        searchClearBtn: null // Will be created dynamically
-    };
-
-    // Load fee data when modal is first opened
-    document.getElementById('feeLookupModal').addEventListener('show.bs.modal', function() {
-        if (!feeData) {
-            loadFeeData();
-        }
-        // Create clear button if not exists
-        if (!elements.searchClearBtn) {
-            const clearBtn = document.createElement('button');
-            clearBtn.className = 'search-clear-btn';
-            clearBtn.innerHTML = '<i class="bi bi-x-circle-fill"></i>';
-            clearBtn.type = 'button';
-            clearBtn.addEventListener('click', () => {
-                elements.categorySearch.value = '';
-                clearBtn.classList.remove('visible');
-                renderCategories(feeData, currentPath);
-            });
-            elements.categorySearch.parentElement.style.position = 'relative';
-            elements.categorySearch.parentElement.appendChild(clearBtn);
-            elements.searchClearBtn = clearBtn;
-        }
+        // searchClearBtn is handled dynamically
     });
+    
+    let searchClearBtn = null;
+
+    // Initialize listeners
+    function init() {
+        console.log('Fee lookup module init');
+        // Listen for the custom event dispatched by calc.html
+        document.addEventListener('feeLookupModal:open', function() {
+            console.log('Fee lookup modal opened');
+            if (!feeData) {
+                loadFeeData();
+            }
+            // Create clear button if not exists
+            const els = getElements();
+            if (!searchClearBtn && els.categorySearch) {
+                const clearBtn = document.createElement('button');
+                clearBtn.className = 'absolute right-3 top-2.5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hidden';
+                clearBtn.innerHTML = '<i class="bi bi-x-circle-fill"></i>';
+                clearBtn.type = 'button';
+                clearBtn.addEventListener('click', () => {
+                    if(els.categorySearch) els.categorySearch.value = '';
+                    clearBtn.classList.add('hidden');
+                    if(feeData) renderCategories(feeData, currentPath);
+                });
+                els.categorySearch.parentElement.appendChild(clearBtn);
+                searchClearBtn = clearBtn;
+            }
+            
+            // Reset view when opening
+            if (feeData) {
+                renderCategories(feeData, []);
+            }
+        });
+        
+        // Setup search listener
+        const els = getElements();
+        if (els.categorySearch) {
+             els.categorySearch.addEventListener('input', handleSearchInput);
+        }
+
+        // Also try to bind directly if element exists
+        const directBtn = document.getElementById('lookupFeeBtn');
+        if(directBtn) {
+            directBtn.addEventListener('click', () => {
+                if (!feeData) loadFeeData();
+            });
+        }
+    }
+
+    // Call init when DOM is ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
 
     // Load fee.json data
     async function loadFeeData() {
+        const els = getElements();
         try {
+            console.log('Fetching fee.json...');
             const response = await fetch('fee.json');
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
             feeData = await response.json();
+            console.log('Fee data loaded', feeData);
             flattenedCategories = flattenCategories(feeData);
             renderCategories(feeData);
         } catch (error) {
             console.error('Error loading fee data:', error);
-            elements.categoryList.innerHTML = `
-                <div class="empty-state">
-                    <i class="bi bi-exclamation-triangle"></i>
-                    <p>無法載入手續費資料</p>
-                </div>
-            `;
+            if (els.categoryList) {
+                els.categoryList.innerHTML = `
+                    <div class="flex flex-col items-center justify-center h-full text-gray-400 p-8">
+                        <i class="bi bi-exclamation-triangle text-4xl mb-3 text-red-500"></i>
+                        <p>無法載入手續費資料</p>
+                        <small class="text-xs mt-2">${error.message}</small>
+                    </div>
+                `;
+            }
         }
     }
 
@@ -91,6 +136,9 @@
 
     // Render categories at current path
     function renderCategories(data, path = []) {
+        const els = getElements();
+        if (!els.categoryList) return;
+
         currentPath = path;
         let current = data;
 
@@ -106,7 +154,8 @@
         }
 
         // Clear search when navigating
-        elements.categorySearch.value = '';
+        if(els.categorySearch) els.categorySearch.value = '';
+        if(searchClearBtn) searchClearBtn.classList.add('hidden');
 
         // Update breadcrumbs
         renderBreadcrumbs();
@@ -140,28 +189,31 @@
 
         // Render category list
         if (categories.length === 0) {
-            elements.categoryList.innerHTML = `
-                <div class="empty-state">
-                    <i class="bi bi-inbox"></i>
+            els.categoryList.innerHTML = `
+                <div class="flex flex-col items-center justify-center h-full text-gray-400 p-8">
+                    <i class="bi bi-inbox text-4xl mb-3"></i>
                     <p>沒有可用的類別</p>
                 </div>
             `;
             return;
         }
 
-        elements.categoryList.innerHTML = categories.map(cat => `
+        els.categoryList.innerHTML = categories.map(cat => `
             <button type="button" 
-                    class="list-group-item list-group-item-action category-item ${cat.hasChildren ? 'has-children' : 'leaf-category'}"
+                    class="category-item w-full text-left px-4 py-3 border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-slate-700/50 transition-colors flex justify-between items-center bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 group"
                     data-category="${cat.name}"
                     data-has-children="${cat.hasChildren}"
                     data-fee="${cat.fee || ''}">
-                <span>${cat.name}</span>
-                ${cat.fee ? `<span class="category-fee">${cat.fee}</span>` : ''}
+                <span class="font-medium group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">${cat.name}</span>
+                ${cat.hasChildren 
+                    ? '<i class="bi bi-chevron-right text-gray-400 group-hover:text-blue-500"></i>' 
+                    : `<span class="category-fee bg-blue-100/50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 px-2 py-1 rounded text-sm font-semibold">${cat.fee}</span>`
+                }
             </button>
         `).join('');
 
         // Add click handlers
-        elements.categoryList.querySelectorAll('.category-item').forEach(item => {
+        els.categoryList.querySelectorAll('.category-item').forEach(item => {
             item.addEventListener('click', handleCategoryClick);
         });
     }
@@ -184,57 +236,68 @@
 
     // Select a fee and close modal
     function selectFee(fee, path) {
+        const els = getElements();
         // Remove % sign if present
         const feeValue = parseFloat(fee.replace('%', ''));
         
         // Update the transaction fee input
-        elements.transactionFeeInput.value = feeValue;
-        
-        // Trigger input event to recalculate
-        elements.transactionFeeInput.dispatchEvent(new Event('input', { bubbles: true }));
+        if (els.transactionFeeInput) {
+            els.transactionFeeInput.value = feeValue;
+            // Trigger input event to recalculate
+            els.transactionFeeInput.dispatchEvent(new Event('input', { bubbles: true }));
+        }
         
         // Clear search input
-        elements.categorySearch.value = '';
+        if(els.categorySearch) els.categorySearch.value = '';
         
         // Reset to initial view
         renderCategories(feeData, []);
         
         // Close modal
-        const modal = bootstrap.Modal.getInstance(document.getElementById('feeLookupModal'));
-        modal.hide();
+        if (typeof window.closeModal === 'function') {
+            window.closeModal('feeLookupModal');
+        } else {
+            const modal = document.getElementById('feeLookupModal');
+            if(modal) modal.classList.add('hidden');
+        }
         
-        // Show success feedback
         console.log(`已選擇類別: ${path.join(' > ')} - ${fee}`);
     }
 
     // Render breadcrumbs
     function renderBreadcrumbs() {
+        const els = getElements();
+        if (!els.breadcrumbNav || !els.categoryBreadcrumb) return;
+
         if (currentPath.length === 0) {
-            elements.breadcrumbNav.style.display = 'none';
+            els.breadcrumbNav.classList.add('hidden');
             return;
         }
 
-        elements.breadcrumbNav.style.display = 'block';
+        els.breadcrumbNav.classList.remove('hidden');
 
         const breadcrumbs = [
-            `<li class="breadcrumb-item"><a href="#" data-path="">首頁</a></li>`
+            `<li><button class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium" data-path="">首頁</button></li>`
         ];
 
         currentPath.forEach((segment, index) => {
+            // Add separator
+            breadcrumbs.push(`<li><span class="text-gray-300 dark:text-gray-600">/</span></li>`);
+
             const isLast = index === currentPath.length - 1;
             const path = currentPath.slice(0, index + 1).join(',');
             
             if (isLast) {
-                breadcrumbs.push(`<li class="breadcrumb-item active" aria-current="page">${segment}</li>`);
+                breadcrumbs.push(`<li><span class="text-gray-800 dark:text-gray-200 font-semibold" aria-current="page">${segment}</span></li>`);
             } else {
-                breadcrumbs.push(`<li class="breadcrumb-item"><a href="#" data-path="${path}">${segment}</a></li>`);
+                breadcrumbs.push(`<li><button class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors" data-path="${path}">${segment}</button></li>`);
             }
         });
 
-        elements.categoryBreadcrumb.innerHTML = breadcrumbs.join('');
+        els.categoryBreadcrumb.innerHTML = breadcrumbs.join('');
 
         // Add click handlers to breadcrumb links
-        elements.categoryBreadcrumb.querySelectorAll('a').forEach(link => {
+        els.categoryBreadcrumb.querySelectorAll('button').forEach(link => {
             link.addEventListener('click', (e) => {
                 e.preventDefault();
                 const pathStr = e.target.dataset.path;
@@ -244,16 +307,17 @@
         });
     }
 
-    // Search functionality
-    elements.categorySearch.addEventListener('input', (e) => {
+    // Search functionality handler
+    function handleSearchInput(e) {
         const searchTerm = e.target.value.trim().toLowerCase();
+        const els = getElements();
 
         // Toggle clear button visibility
-        if (elements.searchClearBtn) {
+        if (searchClearBtn) {
             if (searchTerm.length > 0) {
-                elements.searchClearBtn.classList.add('visible');
+                searchClearBtn.classList.remove('hidden');
             } else {
-                elements.searchClearBtn.classList.remove('visible');
+                searchClearBtn.classList.add('hidden');
             }
         }
 
@@ -273,55 +337,65 @@
         );
 
         // Hide breadcrumbs during search
-        elements.breadcrumbNav.style.display = 'none';
+        if(els.breadcrumbNav) els.breadcrumbNav.classList.add('hidden');
 
         if (results.length === 0) {
-            elements.categoryList.innerHTML = `
-                <div class="empty-state">
-                    <i class="bi bi-search"></i>
-                    <p>找不到符合的類別</p>
-                    <small>請嘗試其他關鍵字</small>
-                </div>
-            `;
+            if(els.categoryList) {
+                els.categoryList.innerHTML = `
+                    <div class="flex flex-col items-center justify-center h-full text-gray-400 p-8">
+                        <i class="bi bi-search text-4xl mb-3"></i>
+                        <p>找不到符合的類別</p>
+                        <small class="opacity-75">請嘗試其他關鍵字</small>
+                    </div>
+                `;
+            }
             return;
         }
 
         // Render search results
-        elements.categoryList.innerHTML = results.map(cat => {
-            const highlightedName = highlightText(cat.name, searchTerm);
-            const highlightedPath = highlightText(cat.fullPath, searchTerm);
-            const fee = isMall ? cat.mall_fee : cat.general_fee;
-            
-            return `
-                <button type="button" 
-                        class="list-group-item list-group-item-action category-item leaf-category"
-                        data-fee="${fee}"
-                        data-path="${cat.path.join(',')}">
-                    <div>
-                        <div>${highlightedName}</div>
-                        <small class="text-muted d-block">${highlightedPath}</small>
-                    </div>
-                    <span class="category-fee">${fee}</span>
-                </button>
-            `;
-        }).join('');
+        if(els.categoryList) {
+            els.categoryList.innerHTML = results.map(cat => {
+                const highlightedName = highlightText(cat.name, searchTerm);
+                const highlightedPath = highlightText(cat.fullPath, searchTerm);
+                const fee = isMall ? cat.mall_fee : cat.general_fee;
+                
+                return `
+                    <button type="button" 
+                            class="category-item w-full text-left px-4 py-3 border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-slate-700/50 transition-colors flex justify-between items-center bg-white dark:bg-gray-800 group"
+                            data-fee="${fee}"
+                            data-path="${cat.path.join(',')}">
+                        <div class="flex flex-col">
+                            <div class="font-medium text-gray-800 dark:text-gray-200">${highlightedName}</div>
+                            <small class="text-gray-500 dark:text-gray-400 mt-0.5">${highlightedPath}</small>
+                        </div>
+                        <span class="category-fee bg-blue-100/50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 px-2 py-1 rounded text-sm font-semibold whitespace-nowrap ml-2">${fee}</span>
+                    </button>
+                `;
+            }).join('');
 
-        // Add click handlers for search results
-        elements.categoryList.querySelectorAll('.category-item').forEach(item => {
-            item.addEventListener('click', () => {
-                const fee = item.dataset.fee;
-                const path = item.dataset.path.split(',');
-                selectFee(fee, path);
+            // Add click handlers for search results
+            els.categoryList.querySelectorAll('.category-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    const fee = item.dataset.fee;
+                    const path = item.dataset.path.split(',');
+                    selectFee(fee, path);
+                });
             });
-        });
-    });
+        }
+    }
 
     // Highlight search term in text
     function highlightText(text, term) {
         if (!term) return text;
         
-        const regex = new RegExp(`(${term})`, 'gi');
-        return text.replace(regex, '<span class="search-highlight">$1</span>');
+        try {
+            // Escape special regex characters
+            const escapedTerm = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            const regex = new RegExp(`(${escapedTerm})`, 'gi');
+            return text.replace(regex, '<span class="text-blue-600 dark:text-blue-400 font-bold bg-blue-50 dark:bg-blue-900/50 rounded px-0.5">$1</span>');
+        } catch (e) {
+            return text;
+        }
     }
 
 })();

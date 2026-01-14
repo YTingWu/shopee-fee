@@ -1,3 +1,5 @@
+import { getStoreSettings } from './storage-v2.js';
+
 // Get all input elements
 const costPriceInput = document.getElementById('costPrice');
 const costTaxTypeInput = document.getElementById('costTaxType');
@@ -97,13 +99,27 @@ function updateQueryString() {
 
 function loadFromQueryString() {
     const params = getQueryParams();
+
+    // 如果沒有 Query String，讀取賣場設定
+    if (window.location.search.length <= 1) {
+        const settings = getStoreSettings();
+        if (settings) {
+            params.seller = settings.sellerType || params.seller;
+            params.shipping = settings.shippingOption || params.shipping;
+            params.cashback = settings.cashbackProgram || params.cashback;
+            params.tax = settings.taxSetting || params.tax;
+            // params.costTax = settings.costTaxType || params.costTax; // Moved to product level
+            if (typeof settings.hasProductInvoice === 'boolean') params.hasProdInv = settings.hasProductInvoice;
+            if (typeof settings.hasFeeInvoice === 'boolean') params.hasFeeInv = settings.hasFeeInvoice;
+        }
+    }
     
     currentMode = params.mode;
     document.getElementById(params.mode === 'profit' ? 'modeProfit' : 'modePrice').checked = true;
     
     currentShippingOption = params.shipping;
-    if (params.shipping === 'ship1') document.getElementById('shipOne').checked = true;
-    else if (params.shipping === 'ship2') document.getElementById('shipTwo').checked = true;
+    if (params.shipping === 'ship1') document.getElementById('ship1').checked = true;
+    else if (params.shipping === 'ship2') document.getElementById('ship2').checked = true;
     else document.getElementById('shipBoth').checked = true;
     
     currentSellerType = params.seller;
@@ -228,20 +244,59 @@ function updateModeUI() {
 }
 
 function updateShippingOptionUI() {
-    const cards = [
-        document.querySelector('.col-md-6:has(.result-card.regular):nth-of-type(1)'),
-        document.querySelector('.col-md-6:has(.result-card.regular):nth-of-type(2)'),
-        document.querySelector('.col-md-6:has(.result-card.event):nth-of-type(3)'),
-        document.querySelector('.col-md-6:has(.result-card.event):nth-of-type(4)')
-    ];
-    const summaryRows = document.querySelectorAll('.table tbody tr');
+    // Select the card columns instead of the cards directly to hide the entire layout space
     
-    const show = [true, true, true, true];
-    if (currentShippingOption === 'ship1') show[1] = show[3] = false;
-    else if (currentShippingOption === 'ship2') show[0] = show[2] = false;
+    const regularCards = document.querySelectorAll('.result-card.regular');
+    const eventCards = document.querySelectorAll('.result-card.event');
+    
+    // Safety check
+    if (regularCards.length < 2 || eventCards.length < 2) return;
 
-    cards.forEach((card, i) => { if(card) card.style.display = show[i] ? '' : 'none'; });
-    summaryRows.forEach((row, i) => { row.style.display = show[i] ? '' : 'none'; });
+    // Use parentElement to select the wrapper div inside the grid
+    const cards = [
+        regularCards[0].parentElement, // Regular Ship 1 Wrapper
+        regularCards[1].parentElement, // Regular Ship 2 Wrapper
+        eventCards[0].parentElement,   // Event Ship 1 Wrapper
+        eventCards[1].parentElement    // Event Ship 2 Wrapper
+    ];
+    
+    // Identify Summary Rows
+    const summaryRows = document.querySelectorAll('table tbody tr');
+    // Row 0: Regular Ship 1, Row 1: Regular Ship 2, Row 2: Event Ship 1, Row 3: Event Ship 2
+    
+    const show = [true, true, true, true]; // Default: Show all
+    
+    if (currentShippingOption === 'ship1') {
+        show[1] = false; // Hide Regular Ship 2
+        show[3] = false; // Hide Event Ship 2
+    } else if (currentShippingOption === 'ship2') {
+        show[0] = false; // Hide Regular Ship 1
+        show[2] = false; // Hide Event Ship 1
+    }
+
+    cards.forEach((card, i) => { 
+        if(card) {
+            if (show[i]) {
+                card.classList.remove('hidden');
+            } else {
+                card.classList.add('hidden');
+            }
+            // Fallback for inline styles if any
+            card.style.display = show[i] ? '' : 'none'; 
+        } 
+    });
+    
+    summaryRows.forEach((row, i) => { 
+        if(row && i < 4) {
+            if (show[i]) {
+               row.classList.remove('hidden');
+               row.style.display = '';
+            } else {
+               row.classList.add('hidden');
+               row.style.display = 'none';
+            }
+        }
+    });
 }
 
 function calculateRequiredPrice(cost, marginPercent, transactionFeeRate, cashbackRate, preOrderRate, taxSetting, isEvent, isShip2, isMall, hasProdInv, hasFeeInv, isCostInc) {
@@ -385,7 +440,9 @@ function calculateFees() {
         
         ['regular-ship1', 'regular-ship2', 'event-ship1', 'event-ship2'].forEach(key => {
             const el = document.getElementById(`${key}-suggested-price`);
+            // Format formatCurrency returns string with $, only update content
             if(el) el.textContent = formatCurrency(prices[key]);
+            
             const elSum = document.getElementById(`summary-${key}-suggested`);
             if(elSum) elSum.textContent = formatCurrency(prices[key]);
         });
@@ -401,7 +458,12 @@ function calculateFees() {
     document.getElementById('floatCost').textContent = formatCurrency(cashOutCost);
     
     if (currentMode === 'profit') {
-        document.getElementById('floatSell').textContent = formatCurrency(prices['regular-ship1']);
+        // Here we decide what to show in the floating header based on shipping option
+        // If ship1 selected -> show ship1 price. If ship2 -> show ship2 price. If both -> show regular ship1 (default)
+        let displayPrice = prices['regular-ship1'];
+        if (currentShippingOption === 'ship2') displayPrice = prices['regular-ship2'];
+        
+        document.getElementById('floatSell').textContent = formatCurrency(displayPrice);
     } else {
         document.getElementById('floatMargin').textContent = profitMarginInput.value + '%';
     }
@@ -605,15 +667,9 @@ floatingHeader.addEventListener('click', () => {
 // Theme toggle is now handled by header.js component
 // Removed duplicate theme toggle code to prevent conflicts
 
-// Init Bootstrap Tooltips
-document.addEventListener('DOMContentLoaded', function() {
-    [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]')).map(el => new bootstrap.Tooltip(el));
-    document.addEventListener('click', function(e) {
-        if (!e.target.closest('[data-bs-toggle="tooltip"]')) {
-            [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]')).forEach(el => bootstrap.Tooltip.getInstance(el)?.hide());
-        }
-    });
-});
+// Init Tooltips (Simplified for Tailwind/Custom)
+// Since we removed Bootstrap, we can implement custom tooltips or just rely on 'title' attribute for now
+// or implement a lightweight solution later. For now, removing the bootstrap initialization to avoid errors.
 
 // Start
 loadFromQueryString();

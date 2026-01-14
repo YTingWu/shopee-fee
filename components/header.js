@@ -23,12 +23,12 @@ export function getHeader(currentPage = 'home') {
 
     return `
         <nav class="bg-white border-gray-200 dark:bg-gray-900 border-b dark:border-gray-800">
-            <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+            <div class="container flex flex-wrap items-center justify-between mx-auto p-4">
                 <a href="index.html" class="flex items-center space-x-3 rtl:space-x-reverse">
                     <img src="favicon.svg" class="h-8" alt="Shopee Fee Calculator Logo" />
                     <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">蝦皮手續費計算機</span>
                 </a>
-                <div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse items-center">
+                <div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse items-center md:ml-4">
                     <!-- Dark Mode Toggle -->
                     <button id="themeToggle" type="button" class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5">
                         <svg id="themeIcon" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">${isDark ? sunIcon : moonIcon}</svg>
@@ -38,7 +38,7 @@ export function getHeader(currentPage = 'home') {
                         <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15"/></svg>
                     </button>
                 </div>
-                <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-cta">
+                <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1 md:ml-auto" id="navbar-cta">
                     <ul class="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
                         ${navItems}
                     </ul>
@@ -53,23 +53,18 @@ export function initThemeToggle() {
     const themeIcon = document.getElementById('themeIcon');
     const htmlElement = document.documentElement;
 
-    let savedTheme = localStorage.getItem('theme') || 'system'; // Default to system
+    let savedTheme = localStorage.getItem('theme');
+    
+    // 如果沒有設定過，或者原本是 system，則根據目前系統偏好決定初始值
+    if (!savedTheme || savedTheme === 'system') {
+        savedTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
 
     function applyTheme(theme) {
         const moonIcon = '<path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>';
         const sunIcon = '<path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.071 14.929a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 1.414l-.707.707zm1.414-10.607a1 1 0 010-1.414l.707-.707a1 1 0 111.414 1.414l-.707.707a1 1 0 01-1.414 0zM3 11a1 1 0 100-2H2a1 1 0 000 2h1z"></path>';
         
-        if (theme === 'system') {
-            if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-                htmlElement.classList.add('dark');
-                htmlElement.setAttribute('data-theme', 'dark');
-                if (themeIcon) themeIcon.innerHTML = sunIcon;
-            } else {
-                htmlElement.classList.remove('dark');
-                htmlElement.setAttribute('data-theme', 'light');
-                if (themeIcon) themeIcon.innerHTML = moonIcon;
-            }
-        } else if (theme === 'dark') {
+        if (theme === 'dark') {
             htmlElement.classList.add('dark');
             htmlElement.setAttribute('data-theme', 'dark');
             if (themeIcon) themeIcon.innerHTML = sunIcon;
@@ -83,22 +78,10 @@ export function initThemeToggle() {
     // Apply initial theme
     applyTheme(savedTheme);
 
-    // Listen for system theme changes
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-        if (savedTheme === 'system') {
-            applyTheme('system');
-        }
-    });
-
+    // 移除對系統偏好改變的監聽，因為我們現在強行指定為 dark/light
     if (themeToggle) {
         themeToggle.addEventListener('click', () => {
-            if (savedTheme === 'dark') {
-                savedTheme = 'light';
-            } else if (savedTheme === 'light') {
-                savedTheme = 'system';
-            } else { // currentTheme === 'system'
-                savedTheme = 'dark';
-            }
+            savedTheme = savedTheme === 'dark' ? 'light' : 'dark';
             localStorage.setItem('theme', savedTheme);
             applyTheme(savedTheme);
         });

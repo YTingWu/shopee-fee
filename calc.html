@@ -144,15 +144,15 @@
                                 <input type="radio" class="hidden peer/both" name="shippingOption" id="shipBoth"
                                     value="both" checked>
                                 <label class="flex-1 px-4 py-3 text-center text-sm font-medium cursor-pointer rounded-lg border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 peer-checked/both:bg-gray-600 peer-checked/both:text-white peer-checked/both:border-gray-600 transition-all" for="shipBoth">兩者比較</label>
-                                <input type="radio" class="hidden peer/one" name="shippingOption" id="shipOne"
+                                <input type="radio" class="hidden peer/ship1" name="shippingOption" id="ship1"
                                     value="ship1">
-                                <label class="flex-1 px-4 py-3 text-center text-sm font-medium cursor-pointer rounded-lg border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 peer-checked/one:bg-gray-600 peer-checked/one:text-white peer-checked/one:border-gray-600 transition-all" for="shipOne">方案一</label>
-                                <input type="radio" class="hidden peer/two" name="shippingOption" id="shipTwo"
+                                <label class="flex-1 px-4 py-3 text-center text-sm font-medium cursor-pointer rounded-lg border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 peer-checked/ship1:bg-gray-600 peer-checked/ship1:text-white peer-checked/ship1:border-gray-600 transition-all" for="ship1">方案一</label>
+                                <input type="radio" class="hidden peer/ship2" name="shippingOption" id="ship2"
                                     value="ship2">
-                                <label class="flex-1 px-4 py-3 text-center text-sm font-medium cursor-pointer rounded-lg border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 peer-checked/two:bg-gray-600 peer-checked/two:text-white peer-checked/two:border-gray-600 transition-all" for="shipTwo">方案二</label>
+                                <label class="flex-1 px-4 py-3 text-center text-sm font-medium cursor-pointer rounded-lg border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 peer-checked/ship2:bg-gray-600 peer-checked/ship2:text-white peer-checked/ship2:border-gray-600 transition-all" for="ship2">方案二</label>
                             </div>
                         </div>
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-start">
                             <div>
                                 <div class="flex items-center gap-2 mb-2">
                                     <label for="costPrice" class="text-sm font-bold text-gray-700 dark:text-gray-300">
@@ -190,24 +190,19 @@
                                     <span class="inline-flex items-center px-3 text-sm bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 font-semibold">%</span>
                                 </div>
                             </div>
-                            <div class="md:col-span-3">
+                            <div>
                                 <label for="transactionFee" class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">
                                     <i class="bi bi-percent"></i> 成交手續費
                                 </label>
                                 <div class="flex rounded-lg overflow-hidden border border-gray-300 dark:border-gray-600 focus-within:ring-2 focus-within:ring-blue-500 mb-1">
                                     <input type="number" class="flex-1 px-3 py-2 bg-white dark:bg-slate-800 text-gray-900 dark:text-white focus:outline-none" id="transactionFee" value="6" min="0" max="100" step="0.1">
                                     <span class="inline-flex items-center px-3 text-sm bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 font-semibold">%</span>
-                                    <button class="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors font-medium" type="button" id="lookupFeeBtn"
-                                        data-bs-toggle="modal" data-bs-target="#feeLookupModal">
+                                    <button class="px-3 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors font-medium whitespace-nowrap" type="button" id="lookupFeeBtn">
                                         <i class="bi bi-search"></i> 查詢
                                     </button>
                                 </div>
                                 <small class="text-gray-600 dark:text-gray-400 text-xs">
-                                    依照分類不同而手續費不同
-                                    <a href="https://seller.shopee.tw/edu/article/26470" target="_blank"
-                                        class="text-blue-600 dark:text-blue-400 hover:underline">
-                                        <i class="bi bi-info-circle"></i> 詳情
-                                    </a>
+                                    依照分類 <a href="https://seller.shopee.tw/edu/article/26470" target="_blank" class="text-blue-600 dark:text-blue-400 hover:underline"><i class="bi bi-info-circle"></i>詳情</a>
                                 </small>
                             </div>
                         </div>
@@ -361,32 +356,34 @@
                     </div>
 
                     <!-- Event Day Info -->
-                    <div class="event-info">
-                        <h6 class="cursor-pointer" data-bs-toggle="collapse" data-bs-target="#eventDayDetails"
-                            aria-expanded="false" aria-controls="eventDayDetails">
-                            <i class="bi bi-calendar-event"></i> <strong>2026年促銷檔期（手續費2%）</strong>
-                            <i class="bi bi-chevron-down float-right"></i>
-                        </h6>
-                        <div class="collapse" id="eventDayDetails">
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
+                    <div class="event-info bg-white dark:bg-slate-800 rounded-lg p-4 mb-6 shadow-sm border border-gray-200 dark:border-gray-700">
+                        <div class="cursor-pointer flex justify-between items-center select-none" onclick="toggleCollapse('eventDayDetails', this.querySelector('.bi-chevron-down'))">
+                            <div class="flex items-center gap-2">
+                                <i class="bi bi-calendar-event text-blue-600 dark:text-blue-400"></i>
+                                <span class="font-bold text-gray-900 dark:text-white">2026年促銷檔期（手續費2%）</span>
+                            </div>
+                            <i class="bi bi-chevron-down transition-transform duration-200"></i>
+                        </div>
+                        <div class="hidden mt-4 pt-4 border-t border-gray-100 dark:border-gray-700" id="eventDayDetails">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
-                                    <ul class="mb-0 space-y-1">
-                                        <li>一月：1/11-1/12；1/18；1/25</li>
-                                        <li>二月：2/2-2/3；2/18；2/25</li>
-                                        <li>三月：3/3-3/4；3/18；3/25</li>
+                                    <ul class="mb-0 space-y-2 text-sm text-gray-700 dark:text-gray-300">
+                                        <li><span class="font-semibold">一月：</span>1/11-1/12；1/18；1/25</li>
+                                        <li><span class="font-semibold">二月：</span>2/2-2/3；2/18；2/25</li>
+                                        <li><span class="font-semibold">三月：</span>3/3-3/4；3/18；3/25</li>
                                     </ul>
                                 </div>
                                 <div>
-                                    <ul class="mb-0 space-y-1">
-                                        <li>四月：4/4；4/18-4/19；4/25</li>
-                                        <li>五月：5/5-5/6；5/18；5/25</li>
-                                        <li>六月：6/6；6/18-6/19；6/25</li>
+                                    <ul class="mb-0 space-y-2 text-sm text-gray-700 dark:text-gray-300">
+                                        <li><span class="font-semibold">四月：</span>4/4；4/18-4/19；4/25</li>
+                                        <li><span class="font-semibold">五月：</span>5/5-5/6；5/18；5/25</li>
+                                        <li><span class="font-semibold">六月：</span>6/6；6/18-6/19；6/25</li>
                                     </ul>
                                 </div>
                             </div>
                             <div class="mt-4 text-center">
                                 <a href="webcal://p39-caldav.icloud.com/published/2/ODEyNzcxNTEzMzgxMjc3McUGBC3fUHVRi6-Ah4xGQymiQBXbg98Y3YkR3E22KPH1TccpJUKoCrtTPu50R2xcHbmP9A4Xamp-o0x0HDoIETI"
-                                    class="inline-flex items-center gap-2 px-4 py-2 bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold rounded-lg shadow transition-colors duration-200" target="_blank">
+                                    class="inline-flex items-center gap-2 px-4 py-2 bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold text-sm rounded-lg shadow transition-colors duration-200" target="_blank">
                                     <i class="bi bi-calendar-plus"></i> 訂閱活動日行事曆
                                 </a>
                             </div>
@@ -407,16 +404,15 @@
 
                                 <!-- Group 1: Shopee Fees -->
                                 <div class="fee-group">
-                                    <div class="fee-group-header" data-bs-toggle="collapse"
-                                        data-bs-target="#collapse-regular-ship1-fees" aria-expanded="true">
+                                    <div class="fee-group-header cursor-pointer select-none" onclick="toggleCollapse('collapse-regular-ship1-fees', this.querySelector('.bi-chevron-down'))">
                                         <span>蝦皮手續費 <small class="text-gray-600 dark:text-gray-400 ml-1"
                                                 id="regular-ship1-shopee-percent">(0%)</small></span>
                                         <span>
                                             <span id="regular-ship1-shopee-total">$ 0</span>
-                                            <i class="bi bi-chevron-down ml-2"></i>
+                                            <i class="bi bi-chevron-down ml-2 transition-transform duration-200"></i>
                                         </span>
                                     </div>
-                                    <div id="collapse-regular-ship1-fees" class="collapse show">
+                                    <div id="collapse-regular-ship1-fees" class="">
                                         <div class="fee-subitem">
                                             <span id="regular-ship1-transaction-label">成交手續費</span>
                                             <span class="fee-value" id="regular-ship1-transaction">$ 0</span>
@@ -442,16 +438,15 @@
 
                                 <!-- Group 2: Payable Tax -->
                                 <div class="fee-group">
-                                    <div class="fee-group-header" data-bs-toggle="collapse"
-                                        data-bs-target="#collapse-regular-ship1-tax" aria-expanded="true">
+                                    <div class="fee-group-header cursor-pointer select-none" onclick="toggleCollapse('collapse-regular-ship1-tax', this.querySelector('.bi-chevron-down'))">
                                         <span>應繳營業稅 <small class="text-gray-600 dark:text-gray-400 ml-1"
                                                 id="regular-ship1-tax-percent">(0%)</small></span>
                                         <span>
                                             <span id="regular-ship1-payable-tax">$ 0</span>
-                                            <i class="bi bi-chevron-down ml-2"></i>
+                                            <i class="bi bi-chevron-down ml-2 transition-transform duration-200"></i>
                                         </span>
                                     </div>
-                                    <div id="collapse-regular-ship1-tax" class="collapse show">
+                                    <div id="collapse-regular-ship1-tax" class="">
                                         <div class="fee-subitem">
                                             <span>銷項稅額</span>
                                             <span class="fee-value" id="regular-ship1-output-tax">$ 0</span>
@@ -504,16 +499,15 @@
 
                                 <!-- Group 1: Shopee Fees -->
                                 <div class="fee-group">
-                                    <div class="fee-group-header" data-bs-toggle="collapse"
-                                        data-bs-target="#collapse-regular-ship2-fees" aria-expanded="true">
+                                    <div class="fee-group-header cursor-pointer select-none" onclick="toggleCollapse('collapse-regular-ship2-fees', this.querySelector('.bi-chevron-down'))">
                                         <span>蝦皮手續費 <small class="text-gray-600 dark:text-gray-400 ml-1"
                                                 id="regular-ship2-shopee-percent">(0%)</small></span>
                                         <span>
                                             <span id="regular-ship2-shopee-total">$ 0</span>
-                                            <i class="bi bi-chevron-down ml-2"></i>
+                                            <i class="bi bi-chevron-down ml-2 transition-transform duration-200"></i>
                                         </span>
                                     </div>
-                                    <div id="collapse-regular-ship2-fees" class="collapse show">
+                                    <div id="collapse-regular-ship2-fees" class="">
                                         <div class="fee-subitem">
                                             <span id="regular-ship2-transaction-label">成交手續費</span>
                                             <span class="fee-value" id="regular-ship2-transaction">$ 0</span>
@@ -539,16 +533,15 @@
 
                                 <!-- Group 2: Payable Tax -->
                                 <div class="fee-group">
-                                    <div class="fee-group-header" data-bs-toggle="collapse"
-                                        data-bs-target="#collapse-regular-ship2-tax" aria-expanded="true">
+                                    <div class="fee-group-header cursor-pointer select-none" onclick="toggleCollapse('collapse-regular-ship2-tax', this.querySelector('.bi-chevron-down'))">
                                         <span>應繳營業稅 <small class="text-gray-600 dark:text-gray-400 ml-1"
                                                 id="regular-ship2-tax-percent">(0%)</small></span>
                                         <span>
                                             <span id="regular-ship2-payable-tax">$ 0</span>
-                                            <i class="bi bi-chevron-down ml-2"></i>
+                                            <i class="bi bi-chevron-down ml-2 transition-transform duration-200"></i>
                                         </span>
                                     </div>
-                                    <div id="collapse-regular-ship2-tax" class="collapse show">
+                                    <div id="collapse-regular-ship2-tax" class="">
                                         <div class="fee-subitem">
                                             <span>銷項稅額</span>
                                             <span class="fee-value" id="regular-ship2-output-tax">$ 0</span>
@@ -601,16 +594,15 @@
 
                                 <!-- Group 1: Shopee Fees -->
                                 <div class="fee-group">
-                                    <div class="fee-group-header" data-bs-toggle="collapse"
-                                        data-bs-target="#collapse-event-ship1-fees" aria-expanded="true">
+                                    <div class="fee-group-header cursor-pointer select-none" onclick="toggleCollapse('collapse-event-ship1-fees', this.querySelector('.bi-chevron-down'))">
                                         <span>蝦皮手續費 <small class="text-gray-600 dark:text-gray-400 ml-1"
                                                 id="event-ship1-shopee-percent">(0%)</small></span>
                                         <span>
                                             <span id="event-ship1-shopee-total">$ 0</span>
-                                            <i class="bi bi-chevron-down ml-2"></i>
+                                            <i class="bi bi-chevron-down ml-2 transition-transform duration-200"></i>
                                         </span>
                                     </div>
-                                    <div id="collapse-event-ship1-fees" class="collapse show">
+                                    <div id="collapse-event-ship1-fees" class="">
                                         <div class="fee-subitem">
                                             <span id="event-ship1-transaction-label">成交手續費</span>
                                             <span class="fee-value" id="event-ship1-transaction">$ 0</span>
@@ -636,16 +628,15 @@
 
                                 <!-- Group 2: Payable Tax -->
                                 <div class="fee-group">
-                                    <div class="fee-group-header" data-bs-toggle="collapse"
-                                        data-bs-target="#collapse-event-ship1-tax" aria-expanded="true">
+                                    <div class="fee-group-header cursor-pointer select-none" onclick="toggleCollapse('collapse-event-ship1-tax', this.querySelector('.bi-chevron-down'))">
                                         <span>應繳營業稅 <small class="text-gray-600 dark:text-gray-400 ml-1"
                                                 id="event-ship1-tax-percent">(0%)</small></span>
                                         <span>
                                             <span id="event-ship1-payable-tax">$ 0</span>
-                                            <i class="bi bi-chevron-down ml-2"></i>
+                                            <i class="bi bi-chevron-down ml-2 transition-transform duration-200"></i>
                                         </span>
                                     </div>
-                                    <div id="collapse-event-ship1-tax" class="collapse show">
+                                    <div id="collapse-event-ship1-tax" class="">
                                         <div class="fee-subitem">
                                             <span>銷項稅額</span>
                                             <span class="fee-value" id="event-ship1-output-tax">$ 0</span>
@@ -696,16 +687,15 @@
 
                                 <!-- Group 1: Shopee Fees -->
                                 <div class="fee-group">
-                                    <div class="fee-group-header" data-bs-toggle="collapse"
-                                        data-bs-target="#collapse-event-ship2-fees" aria-expanded="true">
+                                    <div class="fee-group-header cursor-pointer select-none" onclick="toggleCollapse('collapse-event-ship2-fees', this.querySelector('.bi-chevron-down'))">
                                         <span>蝦皮手續費 <small class="text-gray-600 dark:text-gray-400 ml-1"
                                                 id="event-ship2-shopee-percent">(0%)</small></span>
                                         <span>
                                             <span id="event-ship2-shopee-total">$ 0</span>
-                                            <i class="bi bi-chevron-down ml-2"></i>
+                                            <i class="bi bi-chevron-down ml-2 transition-transform duration-200"></i>
                                         </span>
                                     </div>
-                                    <div id="collapse-event-ship2-fees" class="collapse show">
+                                    <div id="collapse-event-ship2-fees" class="">
                                         <div class="fee-subitem">
                                             <span id="event-ship2-transaction-label">成交手續費</span>
                                             <span class="fee-value" id="event-ship2-transaction">$ 0</span>
@@ -731,16 +721,15 @@
 
                                 <!-- Group 2: Payable Tax -->
                                 <div class="fee-group">
-                                    <div class="fee-group-header" data-bs-toggle="collapse"
-                                        data-bs-target="#collapse-event-ship2-tax" aria-expanded="true">
+                                    <div class="fee-group-header cursor-pointer select-none" onclick="toggleCollapse('collapse-event-ship2-tax', this.querySelector('.bi-chevron-down'))">
                                         <span>應繳營業稅 <small class="text-gray-600 dark:text-gray-400 ml-1"
                                                 id="event-ship2-tax-percent">(0%)</small></span>
                                         <span>
                                             <span id="event-ship2-payable-tax">$ 0</span>
-                                            <i class="bi bi-chevron-down ml-2"></i>
+                                            <i class="bi bi-chevron-down ml-2 transition-transform duration-200"></i>
                                         </span>
                                     </div>
-                                    <div id="collapse-event-ship2-tax" class="collapse show">
+                                    <div id="collapse-event-ship2-tax" class="">
                                         <div class="fee-subitem">
                                             <span>銷項稅額</span>
                                             <span class="fee-value" id="event-ship2-output-tax">$ 0</span>
@@ -882,53 +871,65 @@
     <div class="toast-container position-fixed bottom-0 end-0 p-3" id="toastContainer"></div>
 
     <!-- Save Config Modal -->
-    <div class="modal fade" id="saveConfigModal" tabindex="-1" aria-labelledby="saveConfigModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header border-0 pb-0">
-                    <h5 class="modal-title" id="saveConfigModalLabel">儲存設定名稱</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <div id="saveConfigModal" class="fixed inset-0 z-50 hidden" role="dialog" aria-modal="true">
+        <div class="fixed inset-0 bg-black/50 backdrop-blur-sm transition-opacity" onclick="closeModal('saveConfigModal')"></div>
+        <div class="fixed inset-0 z-10 flex items-center justify-center p-4">
+            <div class="w-full max-w-md bg-white dark:bg-gray-800 rounded-2xl shadow-xl transform transition-all">
+                <div class="flex items-center justify-between p-4 border-b border-gray-100 dark:border-gray-700">
+                    <h5 class="text-lg font-bold text-gray-900 dark:text-white" id="saveConfigModalLabel">儲存設定名稱</h5>
+                    <button type="button" class="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300" onclick="closeModal('saveConfigModal')">
+                        <i class="bi bi-x-lg text-lg"></i>
+                    </button>
                 </div>
-                <div class="modal-body">
-                    <div class="input-group">
-                        <input type="text" class="form-control" id="configNameInput" placeholder="輸入設定名稱">
-                        <button class="btn btn-outline-secondary" type="button" id="clearConfigNameBtn">
-                            <i class="bi bi-x-lg"></i>
+                <div class="p-4">
+                    <div class="relative">
+                        <input type="text" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:outline-none" id="configNameInput" placeholder="輸入設定名稱">
+                        <button class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 p-1" type="button" id="clearConfigNameBtn">
+                            <i class="bi bi-x-circle-fill"></i>
                         </button>
                     </div>
                 </div>
-                <div class="modal-footer border-0">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
-                    <button type="button" class="btn btn-primary" id="confirmSaveConfigBtn">確定儲存</button>
+                <div class="flex justify-end gap-2 p-4 border-t border-gray-100 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800/50 rounded-b-2xl">
+                    <button type="button" class="px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg font-medium transition-colors" onclick="closeModal('saveConfigModal')">取消</button>
+                    <button type="button" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium shadow-sm transition-colors" id="confirmSaveConfigBtn">確定儲存</button>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Fee Lookup Modal -->
-    <div class="modal fade" id="feeLookupModal" tabindex="-1" aria-labelledby="feeLookupModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-            <div class="modal-content">
-                <div class="modal-header border-0 pb-0">
-                    <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
+    <div id="feeLookupModal" class="fixed inset-0 z-50 hidden" role="dialog" aria-modal="true">
+        <div class="fixed inset-0 bg-black/50 backdrop-blur-sm transition-opacity" onclick="closeModal('feeLookupModal')"></div>
+        <div class="fixed inset-0 z-10 flex items-center justify-center p-4">
+             <div class="w-full max-w-lg bg-white dark:bg-gray-800 rounded-2xl shadow-xl flex flex-col max-h-[90vh]">
+                <div class="flex items-center justify-between p-4 border-b border-gray-100 dark:border-gray-700">
+                    <h5 class="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                        <i class="bi bi-search text-blue-600 dark:text-blue-400"></i>
+                        查詢手續費
+                    </h5>
+                    <button type="button" class="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300" onclick="closeModal('feeLookupModal')">
+                        <i class="bi bi-x-lg text-lg"></i>
+                    </button>
                 </div>
-                <div class="modal-body pt-0">
-                    <div class="input-group mb-3">
-                        <span class="input-group-text"><i class="bi bi-search"></i></span>
-                        <input type="text" class="form-control" id="categorySearch" placeholder="搜尋類別 (例如: 手機)...">
+                <div class="p-4 overflow-y-auto flex-1">
+                    <div class="relative mb-4">
+                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                             <i class="bi bi-search text-gray-400"></i>
+                        </div>
+                        <input type="text" class="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:outline-none" id="categorySearch" placeholder="搜尋類別 (例如: 手機)...">
                     </div>
 
-                    <nav aria-label="breadcrumb" id="breadcrumbNav" style="display: none;">
-                        <ol class="breadcrumb" id="categoryBreadcrumb">
+                    <nav aria-label="breadcrumb" id="breadcrumbNav" style="display: none;" class="mb-4">
+                        <ol class="flex flex-wrap items-center gap-2 text-sm text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-slate-700/50 p-2 rounded-lg" id="categoryBreadcrumb">
                             <!-- Breadcrumbs will be injected here -->
                         </ol>
                     </nav>
 
-                    <div class="list-group list-group-flush" id="categoryList">
+                    <div class="space-y-1" id="categoryList">
                         <!-- Categories will be injected here -->
-                        <div class="text-center py-3">
-                            <div class="spinner-border text-primary" role="status">
-                                <span class="visually-hidden">Loading...</span>
+                        <div class="text-center py-8">
+                             <div class="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite] text-blue-600" role="status">
+                                <span class="sr-only">Loading...</span>
                             </div>
                         </div>
                     </div>
@@ -936,7 +937,49 @@
             </div>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function toggleCollapse(id, chevron) {
+            const el = document.getElementById(id);
+            el.classList.toggle('hidden');
+            if (chevron) {
+                if (el.classList.contains('hidden')) {
+                    chevron.style.transform = '';
+                } else {
+                    chevron.style.transform = 'rotate(180deg)';
+                }
+            }
+        }
+
+        function openModal(id) {
+            document.getElementById(id).classList.remove('hidden');
+            document.body.style.overflow = 'hidden'; // Prevent body scroll
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.add('hidden');
+            document.body.style.overflow = ''; // Restore body scroll
+        }
+        
+        // Setup initial listeners for manually handled modals
+        document.addEventListener('DOMContentLoaded', () => {
+             const lookupBtn = document.getElementById('lookupFeeBtn');
+             if(lookupBtn) {
+                 lookupBtn.addEventListener('click', () => {
+                     openModal('feeLookupModal');
+                     // Dispatch generic event for fee-lookup.js to listen to
+                     document.dispatchEvent(new CustomEvent('feeLookupModal:open'));
+                 });
+             }
+             
+             // Setup Save Config Modal trigger (it was probably handled in storage.js or calculator.js, need to check)
+             const saveBtn = document.getElementById('saveConfigBtn');
+             if (saveBtn) {
+                 saveBtn.addEventListener('click', () => {
+                     openModal('saveConfigModal');
+                 });
+             }
+        });
+    </script>
     <script type="module">
         import { getHeader, initThemeToggle } from './components/header.js';
         import { getFooter } from './components/footer.js';
@@ -949,8 +992,8 @@
         initThemeToggle();
     </script>
     <script src="storage.js?202601140"></script>
-    <script src="calculator.js?202601140"></script>
-    <script src="fee-lookup.js?202601140"></script>
+    <script type="module" src="calculator.js?202601140"></script>
+    <script src="fee-lookup.js?202601141" defer></script>
 </body>
 
 </html>

@@ -12,8 +12,7 @@ const defaultData = {
         cashbackProgram: '0',
         taxSetting: '0',
         hasProductInvoice: false,
-        hasFeeInvoice: false,
-        costTaxType: 'inc'
+        hasFeeInvoice: false
     },
     products: []
 };
@@ -86,6 +85,7 @@ function addProduct(product) {
         salePrice: parseFloat(product.salePrice) || 0,
         transactionFeeRate: parseFloat(product.transactionFeeRate) || 6.0,
         isPreOrder: product.isPreOrder || false,
+        costTaxType: product.costTaxType || 'inc', // 預設為含稅
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString()
     };

@@ -394,6 +394,9 @@ function deleteConfig(id, event) {
     showToast('已刪除設定');
 }
 
+// V2 Storage support
+const STORAGE_V2_KEY = 'shopee-fee-v2';
+
 // HTML Escaping
 function escapeHtml(text) {
     if (!text) return '';
@@ -402,45 +405,107 @@ function escapeHtml(text) {
     return div.innerHTML;
 }
 
+function getV2Products() {
+    try {
+        const data = localStorage.getItem(STORAGE_V2_KEY);
+        if (!data) return [];
+        const parsed = JSON.parse(data);
+        return parsed.products || [];
+    } catch (e) {
+        console.error(e);
+        return [];
+    }
+}
+
+function loadProduct(product) {
+    // 1. Set Inputs
+    const setInput = (id, val) => {
+        const el = document.getElementById(id);
+        if (el) {
+            el.value = val;
+            triggerEvent(el, 'input');
+        }
+    };
+
+    setInput('costPrice', product.cost);
+    setInput('sellPrice', product.salePrice);
+    setInput('transactionFee', product.transactionFeeRate);
+    
+    // 2. Set Cost Tax Type
+    const costTaxInput = document.getElementById('costTaxType');
+    if (costTaxInput) {
+        // product.costTaxType is 'inc' or 'exc'
+        // checkbox checked = inc (based on calc.html logic: checked -> 含稅)
+        const isInc = (product.costTaxType !== 'exc');
+        if (costTaxInput.checked !== isInc) {
+            costTaxInput.checked = isInc;
+            triggerEvent(costTaxInput, 'change');
+        }
+    }
+    
+    // 3. Set Pre-order
+    const isPre = product.isPreOrder;
+    const preOrderRadio = document.getElementById(isPre ? 'isPreOrder' : 'noPreOrder');
+    if (preOrderRadio && !preOrderRadio.checked) {
+        preOrderRadio.checked = true;
+        triggerEvent(preOrderRadio, 'change');
+    }
+    
+    // 4. Ensure Mode is 'profit' (Use Selling Price to calc Profit)
+    const modeProfit = document.getElementById('modeProfit');
+    if (modeProfit && !modeProfit.checked) {
+        modeProfit.checked = true;
+        triggerEvent(modeProfit, 'change');
+    }
+
+    showToast(`已載入商品: ${product.name}`);
+    
+    // Close mobile sidebar if open
+    document.body.classList.remove('toggled');
+}
+
 function renderSidebar() {
     const listEl = document.getElementById(LIST_ID);
     if (!listEl) return;
     
     listEl.innerHTML = '';
     
-    if (savedConfigs.length === 0) {
-        listEl.innerHTML = '<div class="text-center p-4 text-muted"><small>尚未儲存任何設定</small></div>';
+    // Load V2 Products instead of V1 Configs
+    const products = getV2Products(); 
+    
+    if (products.length === 0) {
+        listEl.innerHTML = '<div class="text-center p-4 text-gray-600 dark:text-gray-400"><small>尚無商品資料<br>請前往 <a href="management.html" class="text-blue-600 dark:text-blue-400 hover:underline">商品管理</a> 新增</small></div>';
         return;
     }
     
-    savedConfigs.forEach(config => {
+    // Sort by updated time desc
+    products.sort((a, b) => new Date(b.updatedAt || 0) - new Date(a.updatedAt || 0));
+
+    products.forEach(product => {
         const item = document.createElement('a');
-        item.className = 'sidebar-list-item list-group-item list-group-item-action';
+        item.className = 'sidebar-list-item list-group-item list-group-item-action cursor-pointer p-3 border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors block';
+        
         item.innerHTML = `
-            <div class="d-flex justify-content-between align-items-start">
-                <div class="w-100">
-                    <span class="config-title">${escapeHtml(config.title)}</span>
-                    <div class="config-details">
-                        <span>${escapeHtml(config.summary)}</span>
-                        <span class="mx-1">•</span>
-                        <span>${config.date}</span>
+            <div class="flex justify-between items-center w-full">
+                <div class="flex-grow min-w-0 pr-2">
+                    <div class="flex items-center gap-2 mb-0.5">
+                        <span class="font-bold text-gray-900 dark:text-white truncate" style="max-width: 180px;">${escapeHtml(product.name)}</span>
+                        ${product.isPreOrder ? '<span class="inline-block px-1.5 py-0.5 text-[10px] bg-yellow-400 text-gray-900 rounded font-bold whitespace-nowrap">預購</span>' : ''}
+                    </div>
+                    <div class="text-gray-500 dark:text-gray-400 text-xs truncate">
+                        進價$${Math.round(product.cost).toLocaleString()};售價$${Math.round(product.salePrice).toLocaleString()}
                     </div>
                 </div>
-                <button class="btn btn-link btn-sm delete-config-btn" title="刪除">
-                    <i class="bi bi-trash"></i>
-                </button>
+                <div class="flex-shrink-0">
+                    <i class="bi bi-box-arrow-in-right text-blue-600 dark:text-blue-400 text-xl"></i>
+                </div>
             </div>
         `;
         
-        // Click main area -> Load
+        // Make the whole item clickable to load
         item.addEventListener('click', (e) => {
-            loadConfig(config.id);
-        });
-
-        // Click delete btn -> Delete
-        const delBtn = item.querySelector('.delete-config-btn');
-        delBtn.addEventListener('click', (e) => {
-            deleteConfig(config.id, e);
+            e.preventDefault();
+            loadProduct(product);
         });
 
         listEl.appendChild(item);
