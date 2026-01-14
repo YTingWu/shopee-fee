@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google-adsense-account" content="ca-pub-7220444464281913">
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="2026最新蝦皮手續費計算機，快速計算蝦皮成交手續費、金流服務費、免運方案成本與實際獲利。支援一般日與促銷檔期手續費計算，賣家必備工具。">
+    <meta name="keywords" content="蝦皮手續費,蝦皮手續費計算機,蝦皮計算機,蝦皮成本,蝦皮利潤,蝦皮免運,蝦皮活動日,蝦皮賣家工具,手續費計算,蝦皮抽成">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="蝦皮手續費計算機">
+    <meta property="og:site_name" content="蝦皮手續費計算機">
+    <meta property="og:url" content="https://ytingwu.github.io/shopee-fee/">
+    <meta property="og:description" content="幫您快速計算蝦皮成交手續費、金流服務費及免運方案成本，一鍵算出實際獲利，精準掌握賣場營收。">
+
+    <title>快速計算 - 蝦皮手續費計算機 2.0</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+
+    <script>
+        // Apply theme immediately to prevent flash
+        (function() {
+            const theme = localStorage.getItem('theme') || 'system';
+            if (theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+                document.documentElement.setAttribute('data-theme', 'dark');
+            } else {
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        })();
+    </script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="dist/output.css">
+    <link rel="stylesheet" href="style.css?v=202601140">
+    <link rel="stylesheet" href="fee-lookup.css">
+</head>
+
+<body class="bg-gray-100 dark:bg-gray-900">
+    <!-- Header/Navbar -->
+    <header id="main-header"></header>
+
+    <!-- Floating Header (Hidden by default) -->
+    <div id="floatingHeader" class="floating-header">
+        <div class="container relative">
+            <div class="flex justify-center items-center gap-3">
+                <div class="text-center">
+                    <small class="text-gray-600 dark:text-gray-400 block text-xs">進價</small>
+                    <span class="font-bold" id="floatCost">$ 0</span>
+                </div>
+                <div class="text-center" id="floatSellContainer">
+                    <small class="text-gray-600 dark:text-gray-400 block text-xs">售價</small>
+                    <span class="font-bold" id="floatSell">$ 0</span>
+                </div>
+                <div class="text-center" id="floatMarginContainer" style="display: none;">
+                    <small class="text-gray-600 dark:text-gray-400 block text-xs">獲利率</small>
+                    <span class="font-bold" id="floatMargin">0%</span>
+                </div>
+                <div class="text-center">
+                    <small class="text-gray-600 dark:text-gray-400 block text-xs">預購訂單</small>
+                    <span class="inline-block px-2 py-1 bg-gray-600 text-white text-xs rounded" id="floatPreOrder">否</span>
+                </div>
+                <div class="text-center">
+                    <small class="text-gray-600 dark:text-gray-400 block text-xs">蝦幣回饋</small>
+                    <span class="inline-block px-2 py-1 bg-gray-600 text-white text-xs rounded" id="floatCashback">不參加</span>
+                </div>
+            </div>
+            <i class="bi bi-arrow-up-circle-fill text-blue-600 dark:text-blue-400 text-2xl absolute top-1/2 -translate-y-1/2"
+                style="right: 20px;"></i>
+        </div>
+    </div>
+
+    <!-- Wrapper -->
+    <div id="wrapper">
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <div class="sidebar-heading">
+                <span><i class="bi bi-save"></i> 列表</span>
+                <div class="flex items-center gap-2">
+                    <i class="bi bi-layout-sidebar-inset text-blue-600 dark:text-blue-400 hidden md:block" id="desktopSidebarCollapseBtn"
+                        style="cursor: pointer;" title="收合側邊欄"></i>
+                    <span class="md:hidden text-gray-600 dark:text-gray-400" id="sidebarCloseBtn" style="cursor: pointer;">
+                        <i class="bi bi-x-lg"></i>
+                    </span>
+                </div>
+            </div>
+            <div class="list-group list-group-flush" id="savedConfigsList">
+                <!-- Configs will be loaded here -->
+                <div class="text-center p-4 text-gray-600 dark:text-gray-400"><small>尚未儲存任何設定</small></div>
+            </div>
+            <div id="resizer"></div>
+        </div>
+
+        <!-- Floating Sidebar Toggle Button -->
+        <button id="floatingSidebarToggle" class="fixed rounded-full shadow-lg bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center"
+            style="left: calc(20px + env(safe-area-inset-left, 0px)); bottom: calc(20px + env(safe-area-inset-bottom, 0px)); z-index: 1045; width: 50px; height: 50px;">
+            <i class="bi bi-layout-sidebar-inset-reverse text-xl"></i>
+        </button>
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            
+            <div class="container mx-auto px-4 py-6">
+                <div class="main-container">
+                    <!-- Seller Type Toggle -->
+                    <div class="mb-6">
+                        <div class="flex justify-center items-center">
+                            <div class="inline-flex rounded-lg shadow-sm overflow-hidden" role="group">
+                                <input type="radio" class="hidden peer/general" name="sellerType" id="sellerGeneral"
+                                    value="general" checked>
+                                <label class="px-6 py-3 text-sm font-semibold cursor-pointer bg-white dark:bg-slate-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700 peer-checked/general:bg-gradient-to-br peer-checked/general:from-blue-600 peer-checked/general:to-blue-700 peer-checked/general:text-white peer-checked/general:shadow-lg transition-all duration-200" for="sellerGeneral">
+                                    <i class="bi bi-person"></i> 一般賣家
+                                </label>
+                                <input type="radio" class="hidden peer/mall" name="sellerType" id="sellerMall"
+                                    value="mall">
+                                <label class="px-6 py-3 text-sm font-semibold cursor-pointer bg-white dark:bg-slate-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700 peer-checked/mall:bg-gradient-to-br peer-checked/mall:from-blue-600 peer-checked/mall:to-blue-700 peer-checked/mall:text-white peer-checked/mall:shadow-lg transition-all duration-200" for="sellerMall">
+                                    <i class="bi bi-shop"></i> 商城賣家
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Input Section -->
+                    <div class="input-section">
+                        <div class="mb-6">
+                            <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-3">
+                                <i class="bi bi-gear"></i> 模式
+                            </label>
+                            <div class="flex gap-2 w-full" role="group">
+                                <input type="radio" class="hidden peer/profit" name="calcMode" id="modeProfit" value="profit"
+                                    checked>
+                                <label class="flex-1 px-4 py-3 text-center text-sm font-medium cursor-pointer rounded-lg border-2 border-blue-200 dark:border-blue-800 text-gray-700 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-blue-900/20 peer-checked/profit:bg-blue-600 peer-checked/profit:text-white peer-checked/profit:border-blue-600 transition-all" for="modeProfit">用售價算獲利</label>
+                                <input type="radio" class="hidden peer/price" name="calcMode" id="modePrice" value="price">
+                                <label class="flex-1 px-4 py-3 text-center text-sm font-medium cursor-pointer rounded-lg border-2 border-blue-200 dark:border-blue-800 text-gray-700 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-blue-900/20 peer-checked/price:bg-blue-600 peer-checked/price:text-white peer-checked/price:border-blue-600 transition-all" for="modePrice">用獲利率算售價</label>
+                            </div>
+                        </div>
+                        <div class="mb-6">
+                            <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-3">
+                                <i class="bi bi-truck"></i> 免運方案
+                            </label>
+                            <div class="flex gap-2 w-full" role="group">
+                                <input type="radio" class="hidden peer/both" name="shippingOption" id="shipBoth"
+                                    value="both" checked>
+                                <label class="flex-1 px-4 py-3 text-center text-sm font-medium cursor-pointer rounded-lg border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 peer-checked/both:bg-gray-600 peer-checked/both:text-white peer-checked/both:border-gray-600 transition-all" for="shipBoth">兩者比較</label>
+                                <input type="radio" class="hidden peer/one" name="shippingOption" id="shipOne"
+                                    value="ship1">
+                                <label class="flex-1 px-4 py-3 text-center text-sm font-medium cursor-pointer rounded-lg border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 peer-checked/one:bg-gray-600 peer-checked/one:text-white peer-checked/one:border-gray-600 transition-all" for="shipOne">方案一</label>
+                                <input type="radio" class="hidden peer/two" name="shippingOption" id="shipTwo"
+                                    value="ship2">
+                                <label class="flex-1 px-4 py-3 text-center text-sm font-medium cursor-pointer rounded-lg border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 peer-checked/two:bg-gray-600 peer-checked/two:text-white peer-checked/two:border-gray-600 transition-all" for="shipTwo">方案二</label>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div>
+                                <div class="flex items-center gap-2 mb-2">
+                                    <label for="costPrice" class="text-sm font-bold text-gray-700 dark:text-gray-300">
+                                        <i class="bi bi-tag"></i> 進價（成本）
+                                    </label>
+                                    <div class="flex items-center">
+                                        <label class="relative inline-flex items-center cursor-pointer">
+                                            <input type="checkbox" id="costTaxType" class="sr-only peer" checked>
+                                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-green-300 dark:peer-focus:ring-green-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-600"></div>
+                                        </label>
+                                        <span class="ml-2 text-sm text-gray-600 dark:text-gray-400 font-semibold" id="costTaxLabel">含稅</span>
+                                    </div>
+                                </div>
+                                <div class="flex rounded-lg overflow-hidden border border-gray-300 dark:border-gray-600 focus-within:ring-2 focus-within:ring-blue-500">
+                                    <span class="inline-flex items-center px-3 text-sm bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 font-semibold">$</span>
+                                    <input type="number" class="flex-1 px-3 py-2 bg-white dark:bg-slate-800 text-gray-900 dark:text-white focus:outline-none" id="costPrice" placeholder="0" min="0">
+                                    <span class="inline-flex items-center px-3 text-xs bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400" id="costTaxSuffix">(含稅)</span>
+                                </div>
+                            </div>
+                            <div id="sellPriceContainer">
+                                <label for="sellPrice" class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">
+                                    <i class="bi bi-cash-stack"></i> 蝦皮價格（售價）
+                                </label>
+                                <div class="flex rounded-lg overflow-hidden border border-gray-300 dark:border-gray-600 focus-within:ring-2 focus-within:ring-blue-500">
+                                    <span class="inline-flex items-center px-3 text-sm bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 font-semibold">$</span>
+                                    <input type="number" class="flex-1 px-3 py-2 bg-white dark:bg-slate-800 text-gray-900 dark:text-white focus:outline-none" id="sellPrice" placeholder="0" min="0">
+                                </div>
+                            </div>
+                            <div id="profitMarginContainer" style="display: none;">
+                                <label for="profitMargin" class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">
+                                    <i class="bi bi-graph-up-arrow"></i> 預期獲利率
+                                </label>
+                                <div class="flex rounded-lg overflow-hidden border border-gray-300 dark:border-gray-600 focus-within:ring-2 focus-within:ring-blue-500">
+                                    <input type="number" class="flex-1 px-3 py-2 bg-white dark:bg-slate-800 text-gray-900 dark:text-white focus:outline-none" id="profitMargin" value="5" min="0" max="100" step="0.1">
+                                    <span class="inline-flex items-center px-3 text-sm bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 font-semibold">%</span>
+                                </div>
+                            </div>
+                            <div class="md:col-span-3">
+                                <label for="transactionFee" class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">
+                                    <i class="bi bi-percent"></i> 成交手續費
+                                </label>
+                                <div class="flex rounded-lg overflow-hidden border border-gray-300 dark:border-gray-600 focus-within:ring-2 focus-within:ring-blue-500 mb-1">
+                                    <input type="number" class="flex-1 px-3 py-2 bg-white dark:bg-slate-800 text-gray-900 dark:text-white focus:outline-none" id="transactionFee" value="6" min="0" max="100" step="0.1">
+                                    <span class="inline-flex items-center px-3 text-sm bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 font-semibold">%</span>
+                                    <button class="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors font-medium" type="button" id="lookupFeeBtn"
+                                        data-bs-toggle="modal" data-bs-target="#feeLookupModal">
+                                        <i class="bi bi-search"></i> 查詢
+                                    </button>
+                                </div>
+                                <small class="text-gray-600 dark:text-gray-400 text-xs">
+                                    依照分類不同而手續費不同
+                                    <a href="https://seller.shopee.tw/edu/article/26470" target="_blank"
+                                        class="text-blue-600 dark:text-blue-400 hover:underline">
+                                        <i class="bi bi-info-circle"></i> 詳情
+                                    </a>
+                                </small>
+                            </div>
+                        </div>
+
+                        <!-- Advanced Settings Section -->
+                        <div class="advanced-settings rounded-2xl p-6 mt-6 border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-slate-800/50">
+                            <!-- Pre-order Setting -->
+                            <div class="mb-6">
+                                <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-3">
+                                    <i class="bi bi-clock-history"></i> 預購訂單(較長備貨)
+                                </label>
+                                <div class="flex flex-col md:flex-row gap-4">
+                                    <div class="flex items-center">
+                                        <input class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" type="radio" name="preOrder" id="noPreOrder"
+                                            value="0" checked>
+                                        <label class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="noPreOrder">
+                                            否
+                                        </label>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <input class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" type="radio" name="preOrder" id="isPreOrder"
+                                            value="3">
+                                        <label class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="isPreOrder">
+                                            是 (3%)
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <hr class="my-4 border-gray-300 dark:border-gray-600 opacity-25">
+
+                            <!-- Shopee Coins Cashback Program -->
+                            <div class="mb-6">
+                                <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1">
+                                    <i class="bi bi-coin"></i> 蝦幣回饋方案
+                                    <small class="text-gray-600 dark:text-gray-400 font-normal">
+                                        <a href="https://help.shopee.tw/portal/4/article/139826-[%E6%A2%9D%E6%AC%BE%E8%88%87%E6%94%BF%E7%AD%96]-%E8%9D%A6%E5%B9%A3%E5%9B%9E%E9%A5%8B%E6%96%B9%E6%A1%88%E7%B4%84%E5%AE%9A%E6%A2%9D%E6%AC%BE"
+                                            target="_blank" class="text-blue-600 dark:text-blue-400 hover:underline">
+                                            <i class="bi bi-info-circle"></i> 詳情
+                                        </a>
+                                    </small>
+                                </label>
+                                <div class="flex flex-col md:flex-row gap-4 mt-3">
+                                    <div class="flex items-center">
+                                        <input class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" type="radio" name="cashbackProgram"
+                                            id="noCashback" value="0" checked>
+                                        <label class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="noCashback">
+                                            無參加
+                                        </label>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <input class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" type="radio" name="cashbackProgram"
+                                            id="cashback5" value="1.5">
+                                        <label class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="cashback5">
+                                            5%蝦幣回饋方案 (1.5%)
+                                        </label>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <input class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" type="radio" name="cashbackProgram"
+                                            id="cashback10" value="2.5">
+                                        <label class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="cashback10">
+                                            10%蝦幣回饋方案 (2.5%)
+                                            <i class="bi bi-info-circle text-gray-500 dark:text-gray-400 cursor-help" title="原為3%，因同時參加免運活動，可折抵0.5%"></i>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <hr class="my-4 border-gray-300 dark:border-gray-600 opacity-25">
+
+                            <!-- Tax Setting -->
+                            <div class="mb-6">
+                                <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-3">
+                                    <i class="bi bi-receipt"></i> 稅務設定
+                                </label>
+                                <div class="flex flex-col md:flex-row gap-4 flex-wrap">
+                                    <div class="flex items-center">
+                                        <input class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" type="radio" name="taxSetting" id="noTax"
+                                            value="0" checked>
+                                        <label class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="noTax">
+                                            無
+                                        </label>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <input class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" type="radio" name="taxSetting"
+                                            id="businessTax" value="1">
+                                        <label class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="businessTax">
+                                            稅籍登記 (1%)
+                                            <i class="bi bi-info-circle text-gray-500 dark:text-gray-400 cursor-help" data-bs-toggle="tooltip"
+                                                data-bs-placement="top" title="每月營業額超過10萬元，需向國稅局辦理稅籍登記，每季繳納1%的稅。"></i>
+                                        </label>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <input class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" type="radio" name="taxSetting"
+                                            id="invoiceTax" value="5">
+                                        <label class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="invoiceTax">
+                                            發票 (5%)
+                                            <i class="bi bi-info-circle text-gray-500 dark:text-gray-400 cursor-help" data-bs-toggle="tooltip"
+                                                data-bs-placement="top" title="每月營業額超過20萬元，需辦理開發票。"></i>
+                                        </label>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <input class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" type="radio" name="taxSetting"
+                                            id="shopeeInvoice" value="5_plus">
+                                        <label class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="shopeeInvoice">
+                                            蝦皮代開發票 (5% + 2.5元)
+                                            <i class="bi bi-info-circle text-gray-500 dark:text-gray-400 cursor-help" data-bs-toggle="tooltip"
+                                                data-bs-placement="top"
+                                                title="可申請蝦皮代開發票服務，每張需加收2.5元，每月統計。這裡因為是單筆統計，所以每筆會四捨五入為3元，實際以全部張數計算。"></i>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Input Tax Options (Hidden by default) -->
+                            <div class="mt-4" id="inputTaxOptions" style="display: none;">
+                                <div class="p-4 rounded-lg bg-gray-100 dark:bg-slate-700/50 border border-gray-200 dark:border-gray-600">
+                                    <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-3">
+                                        <i class="bi bi-receipt-cutoff"></i> 進項發票設定 (扣抵稅額)
+                                    </label>
+                                    <div class="flex flex-col md:flex-row gap-4">
+                                        <div class="flex items-center">
+                                            <input class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" type="checkbox"
+                                                id="hasProductInvoice">
+                                            <label class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="hasProductInvoice">
+                                                有商品進項發票
+                                                <i class="bi bi-info-circle text-gray-500 dark:text-gray-400 cursor-help" data-bs-toggle="tooltip"
+                                                    data-bs-placement="top" title="進項稅額 = 進價(未稅) * 5%"></i>
+                                            </label>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <input class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" type="checkbox"
+                                                id="hasFeeInvoice">
+                                            <label class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="hasFeeInvoice">
+                                                有手續費進項發票
+                                                <i class="bi bi-info-circle text-gray-500 dark:text-gray-400 cursor-help" data-bs-toggle="tooltip"
+                                                    data-bs-placement="top" title="手續費進項稅額 = 蝦皮手續費 / 1.05 * 5%"></i>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Save Button -->
+                        <div class="flex justify-end mt-4">
+                            <button class="px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg shadow-md transition-colors duration-200 flex items-center gap-2" id="saveConfigBtn">
+                                <i class="bi bi-floppy"></i> 儲存目前設定
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Event Day Info -->
+                    <div class="event-info">
+                        <h6 class="cursor-pointer" data-bs-toggle="collapse" data-bs-target="#eventDayDetails"
+                            aria-expanded="false" aria-controls="eventDayDetails">
+                            <i class="bi bi-calendar-event"></i> <strong>2026年促銷檔期（手續費2%）</strong>
+                            <i class="bi bi-chevron-down float-right"></i>
+                        </h6>
+                        <div class="collapse" id="eventDayDetails">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
+                                <div>
+                                    <ul class="mb-0 space-y-1">
+                                        <li>一月：1/11-1/12；1/18；1/25</li>
+                                        <li>二月：2/2-2/3；2/18；2/25</li>
+                                        <li>三月：3/3-3/4；3/18；3/25</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <ul class="mb-0 space-y-1">
+                                        <li>四月：4/4；4/18-4/19；4/25</li>
+                                        <li>五月：5/5-5/6；5/18；5/25</li>
+                                        <li>六月：6/6；6/18-6/19；6/25</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="mt-4 text-center">
+                                <a href="webcal://p39-caldav.icloud.com/published/2/ODEyNzcxNTEzMzgxMjc3McUGBC3fUHVRi6-Ah4xGQymiQBXbg98Y3YkR3E22KPH1TccpJUKoCrtTPu50R2xcHbmP9A4Xamp-o0x0HDoIETI"
+                                    class="inline-flex items-center gap-2 px-4 py-2 bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold rounded-lg shadow transition-colors duration-200" target="_blank">
+                                    <i class="bi bi-calendar-plus"></i> 訂閱活動日行事曆
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Results Section (繼續) -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Regular Day + Shipping Option 1 -->
+                        <div>
+                            <div class="result-card regular">
+                                <h5><i class="bi bi-calendar-check"></i> 一般日 + 免運方案一 (6%)</h5>
+                                <div class="fee-item suggested-price-row" style="display: none;">
+                                    <span class="fee-label fw-bold text-primary">建議售價</span>
+                                    <span class="fee-value fw-bold text-primary" id="regular-ship1-suggested-price">$
+                                        0</span>
+                                </div>
+
+                                <!-- Group 1: Shopee Fees -->
+                                <div class="fee-group">
+                                    <div class="fee-group-header" data-bs-toggle="collapse"
+                                        data-bs-target="#collapse-regular-ship1-fees" aria-expanded="true">
+                                        <span>蝦皮手續費 <small class="text-gray-600 dark:text-gray-400 ml-1"
+                                                id="regular-ship1-shopee-percent">(0%)</small></span>
+                                        <span>
+                                            <span id="regular-ship1-shopee-total">$ 0</span>
+                                            <i class="bi bi-chevron-down ml-2"></i>
+                                        </span>
+                                    </div>
+                                    <div id="collapse-regular-ship1-fees" class="collapse show">
+                                        <div class="fee-subitem">
+                                            <span id="regular-ship1-transaction-label">成交手續費</span>
+                                            <span class="fee-value" id="regular-ship1-transaction">$ 0</span>
+                                        </div>
+                                        <div class="fee-subitem">
+                                            <span>金流處理費 (2.5%)</span>
+                                            <span class="fee-value" id="regular-ship1-payment">$ 0</span>
+                                        </div>
+                                        <div class="fee-subitem" id="regular-ship1-preorder-row" style="display: none;">
+                                            <span>預購訂單手續費 (3%)</span>
+                                            <span class="fee-value" id="regular-ship1-preorder">$ 0</span>
+                                        </div>
+                                        <div class="fee-subitem">
+                                            <span>免運手續費 (6%)</span>
+                                            <span class="fee-value" id="regular-ship1-shipping">$ 0</span>
+                                        </div>
+                                        <div class="fee-subitem" id="regular-ship1-cashback-row" style="display: none;">
+                                            <span>蝦幣回饋活動服務費</span>
+                                            <span class="fee-value" id="regular-ship1-cashback">$ 0</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Group 2: Payable Tax -->
+                                <div class="fee-group">
+                                    <div class="fee-group-header" data-bs-toggle="collapse"
+                                        data-bs-target="#collapse-regular-ship1-tax" aria-expanded="true">
+                                        <span>應繳營業稅 <small class="text-gray-600 dark:text-gray-400 ml-1"
+                                                id="regular-ship1-tax-percent">(0%)</small></span>
+                                        <span>
+                                            <span id="regular-ship1-payable-tax">$ 0</span>
+                                            <i class="bi bi-chevron-down ml-2"></i>
+                                        </span>
+                                    </div>
+                                    <div id="collapse-regular-ship1-tax" class="collapse show">
+                                        <div class="fee-subitem">
+                                            <span>銷項稅額</span>
+                                            <span class="fee-value" id="regular-ship1-output-tax">$ 0</span>
+                                        </div>
+                                        <div class="fee-subitem" id="regular-ship1-input-tax-row"
+                                            style="display: none;">
+                                            <span class="text-deduction">- 商品進項稅額</span>
+                                            <span class="fee-value text-deduction" id="regular-ship1-input-tax">$
+                                                0</span>
+                                        </div>
+                                        <div class="fee-subitem" id="regular-ship1-fee-input-tax-row"
+                                            style="display: none;">
+                                            <span class="text-deduction">- 手續費進項稅額</span>
+                                            <span class="fee-value text-deduction" id="regular-ship1-fee-input-tax">$
+                                                0</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Independent Fee -->
+                                <div class="fee-item" id="regular-ship1-agent-fee-row" style="display: none;">
+                                    <span class="fee-label">蝦皮代開發票費</span>
+                                    <span class="fee-value" id="regular-ship1-agent-fee">$ 0</span>
+                                </div>
+
+                                <!-- Total Deduction -->
+                                <div class="fee-item deduction-row">
+                                    <span class="fee-label">總扣除額 <small class="text-gray-600 dark:text-gray-400 ml-1"
+                                            id="regular-ship1-deduction-percent">(0%)</small></span>
+                                    <span class="fee-value" id="regular-ship1-deduction">$ 0</span>
+                                </div>
+
+                                <!-- Profit -->
+                                <div class="fee-item profit-row" id="regular-ship1-profit-row">
+                                    <span class="fee-label">獲利</span>
+                                    <span class="fee-value" id="regular-ship1-profit">$ 0</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Regular Day + Shipping Option 2 -->
+                        <div>
+                            <div class="result-card regular">
+                                <h5><i class="bi bi-calendar-check"></i> 一般日 + 免運方案二 (+60元)</h5>
+                                <div class="fee-item suggested-price-row" style="display: none;">
+                                    <span class="fee-label fw-bold text-primary">建議售價</span>
+                                    <span class="fee-value fw-bold text-primary" id="regular-ship2-suggested-price">$
+                                        0</span>
+                                </div>
+
+                                <!-- Group 1: Shopee Fees -->
+                                <div class="fee-group">
+                                    <div class="fee-group-header" data-bs-toggle="collapse"
+                                        data-bs-target="#collapse-regular-ship2-fees" aria-expanded="true">
+                                        <span>蝦皮手續費 <small class="text-gray-600 dark:text-gray-400 ml-1"
+                                                id="regular-ship2-shopee-percent">(0%)</small></span>
+                                        <span>
+                                            <span id="regular-ship2-shopee-total">$ 0</span>
+                                            <i class="bi bi-chevron-down ml-2"></i>
+                                        </span>
+                                    </div>
+                                    <div id="collapse-regular-ship2-fees" class="collapse show">
+                                        <div class="fee-subitem">
+                                            <span id="regular-ship2-transaction-label">成交手續費</span>
+                                            <span class="fee-value" id="regular-ship2-transaction">$ 0</span>
+                                        </div>
+                                        <div class="fee-subitem">
+                                            <span>金流處理費 (2.5%)</span>
+                                            <span class="fee-value" id="regular-ship2-payment">$ 0</span>
+                                        </div>
+                                        <div class="fee-subitem" id="regular-ship2-preorder-row" style="display: none;">
+                                            <span>預購訂單手續費 (3%)</span>
+                                            <span class="fee-value" id="regular-ship2-preorder">$ 0</span>
+                                        </div>
+                                        <div class="fee-subitem">
+                                            <span>免運手續費 (+60元)</span>
+                                            <span class="fee-value" id="regular-ship2-shipping">$ 0</span>
+                                        </div>
+                                        <div class="fee-subitem" id="regular-ship2-cashback-row" style="display: none;">
+                                            <span>蝦幣回饋活動服務費</span>
+                                            <span class="fee-value" id="regular-ship2-cashback">$ 0</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Group 2: Payable Tax -->
+                                <div class="fee-group">
+                                    <div class="fee-group-header" data-bs-toggle="collapse"
+                                        data-bs-target="#collapse-regular-ship2-tax" aria-expanded="true">
+                                        <span>應繳營業稅 <small class="text-gray-600 dark:text-gray-400 ml-1"
+                                                id="regular-ship2-tax-percent">(0%)</small></span>
+                                        <span>
+                                            <span id="regular-ship2-payable-tax">$ 0</span>
+                                            <i class="bi bi-chevron-down ml-2"></i>
+                                        </span>
+                                    </div>
+                                    <div id="collapse-regular-ship2-tax" class="collapse show">
+                                        <div class="fee-subitem">
+                                            <span>銷項稅額</span>
+                                            <span class="fee-value" id="regular-ship2-output-tax">$ 0</span>
+                                        </div>
+                                        <div class="fee-subitem" id="regular-ship2-input-tax-row"
+                                            style="display: none;">
+                                            <span class="text-deduction">- 商品進項稅額</span>
+                                            <span class="fee-value text-deduction" id="regular-ship2-input-tax">$
+                                                0</span>
+                                        </div>
+                                        <div class="fee-subitem" id="regular-ship2-fee-input-tax-row"
+                                            style="display: none;">
+                                            <span class="text-deduction">- 手續費進項稅額</span>
+                                            <span class="fee-value text-deduction" id="regular-ship2-fee-input-tax">$
+                                                0</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Independent Fee -->
+                                <div class="fee-item" id="regular-ship2-agent-fee-row" style="display: none;">
+                                    <span class="fee-label">蝦皮代開發票費</span>
+                                    <span class="fee-value" id="regular-ship2-agent-fee">$ 0</span>
+                                </div>
+
+                                <!-- Total Deduction -->
+                                <div class="fee-item deduction-row">
+                                    <span class="fee-label">總扣除額 <small class="text-gray-600 dark:text-gray-400 ml-1"
+                                            id="regular-ship2-deduction-percent">(0%)</small></span>
+                                    <span class="fee-value" id="regular-ship2-deduction">$ 0</span>
+                                </div>
+
+                                <!-- Profit -->
+                                <div class="fee-item profit-row" id="regular-ship2-profit-row">
+                                    <span class="fee-label">獲利</span>
+                                    <span class="fee-value" id="regular-ship2-profit">$ 0</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Event Day + Shipping Option 1 -->
+                        <div>
+                            <div class="result-card event">
+                                <h5><i class="bi bi-star-fill"></i> 活動日 + 免運方案一 (6%)</h5>
+                                <div class="fee-item suggested-price-row" style="display: none;">
+                                    <span class="fee-label fw-bold text-primary">建議售價</span>
+                                    <span class="fee-value fw-bold text-primary" id="event-ship1-suggested-price">$
+                                        0</span>
+                                </div>
+
+                                <!-- Group 1: Shopee Fees -->
+                                <div class="fee-group">
+                                    <div class="fee-group-header" data-bs-toggle="collapse"
+                                        data-bs-target="#collapse-event-ship1-fees" aria-expanded="true">
+                                        <span>蝦皮手續費 <small class="text-gray-600 dark:text-gray-400 ml-1"
+                                                id="event-ship1-shopee-percent">(0%)</small></span>
+                                        <span>
+                                            <span id="event-ship1-shopee-total">$ 0</span>
+                                            <i class="bi bi-chevron-down ml-2"></i>
+                                        </span>
+                                    </div>
+                                    <div id="collapse-event-ship1-fees" class="collapse show">
+                                        <div class="fee-subitem">
+                                            <span id="event-ship1-transaction-label">成交手續費</span>
+                                            <span class="fee-value" id="event-ship1-transaction">$ 0</span>
+                                        </div>
+                                        <div class="fee-subitem">
+                                            <span>金流處理費 (2.5%)</span>
+                                            <span class="fee-value" id="event-ship1-payment">$ 0</span>
+                                        </div>
+                                        <div class="fee-subitem" id="event-ship1-preorder-row" style="display: none;">
+                                            <span>預購訂單手續費 (3%)</span>
+                                            <span class="fee-value" id="event-ship1-preorder">$ 0</span>
+                                        </div>
+                                        <div class="fee-subitem">
+                                            <span>免運手續費 (6%)</span>
+                                            <span class="fee-value" id="event-ship1-shipping">$ 0</span>
+                                        </div>
+                                        <div class="fee-subitem" id="event-ship1-cashback-row" style="display: none;">
+                                            <span>蝦幣回饋活動服務費</span>
+                                            <span class="fee-value" id="event-ship1-cashback">$ 0</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Group 2: Payable Tax -->
+                                <div class="fee-group">
+                                    <div class="fee-group-header" data-bs-toggle="collapse"
+                                        data-bs-target="#collapse-event-ship1-tax" aria-expanded="true">
+                                        <span>應繳營業稅 <small class="text-gray-600 dark:text-gray-400 ml-1"
+                                                id="event-ship1-tax-percent">(0%)</small></span>
+                                        <span>
+                                            <span id="event-ship1-payable-tax">$ 0</span>
+                                            <i class="bi bi-chevron-down ml-2"></i>
+                                        </span>
+                                    </div>
+                                    <div id="collapse-event-ship1-tax" class="collapse show">
+                                        <div class="fee-subitem">
+                                            <span>銷項稅額</span>
+                                            <span class="fee-value" id="event-ship1-output-tax">$ 0</span>
+                                        </div>
+                                        <div class="fee-subitem" id="event-ship1-input-tax-row" style="display: none;">
+                                            <span class="text-deduction">- 商品進項稅額</span>
+                                            <span class="fee-value text-deduction" id="event-ship1-input-tax">$ 0</span>
+                                        </div>
+                                        <div class="fee-subitem" id="event-ship1-fee-input-tax-row"
+                                            style="display: none;">
+                                            <span class="text-deduction">- 手續費進項稅額</span>
+                                            <span class="fee-value text-deduction" id="event-ship1-fee-input-tax">$
+                                                0</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Independent Fee -->
+                                <div class="fee-item" id="event-ship1-agent-fee-row" style="display: none;">
+                                    <span class="fee-label">蝦皮代開發票費</span>
+                                    <span class="fee-value" id="event-ship1-agent-fee">$ 0</span>
+                                </div>
+
+                                <!-- Total Deduction -->
+                                <div class="fee-item deduction-row">
+                                    <span class="fee-label">總扣除額 <small class="text-gray-600 dark:text-gray-400 ml-1"
+                                            id="event-ship1-deduction-percent">(0%)</small></span>
+                                    <span class="fee-value" id="event-ship1-deduction">$ 0</span>
+                                </div>
+
+                                <!-- Profit -->
+                                <div class="fee-item profit-row" id="event-ship1-profit-row">
+                                    <span class="fee-label">獲利</span>
+                                    <span class="fee-value" id="event-ship1-profit">$ 0</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Event Day + Shipping Option 2 -->
+                        <div>
+                            <div class="result-card event">
+                                <h5><i class="bi bi-star-fill"></i> 活動日 + 免運方案二 (+60元)</h5>
+                                <div class="fee-item suggested-price-row" style="display: none;">
+                                    <span class="fee-label fw-bold text-primary">建議售價</span>
+                                    <span class="fee-value fw-bold text-primary" id="event-ship2-suggested-price">$
+                                        0</span>
+                                </div>
+
+                                <!-- Group 1: Shopee Fees -->
+                                <div class="fee-group">
+                                    <div class="fee-group-header" data-bs-toggle="collapse"
+                                        data-bs-target="#collapse-event-ship2-fees" aria-expanded="true">
+                                        <span>蝦皮手續費 <small class="text-gray-600 dark:text-gray-400 ml-1"
+                                                id="event-ship2-shopee-percent">(0%)</small></span>
+                                        <span>
+                                            <span id="event-ship2-shopee-total">$ 0</span>
+                                            <i class="bi bi-chevron-down ml-2"></i>
+                                        </span>
+                                    </div>
+                                    <div id="collapse-event-ship2-fees" class="collapse show">
+                                        <div class="fee-subitem">
+                                            <span id="event-ship2-transaction-label">成交手續費</span>
+                                            <span class="fee-value" id="event-ship2-transaction">$ 0</span>
+                                        </div>
+                                        <div class="fee-subitem">
+                                            <span>金流處理費 (2.5%)</span>
+                                            <span class="fee-value" id="event-ship2-payment">$ 0</span>
+                                        </div>
+                                        <div class="fee-subitem" id="event-ship2-preorder-row" style="display: none;">
+                                            <span>預購訂單手續費 (3%)</span>
+                                            <span class="fee-value" id="event-ship2-preorder">$ 0</span>
+                                        </div>
+                                        <div class="fee-subitem">
+                                            <span>免運手續費 (+60元)</span>
+                                            <span class="fee-value" id="event-ship2-shipping">$ 0</span>
+                                        </div>
+                                        <div class="fee-subitem" id="event-ship2-cashback-row" style="display: none;">
+                                            <span>蝦幣回饋活動服務費</span>
+                                            <span class="fee-value" id="event-ship2-cashback">$ 0</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Group 2: Payable Tax -->
+                                <div class="fee-group">
+                                    <div class="fee-group-header" data-bs-toggle="collapse"
+                                        data-bs-target="#collapse-event-ship2-tax" aria-expanded="true">
+                                        <span>應繳營業稅 <small class="text-gray-600 dark:text-gray-400 ml-1"
+                                                id="event-ship2-tax-percent">(0%)</small></span>
+                                        <span>
+                                            <span id="event-ship2-payable-tax">$ 0</span>
+                                            <i class="bi bi-chevron-down ml-2"></i>
+                                        </span>
+                                    </div>
+                                    <div id="collapse-event-ship2-tax" class="collapse show">
+                                        <div class="fee-subitem">
+                                            <span>銷項稅額</span>
+                                            <span class="fee-value" id="event-ship2-output-tax">$ 0</span>
+                                        </div>
+                                        <div class="fee-subitem" id="event-ship2-input-tax-row" style="display: none;">
+                                            <span class="text-deduction">- 商品進項稅額</span>
+                                            <span class="fee-value text-deduction" id="event-ship2-input-tax">$ 0</span>
+                                        </div>
+                                        <div class="fee-subitem" id="event-ship2-fee-input-tax-row"
+                                            style="display: none;">
+                                            <span class="text-deduction">- 手續費進項稅額</span>
+                                            <span class="fee-value text-deduction" id="event-ship2-fee-input-tax">$
+                                                0</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Independent Fee -->
+                                <div class="fee-item" id="event-ship2-agent-fee-row" style="display: none;">
+                                    <span class="fee-label">蝦皮代開發票費</span>
+                                    <span class="fee-value" id="event-ship2-agent-fee">$ 0</span>
+                                </div>
+
+                                <!-- Total Deduction -->
+                                <div class="fee-item deduction-row">
+                                    <span class="fee-label">總扣除額 <small class="text-gray-600 dark:text-gray-400 ml-1"
+                                            id="event-ship2-deduction-percent">(0%)</small></span>
+                                    <span class="fee-value" id="event-ship2-deduction">$ 0</span>
+                                </div>
+
+                                <!-- Profit -->
+                                <div class="fee-item profit-row" id="event-ship2-profit-row">
+                                    <span class="fee-label">獲利</span>
+                                    <span class="fee-value" id="event-ship2-profit">$ 0</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Summary Table Section -->
+                    <div class="mt-6">
+                        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-md overflow-hidden border border-gray-200 dark:border-gray-700">
+                            <div class="bg-gray-900 dark:bg-slate-900 text-white p-4">
+                                <h5 class="text-lg font-bold mb-0"><i class="bi bi-table"></i> 費用與獲利總覽</h5>
+                            </div>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-center align-middle">
+                                        <thead class="bg-gray-100 dark:bg-slate-700">
+                                            <tr>
+                                                <th scope="col" class="py-3 text-left pl-4 font-bold text-gray-700 dark:text-gray-300">情境</th>
+                                                <th scope="col" class="py-3 whitespace-nowrap font-bold text-gray-700 dark:text-gray-300 suggested-price-column"
+                                                    style="display: none;">建議售價</th>
+                                                <th scope="col" class="py-3 whitespace-nowrap font-bold text-gray-700 dark:text-gray-300">總扣除額</th>
+                                                <th scope="col" class="py-3 whitespace-nowrap font-bold text-gray-700 dark:text-gray-300">獲利</th>
+                                                <th scope="col" class="py-3 whitespace-nowrap font-bold text-gray-700 dark:text-gray-300">獲利率</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+                                            <tr class="hover:bg-gray-50 dark:hover:bg-slate-700/50 transition-colors">
+                                                <td class="py-3 text-left pl-4">
+                                                    <span class="inline-block px-2 py-1 bg-blue-600 text-white text-xs font-semibold rounded mr-2">一般日</span>
+                                                    <span class="inline-block text-gray-900 dark:text-white">免運方案一</span>
+                                                </td>
+                                                <td class="py-3 font-bold text-blue-600 dark:text-blue-400 whitespace-nowrap suggested-price-column"
+                                                    style="display: none;" id="summary-regular-ship1-suggested">$ 0</td>
+                                                <td class="py-3 font-bold text-blue-600 dark:text-blue-400 whitespace-nowrap"
+                                                    id="summary-regular-ship1-total">$ 0</td>
+                                                <td class="py-3 font-bold text-green-600 dark:text-green-400 whitespace-nowrap"
+                                                    id="summary-regular-ship1-profit">$ 0</td>
+                                                <td class="py-3 text-gray-600 dark:text-gray-400 whitespace-nowrap" id="summary-regular-ship1-margin">0%
+                                                </td>
+                                            </tr>
+                                            <tr class="hover:bg-gray-50 dark:hover:bg-slate-700/50 transition-colors">
+                                                <td class="py-3 text-left pl-4">
+                                                    <span class="inline-block px-2 py-1 bg-blue-600 text-white text-xs font-semibold rounded mr-2">一般日</span>
+                                                    <span class="inline-block text-gray-900 dark:text-white">免運方案二</span>
+                                                </td>
+                                                <td class="py-3 font-bold text-blue-600 dark:text-blue-400 whitespace-nowrap suggested-price-column"
+                                                    style="display: none;" id="summary-regular-ship2-suggested">$ 0</td>
+                                                <td class="py-3 font-bold text-blue-600 dark:text-blue-400 whitespace-nowrap"
+                                                    id="summary-regular-ship2-total">$ 0</td>
+                                                <td class="py-3 font-bold text-green-600 dark:text-green-400 whitespace-nowrap"
+                                                    id="summary-regular-ship2-profit">$ 0</td>
+                                                <td class="py-3 text-gray-600 dark:text-gray-400 whitespace-nowrap" id="summary-regular-ship2-margin">0%
+                                                </td>
+                                            </tr>
+                                            <tr class="hover:bg-gray-50 dark:hover:bg-slate-700/50 transition-colors">
+                                                <td class="py-3 text-left pl-4">
+                                                    <span class="inline-block px-2 py-1 bg-yellow-400 text-gray-900 text-xs font-semibold rounded mr-2">活動日</span>
+                                                    <span class="inline-block text-gray-900 dark:text-white">免運方案一</span>
+                                                </td>
+                                                <td class="py-3 font-bold text-blue-600 dark:text-blue-400 whitespace-nowrap suggested-price-column"
+                                                    style="display: none;" id="summary-event-ship1-suggested">$ 0</td>
+                                                <td class="py-3 font-bold text-blue-600 dark:text-blue-400 whitespace-nowrap"
+                                                    id="summary-event-ship1-total">$ 0</td>
+                                                <td class="py-3 font-bold text-green-600 dark:text-green-400 whitespace-nowrap"
+                                                    id="summary-event-ship1-profit">$ 0</td>
+                                                <td class="py-3 text-gray-600 dark:text-gray-400 whitespace-nowrap" id="summary-event-ship1-margin">0%
+                                                </td>
+                                            </tr>
+                                            <tr class="hover:bg-gray-50 dark:hover:bg-slate-700/50 transition-colors">
+                                                <td class="py-3 text-left pl-4">
+                                                    <span class="inline-block px-2 py-1 bg-yellow-400 text-gray-900 text-xs font-semibold rounded mr-2">活動日</span>
+                                                    <span class="inline-block text-gray-900 dark:text-white">免運方案二</span>
+                                                </td>
+                                                <td class="py-3 font-bold text-blue-600 dark:text-blue-400 whitespace-nowrap suggested-price-column"
+                                                    style="display: none;" id="summary-event-ship2-suggested">$ 0</td>
+                                                <td class="py-3 font-bold text-blue-600 dark:text-blue-400 whitespace-nowrap"
+                                                    id="summary-event-ship2-total">$ 0</td>
+                                                <td class="py-3 font-bold text-green-600 dark:text-green-400 whitespace-nowrap"
+                                                    id="summary-event-ship2-profit">$ 0</td>
+                                                <td class="py-3 text-gray-600 dark:text-gray-400 whitespace-nowrap" id="summary-event-ship2-margin">0%
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Disclaimer Note -->
+                    <div class="text-center text-gray-600 dark:text-gray-400 mt-6">
+                        <small class="block mb-2">💡 此計算機僅供參考，實際以蝦皮官方公告為準。</small>
+                        <small class="block" id="transactionFeeNote">成交手續費:一般賣家成交金額最高 NT$35,000 為上限計算,商城賣家無上限。</small>
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <footer id="main-footer"></footer>
+            </div>
+        </div>
+    </div>
+
+    <!-- Overlay for mobile sidebar -->
+    <div id="sidebar-overlay"></div>
+
+    <!-- Toast Container -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3" id="toastContainer"></div>
+
+    <!-- Save Config Modal -->
+    <div class="modal fade" id="saveConfigModal" tabindex="-1" aria-labelledby="saveConfigModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title" id="saveConfigModalLabel">儲存設定名稱</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="configNameInput" placeholder="輸入設定名稱">
+                        <button class="btn btn-outline-secondary" type="button" id="clearConfigNameBtn">
+                            <i class="bi bi-x-lg"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" id="confirmSaveConfigBtn">確定儲存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fee Lookup Modal -->
+    <div class="modal fade" id="feeLookupModal" tabindex="-1" aria-labelledby="feeLookupModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header border-0 pb-0">
+                    <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body pt-0">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text"><i class="bi bi-search"></i></span>
+                        <input type="text" class="form-control" id="categorySearch" placeholder="搜尋類別 (例如: 手機)...">
+                    </div>
+
+                    <nav aria-label="breadcrumb" id="breadcrumbNav" style="display: none;">
+                        <ol class="breadcrumb" id="categoryBreadcrumb">
+                            <!-- Breadcrumbs will be injected here -->
+                        </ol>
+                    </nav>
+
+                    <div class="list-group list-group-flush" id="categoryList">
+                        <!-- Categories will be injected here -->
+                        <div class="text-center py-3">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="module">
+        import { getHeader, initThemeToggle } from './components/header.js';
+        import { getFooter } from './components/footer.js';
+        
+        // Inject header and footer
+        document.getElementById('main-header').innerHTML = getHeader('calc');
+        document.getElementById('main-footer').innerHTML = getFooter();
+        
+        // Initialize theme toggle
+        initThemeToggle();
+    </script>
+    <script src="storage.js?202601140"></script>
+    <script src="calculator.js?202601140"></script>
+    <script src="fee-lookup.js?202601140"></script>
+</body>
+
+</html>

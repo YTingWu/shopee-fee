@@ -1,0 +1,77 @@
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: [
+    './*.html',
+    './**/*.html',
+    './*.js',
+    './**/*.js',
+    '!./node_modules/**'
+  ],
+  darkMode: 'class',
+  theme: {
+    extend: {
+      colors: {
+        primary: {
+          DEFAULT: '#4e73df',
+          50: '#f0f4ff',
+          100: '#e0e9ff',
+          200: '#c7d7ff',
+          300: '#a3b9ff',
+          400: '#7d92ff',
+          500: '#4e73df',
+          600: '#224abe',
+          700: '#1a3a9a',
+          800: '#152d7a',
+          900: '#0f2260',
+        },
+        success: {
+          DEFAULT: '#1cc88a',
+          50: '#f0fdf9',
+          100: '#ccfbef',
+          200: '#99f6e0',
+          300: '#5fe9ce',
+          400: '#2dd4b4',
+          500: '#1cc88a',
+          600: '#14a871',
+          700: '#12835c',
+          800: '#13674a',
+          900: '#14563f',
+        },
+        warning: {
+          DEFAULT: '#f6c23e',
+          50: '#fefce8',
+          100: '#fef9c3',
+          200: '#fef08a',
+          300: '#fde047',
+          400: '#facc15',
+          500: '#f6c23e',
+          600: '#e0a800',
+          700: '#ca8a04',
+          800: '#a16207',
+          900: '#854d0e',
+        },
+        danger: {
+          DEFAULT: '#e74a3b',
+          50: '#fef2f2',
+          100: '#fee2e2',
+          200: '#fecaca',
+          300: '#fca5a5',
+          400: '#f87171',
+          500: '#e74a3b',
+          600: '#dc2626',
+          700: '#b91c1c',
+          800: '#991b1b',
+          900: '#7f1d1d',
+        },
+      },
+      fontFamily: {
+        sans: ['-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', '"Helvetica Neue"', 'Arial', 'sans-serif'],
+      },
+      borderRadius: {
+        '2xl': '1.25rem',
+        '3xl': '1.5rem',
+      },
+    },
+  },
+  plugins: [],
+}

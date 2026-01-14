@@ -1,0 +1,23 @@
+{
+  "name": "shopee-fee-calculator",
+  "version": "2.0.0",
+  "description": "蝦皮手續費計算機 2.0 - 支援賣場管理與商品管理",
+  "scripts": {
+    "build": "tailwindcss -i ./src/input.css -o ./dist/output.css --minify",
+    "watch": "tailwindcss -i ./src/input.css -o ./dist/output.css --watch",
+    "dev": "tailwindcss -i ./src/input.css -o ./dist/output.css --watch",
+    "start": "npx serve .",
+    "serve": "npx serve ."
+  },
+  "keywords": [
+    "shopee",
+    "calculator",
+    "fee",
+    "taiwan"
+  ],
+  "author": "Bruce Wu",
+  "license": "CC-BY-NC-ND-4.0",
+  "devDependencies": {
+    "tailwindcss": "^3.4.1"
+  }
+}

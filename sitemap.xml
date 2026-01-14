@@ -9,7 +9,28 @@
 
 <url>
   <loc>https://ytingwu.github.io/shopee-fee/</loc>
-  <lastmod>2025-12-21T04:12:59+00:00</lastmod>
+  <lastmod>2026-01-14T06:00:00+00:00</lastmod>
+  <priority>1.00</priority>
+</url>
+<url>
+  <loc>https://ytingwu.github.io/shopee-fee/calc.html</loc>
+  <lastmod>2026-01-14T06:00:00+00:00</lastmod>
+  <priority>0.90</priority>
+</url>
+<url>
+  <loc>https://ytingwu.github.io/shopee-fee/management.html</loc>
+  <lastmod>2026-01-14T06:00:00+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://ytingwu.github.io/shopee-fee/settings.html</loc>
+  <lastmod>2026-01-14T06:00:00+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://ytingwu.github.io/shopee-fee/guide.html</loc>
+  <lastmod>2026-01-14T06:00:00+00:00</lastmod>
+  <priority>0.70</priority>
 </url>
 
 

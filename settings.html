@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>賣場設定 - 蝦皮手續費計算機 2.0</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <script>
+        // Apply theme immediately to prevent flash
+        (function() {
+            const theme = localStorage.getItem('theme') || 'system';
+            if (theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+                document.documentElement.setAttribute('data-theme', 'dark');
+            } else {
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        })();
+    </script>
+    <link href="./dist/output.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <script type="module" src="./settings.js"></script>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen flex flex-col">
+    <header id="main-header"></header>
+
+    <main class="flex-grow container mx-auto p-4">
+        <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">
+            <h1 class="text-2xl font-bold mb-4">賣場設定</h1>
+            <div id="settings-form-container">
+                <!-- Settings form will be rendered here -->
+                <p>載入中...</p>
+            </div>
+        </div>
+    </main>
+
+    <footer id="main-footer" class="mt-auto"></footer>
+</body>
+</html>

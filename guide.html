@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>使用說明與免責聲明 - 蝦皮手續費計算機 2.0</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <script>
+        // Apply theme immediately to prevent flash
+        (function() {
+            const theme = localStorage.getItem('theme') || 'system';
+            if (theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+                document.documentElement.setAttribute('data-theme', 'dark');
+            } else {
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        })();
+    </script>
+    <link href="./dist/output.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen flex flex-col">
+    <header id="main-header"></header>
+
+    <main class="flex-grow container mx-auto p-4">
+        <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">
+            <h1 class="text-2xl font-bold mb-4">使用說明與免責聲明</h1>
+            <section class="mb-6">
+                <h2 class="text-xl font-semibold mb-2">服務條款</h2>
+                <p class="text-gray-700 dark:text-gray-300">
+                    本「蝦皮手續費計算機 2.0」工具（以下簡稱「本工具」）由 Bruce Wu 設計與開發。
+                    使用本工具即表示您同意遵守以下服務條款。
+                </p>
+                <ul class="list-disc list-inside ml-4 text-gray-700 dark:text-gray-300 mt-2">
+                    <li>本工具僅供個人非商業用途參考使用。</li>
+                    <li>所有計算結果僅為模擬，實際手續費與稅務請以蝦皮官方公告及稅務機關規定為準。</li>
+                    <li>本工具不保證計算結果的絕對準確性，使用者應自行承擔使用本工具的風險。</li>
+                    <li>嚴禁對本工具進行反向工程、修改、散佈或用於任何非法目的。</li>
+                </ul>
+            </section>
+
+            <section class="mb-6">
+                <h2 class="text-xl font-semibold mb-2">隱私政策</h2>
+                <p class="text-gray-700 dark:text-gray-300">
+                    本工具尊重並保護所有使用者的個人隱私權。
+                </p>
+                <ul class="list-disc list-inside ml-4 text-gray-700 dark:text-gray-300 mt-2">
+                    <li>本工具不會收集任何個人身份資訊。</li>
+                    <li>所有輸入的商品資料與賣場設定均儲存在您瀏覽器的 `localStorage` 中，不會上傳至任何伺服器。</li>
+                    <li>您可以隨時清除瀏覽器資料來刪除所有儲存的數據。</li>
+                    <li>本工具可能使用標準的網站分析工具（如 Google Analytics），以匿名方式收集流量數據，用於改進服務。</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2 class="text-xl font-semibold mb-2">免責聲明</h2>
+                <p class="text-gray-700 dark:text-gray-300">
+                    本工具提供的所有資訊僅供參考，不構成任何財務、稅務或商業建議。
+                    對於因使用或無法使用本工具所造成的任何直接或間接損失，開發者概不負責。
+                    使用者在進行任何商業決策前，應自行查閱蝦皮官方最新公告及諮詢專業人士。
+                </p>
+            </section>
+        </div>
+    </main>
+
+    <footer id="main-footer" class="mt-auto"></footer>
+
+    <script type="module">
+        import { getHeader, initThemeToggle } from './components/header.js';
+        import { getFooter } from './components/footer.js';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('main-header').innerHTML = getHeader('guide');
+            document.getElementById('main-footer').innerHTML = getFooter();
+            initThemeToggle();
+        });
+    </script>
+</body>
+</html>

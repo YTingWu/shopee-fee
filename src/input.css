@@ -1,0 +1,162 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom Base Styles */
+@layer base {
+  body {
+    @apply bg-gray-50 text-gray-900 dark:bg-slate-900 dark:text-slate-200;
+    @apply antialiased;
+  }
+  
+  html {
+    @apply scroll-smooth;
+  }
+}
+
+/* Custom Component Styles */
+@layer components {
+  /* Card Component */
+  .card {
+    @apply bg-white dark:bg-slate-800 rounded-2xl shadow-lg p-6;
+    @apply border border-gray-100 dark:border-slate-700;
+    @apply transition-all duration-300;
+  }
+  
+  .card:hover {
+    @apply shadow-xl -translate-y-1;
+  }
+  
+  /* Button Components */
+  .btn {
+    @apply px-4 py-2 rounded-lg font-semibold transition-all duration-200;
+    @apply focus:outline-none focus:ring-2 focus:ring-offset-2;
+  }
+  
+  .btn-primary {
+    @apply bg-primary hover:bg-primary-700 text-white;
+    @apply focus:ring-primary-500;
+  }
+  
+  .btn-success {
+    @apply bg-success hover:bg-success-600 text-white;
+    @apply focus:ring-success-500;
+  }
+  
+  .btn-warning {
+    @apply bg-warning hover:bg-warning-600 text-gray-900;
+    @apply focus:ring-warning-500;
+  }
+  
+  .btn-danger {
+    @apply bg-danger hover:bg-danger-600 text-white;
+    @apply focus:ring-danger-500;
+  }
+  
+  .btn-secondary {
+    @apply bg-gray-200 hover:bg-gray-300 text-gray-800;
+    @apply dark:bg-slate-700 dark:hover:bg-slate-600 dark:text-slate-200;
+    @apply focus:ring-gray-500;
+  }
+  
+  /* Input Components */
+  .input {
+    @apply w-full px-4 py-2 rounded-lg border border-gray-300;
+    @apply bg-white dark:bg-slate-800 dark:border-slate-600;
+    @apply text-gray-900 dark:text-slate-200;
+    @apply focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent;
+    @apply transition-all duration-200;
+  }
+  
+  /* Header Component */
+  .header-nav {
+    @apply fixed top-0 left-0 right-0 z-50;
+    @apply bg-white dark:bg-slate-800 shadow-sm;
+    @apply border-b border-gray-200 dark:border-slate-700;
+  }
+  
+  /* Result Card Styles */
+  .result-card {
+    @apply bg-white dark:bg-slate-800 rounded-2xl shadow-lg overflow-hidden;
+    @apply border border-gray-100 dark:border-slate-700;
+  }
+  
+  .result-card-header {
+    @apply px-6 py-4 font-bold text-white;
+  }
+  
+  .result-card-header.regular {
+    @apply bg-gradient-to-r from-primary-500 to-primary-700;
+  }
+  
+  .result-card-header.event {
+    @apply bg-gradient-to-r from-warning-400 to-warning-600;
+  }
+  
+  /* Fee Item Styles */
+  .fee-item {
+    @apply flex justify-between items-center px-6 py-3;
+    @apply border-b border-gray-100 dark:border-slate-700;
+  }
+  
+  .fee-item-label {
+    @apply text-gray-600 dark:text-slate-400 font-medium;
+  }
+  
+  .fee-item-value {
+    @apply text-gray-900 dark:text-slate-200 font-bold;
+  }
+  
+  /* Table Styles */
+  .table-container {
+    @apply overflow-x-auto rounded-lg border border-gray-200 dark:border-slate-700;
+  }
+  
+  .table {
+    @apply w-full text-left;
+  }
+  
+  .table thead {
+    @apply bg-gray-100 dark:bg-slate-700;
+  }
+  
+  .table th {
+    @apply px-4 py-3 font-semibold text-gray-700 dark:text-slate-300;
+  }
+  
+  .table td {
+    @apply px-4 py-3 border-t border-gray-200 dark:border-slate-700;
+  }
+  
+  .table tbody tr {
+    @apply hover:bg-gray-50 dark:hover:bg-slate-800/50 transition-colors;
+  }
+}
+
+/* Custom Utility Styles */
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  .scrollbar-thin {
+    scrollbar-width: thin;
+  }
+  
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  
+  .scrollbar-thin::-webkit-scrollbar-track {
+    @apply bg-gray-100 dark:bg-slate-800;
+  }
+  
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    @apply bg-gray-300 dark:bg-slate-600 rounded-full;
+  }
+  
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    @apply bg-gray-400 dark:bg-slate-500;
+  }
+}

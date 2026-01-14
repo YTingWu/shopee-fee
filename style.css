@@ -53,6 +53,35 @@ body {
     padding: 0;
 }
 
+/* Navbar Dark Mode Support */
+[data-theme="dark"] .navbar {
+    background-color: var(--bg-card) !important;
+    border-color: var(--border-color) !important;
+}
+
+[data-theme="dark"] .navbar-brand,
+[data-theme="dark"] .nav-link {
+    color: var(--text-main) !important;
+}
+
+[data-theme="dark"] .nav-link:hover,
+[data-theme="dark"] .nav-link:focus {
+    color: var(--primary) !important;
+}
+
+[data-theme="dark"] .nav-link.active {
+    color: var(--primary) !important;
+}
+
+[data-theme="dark"] .navbar-toggler {
+    border-color: var(--border-color);
+    background-color: var(--bg-input);
+}
+
+[data-theme="dark"] .navbar-toggler-icon {
+    filter: invert(1);
+}
+
 @media (min-width: 768px) {
     body {
         height: 100vh;

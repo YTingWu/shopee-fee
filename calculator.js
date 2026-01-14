@@ -602,13 +602,8 @@ floatingHeader.addEventListener('click', () => {
     }
 });
 
-const themeToggle = document.getElementById('themeToggle');
-const themeIcon = document.getElementById('themeIcon');
-const htmlElement = document.documentElement;
-let savedTheme = localStorage.getItem('theme') || 'light';
-function applyTheme(t){ htmlElement.setAttribute('data-theme', t); themeIcon.className = t==='dark'?'bi bi-sun-fill fs-4':'bi bi-moon-fill fs-4'; }
-applyTheme(savedTheme);
-themeToggle.addEventListener('click', () => { savedTheme = savedTheme==='dark'?'light':'dark'; applyTheme(savedTheme); localStorage.setItem('theme', savedTheme); });
+// Theme toggle is now handled by header.js component
+// Removed duplicate theme toggle code to prevent conflicts
 
 // Init Bootstrap Tooltips
 document.addEventListener('DOMContentLoaded', function() {
