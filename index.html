@@ -67,7 +67,7 @@
     </script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="style.css?v=202601134">
+    <link rel="stylesheet" href="style.css?v=202601243">
     <link rel="stylesheet" href="fee-lookup.css">
 </head>
 
@@ -466,6 +466,10 @@
                                     <span class="fee-value fw-bold text-primary" id="regular-ship1-suggested-price">$
                                         0</span>
                                 </div>
+                                <div class="fee-item sell-price-row" style="display: none;">
+                                    <span class="fee-label fw-bold text-primary">售價</span>
+                                    <span class="fee-value fw-bold text-primary" id="regular-ship1-sell-price">$ 0</span>
+                                </div>
 
                                 <!-- Group 1: Shopee Fees -->
                                 <div class="fee-group">
@@ -562,6 +566,10 @@
                                     <span class="fee-label fw-bold text-primary">建議售價</span>
                                     <span class="fee-value fw-bold text-primary" id="regular-ship2-suggested-price">$
                                         0</span>
+                                </div>
+                                <div class="fee-item sell-price-row" style="display: none;">
+                                    <span class="fee-label fw-bold text-primary">售價</span>
+                                    <span class="fee-value fw-bold text-primary" id="regular-ship2-sell-price">$ 0</span>
                                 </div>
 
                                 <!-- Group 1: Shopee Fees -->
@@ -660,6 +668,10 @@
                                     <span class="fee-value fw-bold text-primary" id="event-ship1-suggested-price">$
                                         0</span>
                                 </div>
+                                <div class="fee-item sell-price-row" style="display: none;">
+                                    <span class="fee-label fw-bold text-primary">售價</span>
+                                    <span class="fee-value fw-bold text-primary" id="event-ship1-sell-price">$ 0</span>
+                                </div>
 
                                 <!-- Group 1: Shopee Fees -->
                                 <div class="fee-group">
@@ -754,6 +766,10 @@
                                     <span class="fee-label fw-bold text-primary">建議售價</span>
                                     <span class="fee-value fw-bold text-primary" id="event-ship2-suggested-price">$
                                         0</span>
+                                </div>
+                                <div class="fee-item sell-price-row" style="display: none;">
+                                    <span class="fee-label fw-bold text-primary">售價</span>
+                                    <span class="fee-value fw-bold text-primary" id="event-ship2-sell-price">$ 0</span>
                                 </div>
 
                                 <!-- Group 1: Shopee Fees -->
@@ -856,6 +872,8 @@
                                                 <th scope="col" class="py-3 text-start ps-3">情境</th>
                                                 <th scope="col" class="py-3 text-nowrap suggested-price-column"
                                                     style="display: none;">建議售價</th>
+                                                <th scope="col" class="py-3 text-nowrap sell-price-column"
+                                                    style="display: none;">售價</th>
                                                 <th scope="col" class="py-3 text-nowrap">總扣除額</th>
                                                 <th scope="col" class="py-3 text-nowrap">獲利</th>
                                                 <th scope="col" class="py-3 text-nowrap">獲利率</th>
@@ -869,6 +887,8 @@
                                                 </td>
                                                 <td class="fw-bold text-primary text-nowrap suggested-price-column"
                                                     style="display: none;" id="summary-regular-ship1-suggested">$ 0</td>
+                                                <td class="fw-bold text-primary text-nowrap sell-price-column"
+                                                    style="display: none;" id="summary-regular-ship1-sell">$ 0</td>
                                                 <td class="fw-bold text-primary text-nowrap"
                                                     id="summary-regular-ship1-total">$ 0</td>
                                                 <td class="fw-bold text-success text-nowrap"
@@ -883,6 +903,8 @@
                                                 </td>
                                                 <td class="fw-bold text-primary text-nowrap suggested-price-column"
                                                     style="display: none;" id="summary-regular-ship2-suggested">$ 0</td>
+                                                <td class="fw-bold text-primary text-nowrap sell-price-column"
+                                                    style="display: none;" id="summary-regular-ship2-sell">$ 0</td>
                                                 <td class="fw-bold text-primary text-nowrap"
                                                     id="summary-regular-ship2-total">$ 0</td>
                                                 <td class="fw-bold text-success text-nowrap"
@@ -897,6 +919,8 @@
                                                 </td>
                                                 <td class="fw-bold text-primary text-nowrap suggested-price-column"
                                                     style="display: none;" id="summary-event-ship1-suggested">$ 0</td>
+                                                <td class="fw-bold text-primary text-nowrap sell-price-column"
+                                                    style="display: none;" id="summary-event-ship1-sell">$ 0</td>
                                                 <td class="fw-bold text-primary text-nowrap"
                                                     id="summary-event-ship1-total">$ 0</td>
                                                 <td class="fw-bold text-success text-nowrap"
@@ -911,6 +935,8 @@
                                                 </td>
                                                 <td class="fw-bold text-primary text-nowrap suggested-price-column"
                                                     style="display: none;" id="summary-event-ship2-suggested">$ 0</td>
+                                                <td class="fw-bold text-primary text-nowrap sell-price-column"
+                                                    style="display: none;" id="summary-event-ship2-sell">$ 0</td>
                                                 <td class="fw-bold text-primary text-nowrap"
                                                     id="summary-event-ship2-total">$ 0</td>
                                                 <td class="fw-bold text-success text-nowrap"
@@ -931,7 +957,7 @@
                             <div class="text-center mb-2">
                                 <small class="text-muted">贊助廣告</small>
                                 <i class="bi bi-info-circle text-muted ms-1" data-bs-toggle="tooltip"
-                                    data-bs-placement="top" title="歡迎以商品互惠方式贊助本網站，意者請私訊 下方 IG"
+                                    data-bs-placement="top" title="歡迎以商品互惠方式贊助本網站，意者請私訊下方 IG"
                                     style="cursor: help;"></i>
                                 <br>
                                 <small class="text-muted">同為 Bruce 設計開發的APP，歡迎下載使用</small>
@@ -996,7 +1022,7 @@
                             </div>
                             <!-- Line 3: Version -->
                             <div class="text-center text-muted small opacity-50">
-                                v1.1.2
+                                v1.1.3
                             </div>
                         </div>
 
@@ -1108,7 +1134,7 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="calculator.js?202601132"></script>
+    <script src="calculator.js?202601243"></script>
     <script src="fee-lookup.js?20260107"></script>
     <script src="storage.js?20260113"></script>
 </body>

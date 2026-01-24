@@ -13,6 +13,7 @@ const modeRadios = document.querySelectorAll('input[name="calcMode"]');
 const shippingOptionRadios = document.querySelectorAll('input[name="shippingOption"]');
 const sellerTypeRadios = document.querySelectorAll('input[name="sellerType"]');
 const suggestedPriceRows = document.querySelectorAll('.suggested-price-row');
+const sellPriceRows = document.querySelectorAll('.sell-price-row');
 
 // Tax Options
 const inputTaxOptions = document.getElementById('inputTaxOptions');
@@ -23,6 +24,7 @@ const hasFeeInvoiceInput = document.getElementById('hasFeeInvoice');
 const floatSellContainer = document.getElementById('floatSellContainer');
 const floatMarginContainer = document.getElementById('floatMarginContainer');
 const suggestedPriceColumns = document.querySelectorAll('.suggested-price-column');
+const sellPriceColumns = document.querySelectorAll('.sell-price-column');
 
 // Radio Groups
 const cashbackRadios = document.querySelectorAll('input[name="cashbackProgram"]');
@@ -214,16 +216,20 @@ function updateModeUI() {
         sellPriceContainer.style.display = '';
         profitMarginContainer.style.display = 'none';
         suggestedPriceRows.forEach(row => row.style.display = 'none');
+        sellPriceRows.forEach(row => row.style.display = '');
         floatSellContainer.style.display = '';
         floatMarginContainer.style.display = 'none';
         suggestedPriceColumns.forEach(col => col.style.display = 'none');
+        sellPriceColumns.forEach(col => col.style.display = '');
     } else {
         sellPriceContainer.style.display = 'none';
         profitMarginContainer.style.display = '';
         suggestedPriceRows.forEach(row => row.style.display = '');
+        sellPriceRows.forEach(row => row.style.display = 'none');
         floatSellContainer.style.display = 'none';
         floatMarginContainer.style.display = '';
         suggestedPriceColumns.forEach(col => col.style.display = '');
+        sellPriceColumns.forEach(col => col.style.display = 'none');
     }
 }
 
@@ -374,6 +380,14 @@ function calculateFees() {
     if (currentMode === 'profit') {
         const p = parseFloat(sellPriceInput.value) || 0;
         prices = { 'regular-ship1': p, 'regular-ship2': p, 'event-ship1': p, 'event-ship2': p };
+        
+        // Update sell price display in result cards
+        ['regular-ship1', 'regular-ship2', 'event-ship1', 'event-ship2'].forEach(key => {
+            const el = document.getElementById(`${key}-sell-price`);
+            if(el) el.textContent = formatCurrency(p);
+            const elSum = document.getElementById(`summary-${key}-sell`);
+            if(elSum) elSum.textContent = formatCurrency(p);
+        });
     } else {
         const margin = parseFloat(profitMarginInput.value) || 0;
         prices = {
@@ -414,15 +428,15 @@ function calculateFees() {
     floatCash.className = cashbackRate > 0 ? 'badge bg-warning text-dark' : 'badge bg-secondary';
     
     const eventFeeIncrease = isMall ? 3 : 2;
-    const suffix = (cashbackRate === 0) ? ` (+${eventFeeIncrease}%)` : '';
     
     ['regular-ship1', 'regular-ship2', 'event-ship1', 'event-ship2'].forEach(k => {
         const l = document.getElementById(`${k}-transaction-label`);
         if(l) {
             if (k.startsWith('event')) {
-                l.textContent = '成交手續費' + suffix;
+                const eventRate = (cashbackRate === 0) ? transactionFeeRate + eventFeeIncrease : transactionFeeRate;
+                l.textContent = `成交手續費 (${eventRate}%)`;
             } else {
-                l.textContent = '成交手續費';
+                l.textContent = `成交手續費 (${transactionFeeRate}%)`;
             }
         }
     });
@@ -612,12 +626,36 @@ themeToggle.addEventListener('click', () => { savedTheme = savedTheme==='dark'?'
 
 // Init Bootstrap Tooltips
 document.addEventListener('DOMContentLoaded', function() {
-    [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]')).map(el => new bootstrap.Tooltip(el));
-    document.addEventListener('click', function(e) {
-        if (!e.target.closest('[data-bs-toggle="tooltip"]')) {
-            [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]')).forEach(el => bootstrap.Tooltip.getInstance(el)?.hide());
-        }
+    // Detect if device is touch-enabled
+    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    
+    // Configure tooltips based on device type
+    const tooltipTrigger = isTouchDevice ? 'click' : 'hover focus';
+    
+    [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]')).map(el => {
+        // Prevent tooltip icon clicks from triggering parent elements (like radio buttons)
+        el.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        });
+        
+        return new bootstrap.Tooltip(el, {
+            trigger: tooltipTrigger,
+            html: true
+        });
     });
+    
+    // Auto-hide tooltips on click outside (for touch devices)
+    if (isTouchDevice) {
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('[data-bs-toggle="tooltip"]')) {
+                [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]')).forEach(el => {
+                    const tooltip = bootstrap.Tooltip.getInstance(el);
+                    if (tooltip) tooltip.hide();
+                });
+            }
+        });
+    }
 });
 
 // Start

@@ -834,3 +834,28 @@ body.toggled #sidebar-overlay {
 .toast-container {
     z-index: 1060;
 }
+
+/* Tooltip icon improvements for touch devices */
+[data-bs-toggle="tooltip"] {
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 20px;
+    min-height: 20px;
+}
+
+/* Increase touch target size on mobile devices */
+@media (hover: none) and (pointer: coarse) {
+    [data-bs-toggle="tooltip"] {
+        padding: 4px;
+        margin: -4px;
+        min-width: 28px;
+        min-height: 28px;
+    }
+    
+    /* Prevent radio button labels from triggering when clicking tooltips */
+    .form-check-label [data-bs-toggle="tooltip"] {
+        pointer-events: auto;
+    }
+}
