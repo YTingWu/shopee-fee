@@ -1,0 +1,238 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&family=Source+Sans+3:wght@300;400;500;600;700&display=swap');
+
+/* Import Bootstrap Compatibility Layer */
+@import './bootstrap-compat.css';
+
+@layer base {
+  body {
+    @apply font-body text-text;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading;
+  }
+}
+
+@layer components {
+  /* Custom Button Styles */
+  .btn-primary {
+    @apply bg-cta text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 cursor-pointer hover:opacity-90 hover:-translate-y-0.5;
+  }
+  
+  .btn-secondary {
+    @apply bg-transparent text-primary border-2 border-primary font-semibold py-3 px-6 rounded-lg transition-all duration-200 cursor-pointer hover:bg-primary hover:text-white;
+  }
+  
+  /* Card Styles */
+  .card {
+    @apply bg-background-card rounded-card p-6 shadow-md transition-all duration-200 hover:shadow-lg hover:-translate-y-1;
+  }
+  
+  /* Input Styles */
+  .input {
+    @apply py-3 px-4 border border-gray-300 rounded-lg text-base transition-colors duration-200 focus:border-primary focus:outline-none focus:ring-4 focus:ring-primary/20;
+  }
+  
+  /* Result Card Styles */
+  .result-card {
+    @apply bg-background-card rounded-section shadow-lg transition-all duration-300 overflow-hidden flex flex-col mb-6 hover:-translate-y-1 hover:shadow-card-hover;
+  }
+  
+  .result-card-header {
+    @apply p-5 text-white font-bold text-lg flex items-center gap-2.5;
+  }
+  
+  .result-card-header-regular {
+    @apply bg-gradient-to-br from-primary to-primary-dark;
+  }
+  
+  .result-card-header-event {
+    @apply bg-gradient-to-br from-warning to-yellow-600;
+  }
+  
+  /* Fee Item Styles */
+  .fee-item {
+    @apply flex justify-between items-center px-6 py-4 border-b border-gray-100 dark:border-gray-700;
+  }
+  
+  .fee-label {
+    @apply text-text-secondary font-medium;
+  }
+  
+  .fee-value {
+    @apply font-bold text-text;
+  }
+  
+  /* Special Fee Rows */
+  .fee-item-profit {
+    @apply bg-success text-white border-b-0;
+  }
+  
+  .fee-item-profit.negative {
+    @apply bg-danger;
+  }
+  
+  .fee-item-deduction {
+    @apply bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700;
+  }
+  
+  /* Fee Group Styles */
+  .fee-group {
+    @apply border-b border-gray-100 dark:border-gray-700;
+  }
+  
+  .fee-group-header {
+    @apply flex justify-between items-center px-6 py-4 cursor-pointer font-bold text-text transition-colors duration-200 hover:bg-gray-50 dark:hover:bg-gray-800;
+  }
+  
+  .fee-subitem {
+    @apply flex justify-between items-center py-2.5 px-6 pl-11 text-sm border-t border-dashed border-gray-100 dark:border-gray-700 text-text-secondary;
+  }
+  
+  /* Dark Mode Specific Styles */
+  [data-theme="dark"] {
+    @apply bg-gray-900 text-gray-100;
+  }
+  
+  [data-theme="dark"] .bg-background-card {
+    @apply bg-gray-800;
+  }
+  
+  [data-theme="dark"] .bg-background-input {
+    @apply bg-gray-700;
+  }
+  
+  [data-theme="dark"] .border-gray-300 {
+    @apply border-gray-600;
+  }
+  
+  /* Floating Header */
+  .floating-header {
+    @apply fixed top-0 left-0 right-0 bg-white/95 dark:bg-gray-800/95 backdrop-blur-md py-2.5 shadow-md z-[1000] -translate-y-full transition-transform duration-300 cursor-pointer;
+  }
+  
+  .floating-header.visible {
+    @apply translate-y-0;
+  }
+  
+  /* Sidebar Styles */
+  .sidebar {
+    @apply fixed top-0 bottom-0 -left-3/4 w-3/4 z-[1060] transition-all duration-300 bg-background-card border-r border-gray-200 dark:border-gray-700 flex flex-col;
+  }
+  
+  body.toggled .sidebar {
+    @apply left-0;
+  }
+  
+  @media (min-width: 768px) {
+    .sidebar {
+      @apply left-0 relative w-[280px] h-auto max-h-[calc(100vh-40px)] overflow-y-auto mt-5 mb-5 ml-5 rounded-card shadow-lg;
+    }
+    
+    .sidebar-collapsed .sidebar {
+      @apply hidden;
+    }
+  }
+  
+  /* Mobile Sidebar Float Style */
+  @media (max-width: 767.98px) {
+    .sidebar {
+      @apply top-4 bottom-4 h-[calc(100dvh-30px)] -left-full w-[85%] rounded-card shadow-2xl ml-0 border border-gray-200 dark:border-gray-700;
+    }
+    
+    body.toggled .sidebar {
+      @apply left-2.5;
+    }
+  }
+  
+  /* Sidebar Overlay */
+  .sidebar-overlay {
+    @apply hidden fixed inset-0 bg-black/50 z-[1055] opacity-0 transition-opacity duration-300;
+  }
+  
+  body.toggled .sidebar-overlay {
+    @apply block opacity-100;
+  }
+  
+  @media (min-width: 768px) {
+    .sidebar-overlay {
+      @apply hidden !important;
+    }
+  }
+  
+  /* Advanced Settings */
+  .advanced-settings {
+    @apply rounded-lg p-4 mt-4 border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800;
+  }
+  
+  /* Form Elements */
+  .form-label {
+    @apply font-bold text-text mb-2 block;
+  }
+  
+  .form-control {
+    @apply w-full py-3 px-4 border border-gray-300 dark:border-gray-600 rounded-lg bg-background-input dark:bg-gray-700 text-text transition-colors duration-200;
+  }
+  
+  .form-control:focus {
+    @apply border-primary outline-none ring-4 ring-primary/25;
+  }
+  
+  /* Seller Type Toggle */
+  .seller-type-toggle {
+    @apply shadow-md rounded-lg overflow-hidden;
+  }
+  
+  .seller-type-btn {
+    @apply border-0 py-2 px-4 font-semibold text-sm text-text bg-background-card transition-all duration-300 whitespace-nowrap;
+  }
+  
+  .seller-type-btn-checked {
+    @apply bg-gradient-to-br from-primary to-primary-dark text-white shadow-lg;
+  }
+  
+  /* Event Info */
+  .event-info {
+    @apply bg-yellow-50 dark:bg-yellow-900/30 border-l-4 border-warning p-5 mb-10 rounded-lg text-yellow-800 dark:text-yellow-200;
+  }
+}
+
+@layer utilities {
+  /* Safe area utilities for iOS */
+  .safe-top {
+    padding-top: calc(20px + env(safe-area-inset-top, 0px));
+  }
+  
+  .safe-bottom {
+    padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+  }
+  
+  .safe-left {
+    padding-left: calc(20px + env(safe-area-inset-left, 0px));
+  }
+  
+  .safe-right {
+    padding-right: calc(20px + env(safe-area-inset-right, 0px));
+  }
+  
+  /* Accessibility utilities */
+  .focus-visible {
+    @apply outline-none ring-4 ring-primary/25;
+  }
+}
+
+/* Prefers reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

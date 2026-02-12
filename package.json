@@ -1,0 +1,12 @@
+{
+  "name": "shopee-fee-calculator",
+  "version": "1.1.6",
+  "description": "Shopee Fee Calculator with Tailwind CSS",
+  "scripts": {
+    "dev": "tailwindcss -i ./src/input.css -o ./dist/output.css --watch",
+    "build": "tailwindcss -i ./src/input.css -o ./dist/output.css --minify"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.1"
+  }
+}

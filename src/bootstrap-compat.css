@@ -1,0 +1,353 @@
+/* Bootstrap Compatibility Layer for Tailwind */
+/* This file provides minimal Bootstrap component styles needed for modals, collapses, etc. */
+
+/* Modal Styles */
+.modal {
+  @apply fixed top-0 left-0 z-[1055] hidden w-full h-full overflow-x-hidden overflow-y-auto outline-none;
+}
+
+.modal.fade .modal-dialog {
+  @apply transition-transform duration-300 ease-out translate-y-[-50px];
+}
+
+.modal.show .modal-dialog {
+  @apply translate-y-0;
+}
+
+.modal-dialog {
+  @apply relative w-auto pointer-events-none my-7 mx-auto;
+}
+
+.modal-dialog-centered {
+  @apply flex items-center min-h-[calc(100%-3.5rem)];
+}
+
+.modal-dialog-scrollable {
+  @apply max-h-[calc(100%-3.5rem)];
+}
+
+.modal-dialog-scrollable .modal-body {
+  @apply overflow-y-auto;
+}
+
+.modal-content {
+  @apply relative flex flex-col w-full pointer-events-auto bg-white dark:bg-gray-800 bg-clip-padding border border-gray-300 dark:border-gray-600 rounded-lg outline-none shadow-xl;
+}
+
+.modal-backdrop {
+  @apply fixed top-0 left-0 z-[1050] w-full h-full bg-black;
+}
+
+.modal-backdrop.fade {
+  @apply opacity-0;
+}
+
+.modal-backdrop.show {
+  @apply opacity-50;
+}
+
+.btn-close {
+  @apply box-content w-4 h-4 p-1 text-gray-900 dark:text-gray-100 border-0 rounded opacity-50 hover:opacity-75 focus:shadow-none focus:outline-none focus:opacity-100 cursor-pointer bg-transparent;
+  background:no url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23000'%3e%3cpath d='M.293.293a1 1 0 011.414 0L8 6.586 14.293.293a1 1 0 111.414 1.414L9.414 8l6.293 6.293a1 1 0 01-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 01-1.414-1.414L6.586 8 .293 1.707a1 1 0 010-1.414z'/%3e%3c/svg%3e") center/1em auto no-repeat;
+}
+
+[data-theme="dark"] .btn-close {
+  filter: invert(1) grayscale(100%) brightness(200%);
+}
+
+/* Collapse Styles */
+.collapse:not(.show) {
+  @apply hidden;
+}
+
+.collapsing {
+  @apply h-0 overflow-hidden transition-[height] duration-[350ms] ease-in-out;
+}
+
+/* List Group Styles */
+.list-group {
+  @apply flex flex-col pl-0 mb-0 rounded-lg;
+}
+
+.list-group-flush {
+  @apply rounded-none;
+}
+
+.list-group-flush .list-group-item {
+  @apply border-x-0 rounded-none;
+}
+
+.list-group-flush .list-group-item:first-child {
+  @apply border-t-0;
+}
+
+.list-group-item {
+  @apply relative block py-3 px-5 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 no-underline;
+}
+
+.list-group-item-action {
+  @apply w-full text-inherit hover:z-[1] hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer;
+}
+
+/* Breadcrumb Styles */
+.breadcrumb {
+  @apply flex flex-wrap py-0 px-0 mb-4 list-none;
+}
+
+.breadcrumb-item {
+  @apply text-gray-600 dark:text-gray-400;
+}
+
+.breadcrumb-item + .breadcrumb-item {
+  @apply pl-2;
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+  @apply float-left pr-2 text-gray-400 dark:text-gray-500;
+  content: var(--bs-breadcrumb-divider, "/");
+}
+
+.breadcrumb-item.active {
+  @apply text-gray-500 dark:text-gray-400;
+}
+
+.breadcrumb-item a {
+  @apply text-primary hover:text-primary-dark no-underline cursor-pointer;
+}
+
+/* Utility Classes for spacing (Bootstrap equivalent) */
+.gap-3 {
+  @apply gap-3;
+}
+
+.mb-0 {
+  @apply mb-0;
+}
+
+.mb-2 {
+  @apply mb-2;
+}
+
+.mb-3 {
+  @apply mb-3;
+}
+
+.mt-2 {
+  @apply mt-2;
+}
+
+.mt-3 {
+  @apply mt-3;
+}
+
+.mt-4 {
+  @apply mt-4;
+}
+
+.p-3 {
+  @apply p-3;
+}
+
+.p-4 {
+  @apply p-4;
+}
+
+.px-2 {
+  @apply px-2;
+}
+
+.py-3 {
+  @apply py-3;
+}
+
+/* Floating/Fixed positioning */
+.position-fixed,
+.fixed {
+  @apply fixed;
+}
+
+.position-relative,
+.relative {
+  @apply relative;
+}
+
+.position-absolute,
+.absolute {
+  @apply absolute;
+}
+
+/* Text utilities */
+.text-center {
+  @apply text-center;
+}
+
+.text-end,
+.text-right {
+  @apply text-right;
+}
+
+.small {
+  @apply text-sm;
+}
+
+.fw-bold,
+.font-bold {
+  @apply font-bold;
+}
+
+/* Visibility */
+.d-none {
+  @apply hidden;
+}
+
+.d-block {
+  @apply block;
+}
+
+.d-flex {
+  @apply flex;
+}
+
+.d-inline-block {
+  @apply inline-block;
+}
+
+/* Display: responsive */
+@media (min-width: 768px) {
+  .d-md-none {
+    @apply hidden;
+  }
+  
+  .d-md-block {
+    @apply block;
+  }
+  
+  .d-md-flex {
+    @apply flex;
+  }
+}
+
+/* Borders */
+.border-top,
+.border-t {
+  @apply border-t border-gray-200 dark:border-gray-700;
+}
+
+.border-0 {
+  @apply border-0;
+}
+
+.rounded {
+  @apply rounded;
+}
+
+.rounded-lg {
+  @apply rounded-lg;
+}
+
+/* Link styles */
+.link-secondary {
+  @apply text-gray-600 dark:text-gray-400 hover:text-primary transition-colors;
+}
+
+.text-decoration-none {
+  @apply no-underline;
+}
+
+.text-decoration-underline {
+  @apply underline;
+}
+
+/* Opacity */
+.opacity-50 {
+  @apply opacity-50;
+}
+
+.opacity-25 {
+  @apply opacity-25;
+}
+
+/* Z-index */
+.z-10 {
+  @apply z-10;
+}
+
+/* Transitions */
+.transition {
+  @apply transition-all duration-200;
+}
+
+/* Cursor */
+.cursor-pointer {
+  @apply cursor-pointer;
+}
+
+/* Overflow */
+.overflow-hidden {
+  @apply overflow-hidden;
+}
+
+.overflow-y-auto {
+  @apply overflow-y-auto;
+}
+
+/* Flex utilities */
+.flex-column {
+  @apply flex-col;
+}
+
+.flex-row {
+  @apply flex-row;
+}
+
+.flex-wrap {
+  @apply flex-wrap;
+}
+
+.justify-content-center {
+  @apply justify-center;
+}
+
+.justify-content-between {
+  @apply justify-between;
+}
+
+.align-items-center {
+  @apply items-center;
+}
+
+/* Width */
+.w-100 {
+  @apply w-full;
+}
+
+/* Screen reader text */
+.sr-only,
+.visually-hidden {
+  @apply absolute w-px h-px p-0 -m-px overflow-hidden whitespace-nowrap border-0;
+  clip: rect(0, 0, 0, 0);
+}
+
+/* Animate spin (for loading spinner) */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+/* Toast Styles (if needed) */
+.toast {
+  @apply max-w-xs overflow-hidden text-sm bg-white dark:bg-gray-800 rounded-lg shadow-lg pointer-events-auto;
+}
+
+.toast-header {
+  @apply flex items-center py-2 px-3 text-gray-600 dark:text-gray-300 bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600 rounded-t-lg;
+}
+
+.toast-body {
+  @apply p-3;
+}
