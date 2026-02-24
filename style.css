@@ -813,6 +813,16 @@ body.toggled #sidebar-overlay {
     color: var(--text-secondary);
 }
 
+.donate-section {
+    background: linear-gradient(135deg, #fdf6f0 0%, #fdecd8 100%);
+    border: 1px solid #f0d5bb;
+}
+
+[data-theme="dark"] .donate-section {
+    background: linear-gradient(135deg, #2a1f1a 0%, #3a2518 100%);
+    border: 1px solid #5a3a28;
+}
+
 .delete-config-btn {
     opacity: 0.3;
     transition: opacity 0.2s;
