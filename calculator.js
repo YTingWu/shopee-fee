@@ -250,23 +250,21 @@ function updateShippingOptionUI() {
     summaryRows.forEach((row, i) => { row.style.display = show[i] ? '' : 'none'; });
 }
 
-function calculateRequiredPrice(cost, marginPercent, transactionFeeRate, cashbackRate, preOrderRate, taxSetting, isEvent, isShip2, isMall, hasProdInv, hasFeeInv, isCostInc) {
+function _calcRequiredPriceWithShipParams(cost, marginPercent, transactionFeeRate, cashbackRate, preOrderRate, taxSetting, isEvent, shipRate, shipFixed, isMall, hasProdInv, hasFeeInv, isCostInc) {
     const margin = marginPercent / 100;
     const eventFeeIncrease = isMall ? 3 : 2;
     const effectiveTransactionRate = (isEvent && cashbackRate === 0) ? transactionFeeRate + eventFeeIncrease : transactionFeeRate;
     const transRate = effectiveTransactionRate / 100;
     const paymentRate = 0.025;
-    const shipRate = isShip2 ? 0 : 0.06;
     const cashbackRateVal = cashbackRate / 100;
     const preOrderRateVal = preOrderRate / 100;
-    const shipFixed = isShip2 ? 60 : 0;
-    
+
     // Agent Fee
     const agentFee = (taxSetting === '5_plus') ? 2.5 : 0;
 
     // Shopee Fee Rate (Ratio of Price)
     const feeRate = transRate + paymentRate + shipRate + cashbackRateVal + preOrderRateVal;
-    
+
     // Tax Rates
     let outputTaxRate = 0;
     if (taxSetting === '1') outputTaxRate = 0.01;
@@ -278,7 +276,7 @@ function calculateRequiredPrice(cost, marginPercent, transactionFeeRate, cashbac
         if (isCostInc) productInputTax = cost / 1.05 * 0.05;
         else productInputTax = cost * 0.05;
     }
-    
+
     let feeInputTaxRate = 0;
     let feeInputTaxFixed = 0;
     if (hasFeeInv && (taxSetting === '5' || taxSetting === '5_plus')) {
@@ -293,41 +291,41 @@ function calculateRequiredPrice(cost, marginPercent, transactionFeeRate, cashbac
     // Formula Check
     const taxRateLinear = outputTaxRate - feeInputTaxRate;
     const taxFixedDeduction = productInputTax + feeInputTaxFixed;
-    
+
     const denominator_linear = 1 - margin - feeRate - taxRateLinear;
     const numerator_linear = cashOutCost + shipFixed - taxFixedDeduction + agentFee;
 
     if (denominator_linear <= 0) return 0; // Impossible
-    
+
     // Check if simple calculation works (Linear assumption: Tax > 0)
     let price1 = numerator_linear / denominator_linear;
-    
+
     // Check Tax at price1
     const taxAtP1 = (price1 * outputTaxRate) - productInputTax - (price1 * feeRate + shipFixed) * (0.05/1.05);
-    
+
     // Case 2: Tax <= 0. Payable Tax is 0.
     const price2_denom = 1 - margin - feeRate;
     const price2_num = cashOutCost + shipFixed + agentFee;
     let price2 = (price2_denom > 0) ? price2_num / price2_denom : 0;
-    
+
     let usePrice = (taxAtP1 >= 0) ? price1 : price2;
-    
+
     // Handle General Seller Limit (35000) for Transaction Fee
     if (!isMall && usePrice > 35000) {
         // Recalculate with Fixed Trans Fee
         const fixedTransFee = 35000 * transRate;
         const feeRate_capped = feeRate - transRate;
         const feeFixed_capped = fixedTransFee + shipFixed;
-        
+
         const feeInputTaxRate_capped = hasFeeInv ? feeRate_capped * (0.05/1.05) : 0;
         const feeInputTaxFixed_capped = hasFeeInv ? feeFixed_capped * (0.05/1.05) : 0;
-        
+
         const taxRateLinear_capped = outputTaxRate - feeInputTaxRate_capped;
         const taxFixedDeduction_capped = productInputTax + feeInputTaxFixed_capped;
-        
+
         const denom_capped = 1 - margin - feeRate_capped - taxRateLinear_capped;
         const num_capped = cashOutCost + feeFixed_capped - taxFixedDeduction_capped + agentFee;
-        
+
         if (denom_capped > 0) {
              let price_capped_1 = num_capped / denom_capped;
              const taxAtCapped1 = (price_capped_1 * outputTaxRate) - productInputTax - (price_capped_1 * feeRate_capped + feeFixed_capped) * (0.05/1.05);
@@ -342,6 +340,17 @@ function calculateRequiredPrice(cost, marginPercent, transactionFeeRate, cashbac
     }
 
     return Math.ceil(usePrice);
+}
+
+function calculateRequiredPrice(cost, marginPercent, transactionFeeRate, cashbackRate, preOrderRate, taxSetting, isEvent, isShip2, isMall, hasProdInv, hasFeeInv, isCostInc) {
+    if (!isShip2) {
+        return _calcRequiredPriceWithShipParams(cost, marginPercent, transactionFeeRate, cashbackRate, preOrderRate, taxSetting, isEvent, 0.06, 0, isMall, hasProdInv, hasFeeInv, isCostInc);
+    }
+    // Ship2 tiered: ≥100 → fixed $60; ≤99 → 6% activity service fee
+    const priceA = _calcRequiredPriceWithShipParams(cost, marginPercent, transactionFeeRate, cashbackRate, preOrderRate, taxSetting, isEvent, 0, 60, isMall, hasProdInv, hasFeeInv, isCostInc);
+    if (priceA >= 100) return priceA;
+    const priceB = _calcRequiredPriceWithShipParams(cost, marginPercent, transactionFeeRate, cashbackRate, preOrderRate, taxSetting, isEvent, 0.06, 0, isMall, hasProdInv, hasFeeInv, isCostInc);
+    return priceB;
 }
 
 function calculateFees() {
@@ -453,7 +462,10 @@ function calculateScenario(prefix, sellPrice, costPrice, transactionFeeRate, cas
         Math.round(Math.min(sellPrice, limit) * effTransRate / 100);
         
     const payFee = Math.round(sellPrice * 0.025);
-    const shipFee = isShip2 ? 60 : Math.round(sellPrice * 0.06);
+    // Ship2 tiered: ≤99 → 6% activity service fee; ≥100 → fixed $60
+    const shipFee = isShip2
+        ? (sellPrice <= 99 ? Math.round(sellPrice * 0.06) : 60)
+        : Math.round(sellPrice * 0.06);
     const cashFee = Math.round(sellPrice * cashbackRate / 100);
     const preFee = Math.round(sellPrice * preOrderRate / 100);
     
@@ -495,6 +507,11 @@ function calculateScenario(prefix, sellPrice, costPrice, transactionFeeRate, cas
     document.getElementById(`${prefix}-transaction`).textContent = formatCurrency(transFee);
     document.getElementById(`${prefix}-payment`).textContent = formatCurrency(payFee);
     document.getElementById(`${prefix}-shipping`).textContent = formatCurrency(shipFee);
+
+    const shipLabelEl = document.getElementById(`${prefix}-shipping-label`);
+    if (shipLabelEl && isShip2) {
+        shipLabelEl.textContent = sellPrice <= 99 ? '免運活動服務費 (6%)' : '免運手續費 (+60元)';
+    }
     
     const elPre = document.getElementById(`${prefix}-preorder`);
     const rowPre = document.getElementById(`${prefix}-preorder-row`);
