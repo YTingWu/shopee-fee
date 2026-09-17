@@ -942,208 +942,1492 @@
                 "mall_seller_fee": "8.7%"
             }
         },
-        "汽車類": {
-            "汽車": {
-                "general_seller_fee": "4.0%",
-                "mall_seller_fee": "4.0%"
-            },
-            "保養維修工具": {
-                "胎壓偵測器": {
-                    "general_seller_fee": "4.5%",
-                    "mall_seller_fee": "4.5%"
-                },
-                "汽車測試診斷維修工具": {
-                    "general_seller_fee": "4.5%",
-                    "mall_seller_fee": "7.5%"
-                },
-                "其他": {
-                    "general_seller_fee": "4.5%",
-                    "mall_seller_fee": "7.5%"
-                }
-            },
-            "鑰匙圈及鑰匙套": {
-                "general_seller_fee": "4.5%",
-                "mall_seller_fee": "7.5%"
-            },
-            "油品保養": {
-                "general_seller_fee": "5.5%",
-                "mall_seller_fee": "7.5%"
-            },
-            "車外裝飾及百貨": {
-                "general_seller_fee": "5.5%",
-                "mall_seller_fee": "7.5%"
-            },
-            "汽機車美容用品": {
-                "輪胎及鋁圈保養用品": {
-                    "general_seller_fee": "5.5%",
-                    "mall_seller_fee": "4.5%"
-                },
-                "拋光鍍膜用品": {
-                    "general_seller_fee": "6.0%",
-                    "mall_seller_fee": "9.0%"
-                },
-                "其他": {
-                    "general_seller_fee": "6.0%",
-                    "mall_seller_fee": "9.0%"
-                },
-                "清洗及打蠟用品": {
-                    "general_seller_fee": "6.0%",
-                    "mall_seller_fee": "9.0%"
-                },
-                "玻璃清潔及撥水劑用品": {
-                    "general_seller_fee": "6.0%",
-                    "mall_seller_fee": "9.0%"
-                },
-                "內飾清潔保養用品": {
-                    "general_seller_fee": "6.0%",
-                    "mall_seller_fee": "9.0%"
-                }
-            },
+        "汽機車百貨／交通用品": {
             "汽車零件": {
-                "輪胎及周邊": {
-                    "general_seller_fee": "5.5%",
-                    "mall_seller_fee": "4.5%"
+                "車體車身與保險桿": {
+                    "其他": {
+                        "general_seller_fee": "5.50%",
+                        "mall_seller_fee": "7.50%"
+                    },
+                    "車身飾條": {
+                        "general_seller_fee": "5.50%",
+                        "mall_seller_fee": "7.50%"
+                    },
+                    "保險桿格柵": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "保險桿架": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "保險桿支架": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "保險桿": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "車門把手": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "車門和儀表板": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "擋泥板": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "霧燈罩": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "油箱": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "後視鏡及周邊": {
+                        "general_seller_fee": "5.50%",
+                        "mall_seller_fee": "7.50%"
+                    }
                 },
-                "輪框及周邊": {
-                    "general_seller_fee": "5.5%",
-                    "mall_seller_fee": "4.5%"
+                "汽車內部零配件": {
+                    "車用頭枕及腰靠墊及其他": {
+                        "general_seller_fee": "5.50%",
+                        "mall_seller_fee": "7.50%"
+                    },
+                    "車用空氣清淨機": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "汽車扶手": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "車門開關飾板": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "變速桿頭/打檔桿頭/排檔頭套": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "汽車手套箱": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "手煞車拉桿": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "車用室內燈": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "槓桿和把手": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "踏板": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "後視鏡及周邊": {
+                        "general_seller_fee": "5.50%",
+                        "mall_seller_fee": "7.50%"
+                    },
+                    "變速桿頭/打檔桿頭/排檔頭": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "方向盤": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "手動變速桿": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "汽車啟動鈕/啟動按鍵": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "行李箱內襯蓋": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "車用電線": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    }
                 },
-                "懸吊系統及避震器": {
-                    "general_seller_fee": "6.0%",
-                    "mall_seller_fee": "9.0%"
+                "添加劑和潤滑劑": {
+                    "添加劑": {
+                        "general_seller_fee": "5.50%",
+                        "mall_seller_fee": "7.50%"
+                    },
+                    "潤滑劑": {
+                        "general_seller_fee": "5.50%",
+                        "mall_seller_fee": "7.50%"
+                    },
+                    "其他": {
+                        "general_seller_fee": "5.50%",
+                        "mall_seller_fee": "7.50%"
+                    }
                 },
-                "汽車引擎零件": {
-                    "general_seller_fee": "6.0%",
-                    "mall_seller_fee": "9.0%"
-                },
-                "排風扇及散熱器": {
-                    "general_seller_fee": "6.0%",
-                    "mall_seller_fee": "9.0%"
-                },
-                "離合器及傳動軸": {
-                    "general_seller_fee": "6.0%",
-                    "mall_seller_fee": "9.0%"
-                },
-                "排氣管": {
-                    "general_seller_fee": "6.0%",
-                    "mall_seller_fee": "9.0%"
+                "車用空調零件": {
+                    "冷氣": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "暖氣": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "其他": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    }
                 },
                 "剎車系統": {
-                    "general_seller_fee": "6.0%",
-                    "mall_seller_fee": "9.0%"
+                    "ABS 感應器": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "煞車卡鉗": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "煞車分泵": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "煞車碟": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "煞車鼓": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "煞車管": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "煞車套件": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "煞車片": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "煞車泵": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "煞車助力器": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "煞車蹄": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "手煞車線": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "其他": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    }
                 },
-                "燃油系統": {
-                    "general_seller_fee": "6.0%",
-                    "mall_seller_fee": "9.0%"
+                "CNG及周邊零件": {
+                    "燃氣套件": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "其他": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "零件備件": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    }
                 },
-                "電系零件": {
-                    "general_seller_fee": "6.0%",
-                    "mall_seller_fee": "9.0%"
+                "電氣系統": {
+                    "電池": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "電氣系統": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "保險絲": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "其他": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    }
                 },
-                "車體及保險桿": {
-                    "general_seller_fee": "6.0%",
-                    "mall_seller_fee": "9.0%"
+                "引擎系統": {
+                    "化油器": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "皮帶、滑輪": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "引擎零件": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "引擎支架": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "墊片組": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "軟管": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "其他": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "活塞": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "泵": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "散熱器": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "電動風扇": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "渦輪": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    }
                 },
-                "皮帶、油管及滑輪": {
-                    "general_seller_fee": "6.0%",
-                    "mall_seller_fee": "9.0%"
+                "排氣管及周邊": {
+                    "催化轉換器": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "排氣尾管": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "其他": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    }
                 },
-                "雨刷及噴水嘴": {
-                    "general_seller_fee": "6.0%",
-                    "mall_seller_fee": "9.0%"
+                "汽車外部零件": {
+                    "車標 / 汽車標誌": {
+                        "general_seller_fee": "5.50%",
+                        "mall_seller_fee": "7.50%"
+                    },
+                    "氣壓支撐杆": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "喇叭": {
+                        "general_seller_fee": "5.50%",
+                        "mall_seller_fee": "7.50%"
+                    },
+                    "螺帽蓋": {
+                        "general_seller_fee": "5.50%",
+                        "mall_seller_fee": "4.50%"
+                    },
+                    "其他": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "防撞條及橡膠條": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "雨刷臂": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "雨刷": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "雨刷液儲存槽": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "雨刷馬達": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    }
                 },
-                "汽車軸承": {
-                    "general_seller_fee": "6.0%",
-                    "mall_seller_fee": "9.0%"
+                "汽車過濾器、濾網、濾芯": {
+                    "空氣過濾器": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "過濾器套件": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "燃油過濾器": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "機油濾清器": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "其他": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    }
+                },
+                "汽車玻璃/車窗": {
+                    "車門玻璃": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "電動車窗升降器": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "其他": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "後擋風玻璃": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "擋風玻璃": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    }
+                },
+                "點火裝置": {
+                    "發電機": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "分電器": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "點火線圈": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "其他": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "火星塞": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "火星塞線": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "啟動馬達": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    }
+                },
+                "燃油噴射系統及零件": {
+                    "廢氣再循環閥": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "燃油噴射器": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "怠速空氣控制執行器": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "燃油噴射控制模組": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "氧氣傳感器": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "其他": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "壓力調節器": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "各式傳感器及周邊": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "節氣門體": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    }
+                },
+                "照明系統": {
+                    "燈泡": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "霧燈": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "頭燈組/前燈組": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "燈殼與燈罩": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "其他": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "尾燈": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    }
                 },
                 "其他": {
-                    "general_seller_fee": "6.0%",
-                    "mall_seller_fee": "9.0%"
+                    "general_seller_fee": "6.00%",
+                    "mall_seller_fee": "9.00%"
+                },
+                "避震系統": {
+                    "球頭": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "軸承": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "襯套": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "控制臂和懸掛臂": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "驅動軸": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "液壓泵": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "其他": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "橡膠金屬緩衝器": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "避震器": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "彈簧": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "穩定桿連接件": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "轉向齒輪": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "懸掛支架": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "搖桿": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "球頭拉桿/球扣": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "輪轂": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    }
+                },
+                "傳動系統": {
+                    "軸承保持器": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "軸承和半軸": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "離合器": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "其他": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "手動變速器": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "三腳接頭": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    }
                 }
             },
             "車內周邊百貨": {
-                "general_seller_fee": "6.0%",
-                "mall_seller_fee": "9.0%"
-            },
-            "其他": {
-                "general_seller_fee": "6.0%",
-                "mall_seller_fee": "9.0%"
-            }
-        },
-        "機車類": {
-            "機車": {
-                "general_seller_fee": "4.5%",
-                "mall_seller_fee": "4.5%"
-            },
-            "機車零件": {
-                "機車鋁圈及周邊": {
-                    "general_seller_fee": "5.5%",
-                    "mall_seller_fee": "4.5%"
+                "汽車影音設備": {
+                    "天線": {
+                        "general_seller_fee": "5.50%",
+                        "mall_seller_fee": "7.50%"
+                    },
+                    "擴大機": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "音響驅動器": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "其他": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "音響": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "遙控器": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "揚聲器": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    }
                 },
-                "機車輪胎及周邊": {
-                    "general_seller_fee": "5.5%",
-                    "mall_seller_fee": "4.5%"
+                "USB車充、車載藍芽接收器": {
+                    "general_seller_fee": "6.00%",
+                    "mall_seller_fee": "9.00%"
                 },
-                "機車車體": {
-                    "general_seller_fee": "6.0%",
-                    "mall_seller_fee": "8.5%"
+                "汽車行車紀錄器": {
+                    "general_seller_fee": "6.00%",
+                    "mall_seller_fee": "9.00%"
                 },
-                "機車喇叭及周邊": {
-                    "general_seller_fee": "6.0%",
-                    "mall_seller_fee": "8.5%"
+                "導航、GPS接收器": {
+                    "general_seller_fee": "6.00%",
+                    "mall_seller_fee": "9.00%"
                 },
-                "動力總成及變速器及離合器": {
-                    "general_seller_fee": "6.0%",
-                    "mall_seller_fee": "8.5%"
+                "車用地墊及行李箱墊": {
+                    "general_seller_fee": "6.00%",
+                    "mall_seller_fee": "9.00%"
                 },
-                "燃油系統": {
-                    "general_seller_fee": "6.0%",
-                    "mall_seller_fee": "8.5%"
+                "車用收納": {
+                    "general_seller_fee": "6.00%",
+                    "mall_seller_fee": "9.00%"
                 },
-                "機車燈具": {
-                    "general_seller_fee": "6.0%",
-                    "mall_seller_fee": "8.5%"
+                "鑰匙圈及鑰匙套": {
+                    "general_seller_fee": "4.50%",
+                    "mall_seller_fee": "7.50%"
                 },
-                "點火及引擎零件": {
-                    "general_seller_fee": "6.0%",
-                    "mall_seller_fee": "8.5%"
+                "汽車床墊及其他車內配件": {
+                    "general_seller_fee": "6.00%",
+                    "mall_seller_fee": "9.00%"
                 },
-                "機車電線及油管": {
-                    "general_seller_fee": "6.0%",
-                    "mall_seller_fee": "8.5%"
+                "座椅及座椅套": {
+                    "general_seller_fee": "6.00%",
+                    "mall_seller_fee": "9.00%"
                 },
-                "機車排氣管及周邊": {
-                    "general_seller_fee": "6.0%",
-                    "mall_seller_fee": "8.5%"
+                "汽車方向盤套": {
+                    "general_seller_fee": "6.00%",
+                    "mall_seller_fee": "9.00%"
                 },
-                "機車電池及周邊": {
-                    "general_seller_fee": "6.0%",
-                    "mall_seller_fee": "8.5%"
-                },
-                "煞車系統": {
-                    "general_seller_fee": "6.0%",
-                    "mall_seller_fee": "8.5%"
-                },
-                "機車避震器及懸吊裝置": {
-                    "general_seller_fee": "6.0%",
-                    "mall_seller_fee": "8.5%"
-                },
-                "其他": {
-                    "general_seller_fee": "6.0%",
-                    "mall_seller_fee": "8.5%"
+                "遮陽隔熱": {
+                    "general_seller_fee": "6.00%",
+                    "mall_seller_fee": "9.00%"
                 }
             },
-            "機車安全帽及周邊": {
-                "general_seller_fee": "6.0%",
-                "mall_seller_fee": "8.5%"
+            "機車零件": {
+                "喇叭及其他機車零件": {
+                    "general_seller_fee": "6.00%",
+                    "mall_seller_fee": "8.50%"
+                },
+                "添加劑和潤滑劑": {
+                    "機油": {
+                        "general_seller_fee": "5.50%",
+                        "mall_seller_fee": "7.50%"
+                    }
+                },
+                "機車電池": {
+                    "general_seller_fee": "6.00%",
+                    "mall_seller_fee": "8.50%"
+                },
+                "底盤周邊": {
+                    "煞車": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "8.50%"
+                    },
+                    "引擎護罩": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "8.50%"
+                    },
+                    "擋泥板": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "腳踏桿": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "8.50%"
+                    },
+                    "前叉管": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "8.50%"
+                    },
+                    "油箱及周邊": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "8.50%"
+                    },
+                    "油箱蓋": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "8.50%"
+                    },
+                    "手把握把套": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "8.50%"
+                    },
+                    "手把與相關零件": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "8.50%"
+                    },
+                    "把手": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "8.50%"
+                    },
+                    "車牌架/車牌支架": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "8.50%"
+                    },
+                    "機車踏墊/停車地毯及其他": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "8.50%"
+                    },
+                    "塑料外殼套件": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "8.50%"
+                    },
+                    "座椅把手": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "8.50%"
+                    },
+                    "機車座椅": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "阻尼器": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "8.50%"
+                    },
+                    "輪輻/輻條": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "8.50%"
+                    },
+                    "駐車架/腳架": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "8.50%"
+                    },
+                    "輪轂": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "8.50%"
+                    },
+                    "機車電線": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "8.50%"
+                    },
+                    "扳手": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "8.50%"
+                    }
+                },
+                "引擎系統": {
+                    "凸輪軸": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "8.50%"
+                    },
+                    "化油器": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "8.50%"
+                    },
+                    "連桿": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "8.50%"
+                    },
+                    "汽缸頭": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "8.50%"
+                    },
+                    "汽缸": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "8.50%"
+                    },
+                    "傳動鍊條": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "8.50%"
+                    },
+                    "機油泵(機油幫浦)": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "8.50%"
+                    },
+                    "其他": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "8.50%"
+                    },
+                    "活塞": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "8.50%"
+                    },
+                    "整流穩壓器(整流器)": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "8.50%"
+                    },
+                    "啟動馬達零件": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "8.50%"
+                    },
+                    "發電機定子": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "8.50%"
+                    },
+                    "正時鏈條張力器": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "8.50%"
+                    }
+                },
+                "排氣管與消音器": {
+                    "排氣管": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "8.50%"
+                    },
+                    "消音器": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "8.50%"
+                    },
+                    "其他": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "8.50%"
+                    }
+                },
+                "機車過濾器、濾網、濾芯": {
+                    "機車空氣濾清器": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "8.50%"
+                    },
+                    "濾心套組": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "8.50%"
+                    },
+                    "機油濾心": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "8.50%"
+                    },
+                    "其他": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "8.50%"
+                    }
+                },
+                "點火裝置": {
+                    "點火控制器": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "8.50%"
+                    },
+                    "點火線圈": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "8.50%"
+                    },
+                    "點火開關": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "8.50%"
+                    },
+                    "其他": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "8.50%"
+                    },
+                    "火星塞": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "8.50%"
+                    }
+                },
+                "照明系統": {
+                    "頭燈": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "8.50%"
+                    },
+                    "近光燈": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "8.50%"
+                    },
+                    "其他": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "8.50%"
+                    },
+                    "方向燈": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "8.50%"
+                    }
+                },
+                "後照鏡及周邊": {
+                    "general_seller_fee": "6.00%",
+                    "mall_seller_fee": "9.00%"
+                },
+                "傳動系統": {
+                    "離合器": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "8.50%"
+                    },
+                    "傳動帶": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "8.50%"
+                    },
+                    "變速箱/齒輪箱": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "8.50%"
+                    },
+                    "齒輪軸": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "8.50%"
+                    },
+                    "其他": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "8.50%"
+                    },
+                    "鏈輪": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "8.50%"
+                    },
+                    "變速箱套件": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "8.50%"
+                    }
+                }
             },
             "機車配件/機車百貨": {
-                "general_seller_fee": "6.0%",
-                "mall_seller_fee": "9.0%"
+                "其他周邊": {
+                    "general_seller_fee": "6.00%",
+                    "mall_seller_fee": "8.50%"
+                },
+                "重機背包/騎士背包": {
+                    "general_seller_fee": "6.00%",
+                    "mall_seller_fee": "8.50%"
+                },
+                "後箱/收納箱": {
+                    "後箱": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "後架/側箱架": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "其他": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "側箱": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    }
+                },
+                "騎士部品": {
+                    "騎士周邊配件": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "8.50%"
+                    },
+                    "騎士車靴": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "8.50%"
+                    },
+                    "騎士夾克外套": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "8.50%"
+                    },
+                    "其他": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "8.50%"
+                    },
+                    "護具": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "8.50%"
+                    },
+                    "雨衣": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "8.50%"
+                    }
+                },
+                "車罩": {
+                    "機車車罩": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "其他": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "椅墊罩": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    }
+                },
+                "引擎保護劑/機油精": {
+                    "general_seller_fee": "6.00%",
+                    "mall_seller_fee": "9.00%"
+                },
+                "防摔防倒用品": {
+                    "general_seller_fee": "6.00%",
+                    "mall_seller_fee": "8.50%"
+                },
+                "手把護罩/手把套": {
+                    "general_seller_fee": "6.00%",
+                    "mall_seller_fee": "8.50%"
+                },
+                "安全帽鏡片": {
+                    "general_seller_fee": "6.00%",
+                    "mall_seller_fee": "8.50%"
+                },
+                "安全帽": {
+                    "general_seller_fee": "6.00%",
+                    "mall_seller_fee": "8.50%"
+                },
+                "安全帽藍芽耳機及通訊系統": {
+                    "general_seller_fee": "6.00%",
+                    "mall_seller_fee": "8.50%"
+                },
+                "儀錶板": {
+                    "general_seller_fee": "6.00%",
+                    "mall_seller_fee": "9.00%"
+                },
+                "馬鞍包/側掛包": {
+                    "general_seller_fee": "6.00%",
+                    "mall_seller_fee": "8.50%"
+                },
+                "機車車貼、車標改裝": {
+                    "general_seller_fee": "6.00%",
+                    "mall_seller_fee": "9.00%"
+                },
+                "擋風玻璃": {
+                    "general_seller_fee": "6.00%",
+                    "mall_seller_fee": "8.50%"
+                },
+                "機車手機支架": {
+                    "general_seller_fee": "6.00%",
+                    "mall_seller_fee": "9.00%"
+                },
+                "機車行車紀錄器": {
+                    "general_seller_fee": "6.00%",
+                    "mall_seller_fee": "8.50%"
+                }
             },
-            "騎士手套/防摔衣及其他騎士裝備": {
-                "general_seller_fee": "6.0%",
-                "mall_seller_fee": "9.0%"
+            "輪胎、輪框及周邊": {
+                "輪胎內胎": {
+                    "general_seller_fee": "5.50%",
+                    "mall_seller_fee": "4.50%"
+                },
+                "耕耘機、拖拉機及其他農用輪胎": {
+                    "general_seller_fee": "5.50%",
+                    "mall_seller_fee": "4.50%"
+                },
+                "汽車輪胎": {
+                    "general_seller_fee": "5.50%",
+                    "mall_seller_fee": "4.50%"
+                },
+                "汽車輪圈/輪框": {
+                    "general_seller_fee": "5.50%",
+                    "mall_seller_fee": "4.50%"
+                },
+                "腳踏車輪胎": {
+                    "general_seller_fee": "5.50%",
+                    "mall_seller_fee": "4.50%"
+                },
+                "工業輪胎": {
+                    "general_seller_fee": "5.50%",
+                    "mall_seller_fee": "4.50%"
+                },
+                "機車輪胎": {
+                    "general_seller_fee": "5.50%",
+                    "mall_seller_fee": "4.50%"
+                },
+                "機車輪圈/輪框": {
+                    "general_seller_fee": "5.50%",
+                    "mall_seller_fee": "4.50%"
+                },
+                "輪胎周邊零件及工具": {
+                    "general_seller_fee": "5.50%",
+                    "mall_seller_fee": "4.50%"
+                },
+                "四輪沙灘車輪胎": {
+                    "general_seller_fee": "5.50%",
+                    "mall_seller_fee": "4.50%"
+                },
+                "卡車輪胎": {
+                    "general_seller_fee": "5.50%",
+                    "mall_seller_fee": "4.50%"
+                },
+                "卡車輪圈/輪框": {
+                    "general_seller_fee": "5.50%",
+                    "mall_seller_fee": "4.50%"
+                }
+            },
+            "汽車": {
+                "general_seller_fee": "4.00%",
+                "mall_seller_fee": "4.00%"
+            },
+            "機車": {
+                "general_seller_fee": "4.50%",
+                "mall_seller_fee": "4.50%"
+            },
+            "車外裝飾及性能配件": {
+                "車罩": {
+                    "汽車車罩": {
+                        "general_seller_fee": "5.50%",
+                        "mall_seller_fee": "7.50%"
+                    },
+                    "車頭防護罩": {
+                        "general_seller_fee": "5.50%",
+                        "mall_seller_fee": "7.50%"
+                    },
+                    "其他": {
+                        "general_seller_fee": "5.50%",
+                        "mall_seller_fee": "7.50%"
+                    }
+                },
+                "導流板": {
+                    "general_seller_fee": "5.50%",
+                    "mall_seller_fee": "7.50%"
+                },
+                "車輪拱罩": {
+                    "general_seller_fee": "5.50%",
+                    "mall_seller_fee": "7.50%"
+                },
+                "拖鉤周邊": {
+                    "拖掛球": {
+                        "general_seller_fee": "5.50%",
+                        "mall_seller_fee": "7.50%"
+                    },
+                    "拖掛套件": {
+                        "general_seller_fee": "5.50%",
+                        "mall_seller_fee": "7.50%"
+                    },
+                    "拖掛鎖": {
+                        "general_seller_fee": "5.50%",
+                        "mall_seller_fee": "7.50%"
+                    },
+                    "其他": {
+                        "general_seller_fee": "5.50%",
+                        "mall_seller_fee": "7.50%"
+                    }
+                },
+                "擋泥板": {
+                    "general_seller_fee": "5.50%",
+                    "mall_seller_fee": "7.50%"
+                },
+                "車牌框及其他": {
+                    "general_seller_fee": "5.50%",
+                    "mall_seller_fee": "7.50%"
+                },
+                "車頂架/行李架": {
+                    "車頂箱": {
+                        "general_seller_fee": "5.50%",
+                        "mall_seller_fee": "7.50%"
+                    },
+                    "晴雨窗及其他": {
+                        "general_seller_fee": "5.50%",
+                        "mall_seller_fee": "7.50%"
+                    },
+                    "行李架與橫桿": {
+                        "general_seller_fee": "5.50%",
+                        "mall_seller_fee": "7.50%"
+                    }
+                },
+                "車身側踏板": {
+                    "general_seller_fee": "5.50%",
+                    "mall_seller_fee": "7.50%"
+                },
+                "尾門配件": {
+                    "車斗蓋/貨箱蓋/床蓋": {
+                        "general_seller_fee": "5.50%",
+                        "mall_seller_fee": "7.50%"
+                    },
+                    "其他": {
+                        "general_seller_fee": "5.50%",
+                        "mall_seller_fee": "7.50%"
+                    },
+                    "滾筒防滾桿": {
+                        "general_seller_fee": "5.50%",
+                        "mall_seller_fee": "7.50%"
+                    }
+                },
+                "輪圈蓋": {
+                    "general_seller_fee": "5.50%",
+                    "mall_seller_fee": "4.50%"
+                },
+                "輪圈墊片": {
+                    "general_seller_fee": "5.50%",
+                    "mall_seller_fee": "4.50%"
+                },
+                "停車輔助/倒車雷達": {
+                    "general_seller_fee": "6.00%",
+                    "mall_seller_fee": "9.00%"
+                },
+                "車外裝飾/改裝配件": {
+                    "抬頭顯示器及儀錶板": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "照明": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "其他": {
+                        "general_seller_fee": "5.50%",
+                        "mall_seller_fee": "7.50%"
+                    },
+                    "車漆及補漆筆": {
+                        "general_seller_fee": "6.00%",
+                        "mall_seller_fee": "9.00%"
+                    },
+                    "車貼": {
+                        "general_seller_fee": "5.50%",
+                        "mall_seller_fee": "7.50%"
+                    }
+                }
+            },
+            "車用安全與防盜器材": {
+                "輪胎螺母": {
+                    "general_seller_fee": "6.00%",
+                    "mall_seller_fee": "9.00%"
+                },
+                "警報器及配件": {
+                    "general_seller_fee": "6.00%",
+                    "mall_seller_fee": "9.00%"
+                },
+                "防盜鎖": {
+                    "general_seller_fee": "6.00%",
+                    "mall_seller_fee": "9.00%"
+                },
+                "防盜工具及其他": {
+                    "general_seller_fee": "6.00%",
+                    "mall_seller_fee": "9.00%"
+                },
+                "電子防盜鎖及中控鎖": {
+                    "general_seller_fee": "6.00%",
+                    "mall_seller_fee": "9.00%"
+                },
+                "車用鑰匙及周邊": {
+                    "general_seller_fee": "4.50%",
+                    "mall_seller_fee": "7.50%"
+                }
+            },
+            "保養維修工具": {
+                "打氣機及空氣壓縮機": {
+                    "general_seller_fee": "4.50%",
+                    "mall_seller_fee": "7.50%"
+                },
+                "電瓶充電器及檢測工具": {
+                    "電池充電器": {
+                        "general_seller_fee": "4.50%",
+                        "mall_seller_fee": "7.50%"
+                    },
+                    "電池測試儀": {
+                        "general_seller_fee": "4.50%",
+                        "mall_seller_fee": "7.50%"
+                    },
+                    "其他": {
+                        "general_seller_fee": "4.50%",
+                        "mall_seller_fee": "7.50%"
+                    }
+                },
+                "千斤頂及升降機": {
+                    "汽車升降機": {
+                        "general_seller_fee": "4.50%",
+                        "mall_seller_fee": "7.50%"
+                    },
+                    "千斤頂支架": {
+                        "general_seller_fee": "4.50%",
+                        "mall_seller_fee": "7.50%"
+                    },
+                    "千斤頂": {
+                        "general_seller_fee": "4.50%",
+                        "mall_seller_fee": "7.50%"
+                    },
+                    "其他": {
+                        "general_seller_fee": "4.50%",
+                        "mall_seller_fee": "7.50%"
+                    }
+                },
+                "胎壓偵測器與其他測量工具": {
+                    "其他": {
+                        "general_seller_fee": "4.50%",
+                        "mall_seller_fee": "7.50%"
+                    },
+                    "胎壓偵測器": {
+                        "general_seller_fee": "4.50%",
+                        "mall_seller_fee": "4.50%"
+                    }
+                },
+                "其他": {
+                    "general_seller_fee": "4.50%",
+                    "mall_seller_fee": "7.50%"
+                },
+                "汽機車掃描儀/診斷工具": {
+                    "其他": {
+                        "general_seller_fee": "4.50%",
+                        "mall_seller_fee": "7.50%"
+                    },
+                    "掃描儀": {
+                        "general_seller_fee": "4.50%",
+                        "mall_seller_fee": "7.50%"
+                    }
+                },
+                "輪胎安裝工具": {
+                    "general_seller_fee": "4.50%",
+                    "mall_seller_fee": "7.50%"
+                },
+                "車用電動絞盤/吊車工具": {
+                    "general_seller_fee": "4.50%",
+                    "mall_seller_fee": "7.50%"
+                },
+                "板手": {
+                    "套筒扳手": {
+                        "general_seller_fee": "4.50%",
+                        "mall_seller_fee": "7.50%"
+                    },
+                    "其他": {
+                        "general_seller_fee": "4.50%",
+                        "mall_seller_fee": "7.50%"
+                    },
+                    "輪胎扳手": {
+                        "general_seller_fee": "4.50%",
+                        "mall_seller_fee": "7.50%"
+                    }
+                }
+            },
+            "汽機車美容用品": {
+                "美白/亮光/增艷劑": {
+                    "general_seller_fee": "6.00%",
+                    "mall_seller_fee": "9.00%"
+                },
+                "除油劑": {
+                    "general_seller_fee": "5.50%",
+                    "mall_seller_fee": "4.50%"
+                },
+                "車用香氛": {
+                    "general_seller_fee": "6.00%",
+                    "mall_seller_fee": "9.00%"
+                },
+                "洗車海棉及拋光上蠟墊": {
+                    "general_seller_fee": "6.00%",
+                    "mall_seller_fee": "9.00%"
+                },
+                "拋光打蠟機/洗車機器": {
+                    "general_seller_fee": "6.00%",
+                    "mall_seller_fee": "9.00%"
+                },
+                "洗車劑及洗車用品": {
+                    "general_seller_fee": "6.00%",
+                    "mall_seller_fee": "9.00%"
+                },
+                "車用擦拭布/洗車毛巾": {
+                    "general_seller_fee": "6.00%",
+                    "mall_seller_fee": "9.00%"
+                },
+                "鍍膜美容用品": {
+                    "general_seller_fee": "6.00%",
+                    "mall_seller_fee": "9.00%"
+                },
+                "車用吸塵器": {
+                    "general_seller_fee": "6.00%",
+                    "mall_seller_fee": "9.00%"
+                },
+                "車蠟及打蠟用品": {
+                    "general_seller_fee": "6.00%",
+                    "mall_seller_fee": "9.00%"
+                },
+                "輪胎及鋁圈保養用品": {
+                    "general_seller_fee": "5.50%",
+                    "mall_seller_fee": "4.50%"
+                },
+                "玻璃清潔及其他美容用品": {
+                    "general_seller_fee": "6.00%",
+                    "mall_seller_fee": "9.00%"
+                }
+            },
+            "重型車輛/工程車/船類用品": {
+                "重型車輛/工程車零件": {
+                    "外觀零件": {
+                        "general_seller_fee": "5.50%",
+                        "mall_seller_fee": "7.50%"
+                    },
+                    "照明系統": {
+                        "general_seller_fee": "5.50%",
+                        "mall_seller_fee": "7.50%"
+                    },
+                    "懸吊與轉向系統": {
+                        "general_seller_fee": "5.50%",
+                        "mall_seller_fee": "7.50%"
+                    },
+                    "煞車系統": {
+                        "general_seller_fee": "5.50%",
+                        "mall_seller_fee": "7.50%"
+                    },
+                    "引擎零件": {
+                        "general_seller_fee": "5.50%",
+                        "mall_seller_fee": "7.50%"
+                    },
+                    "冷卻系統": {
+                        "general_seller_fee": "5.50%",
+                        "mall_seller_fee": "7.50%"
+                    },
+                    "濾清器": {
+                        "general_seller_fee": "5.50%",
+                        "mall_seller_fee": "7.50%"
+                    },
+                    "車身零件": {
+                        "general_seller_fee": "5.50%",
+                        "mall_seller_fee": "7.50%"
+                    },
+                    "其他": {
+                        "general_seller_fee": "5.50%",
+                        "mall_seller_fee": "7.50%"
+                    }
+                },
+                "重型車輛/工程車配件": {
+                    "駕駛室內裝": {
+                        "general_seller_fee": "5.50%",
+                        "mall_seller_fee": "7.50%"
+                    },
+                    "駕駛室外觀配件": {
+                        "general_seller_fee": "5.50%",
+                        "mall_seller_fee": "7.50%"
+                    },
+                    "其他": {
+                        "general_seller_fee": "5.50%",
+                        "mall_seller_fee": "7.50%"
+                    }
+                },
+                "船類零件": {
+                    "引擎與引擎零件": {
+                        "general_seller_fee": "5.50%",
+                        "mall_seller_fee": "7.50%"
+                    },
+                    "甲板與船艙": {
+                        "general_seller_fee": "5.50%",
+                        "mall_seller_fee": "7.50%"
+                    },
+                    "操控與導航": {
+                        "general_seller_fee": "5.50%",
+                        "mall_seller_fee": "7.50%"
+                    },
+                    "航行設備": {
+                        "general_seller_fee": "5.50%",
+                        "mall_seller_fee": "7.50%"
+                    },
+                    "五金與緊固件": {
+                        "general_seller_fee": "5.50%",
+                        "mall_seller_fee": "7.50%"
+                    },
+                    "其他": {
+                        "general_seller_fee": "5.50%",
+                        "mall_seller_fee": "7.50%"
+                    }
+                },
+                "船類配件": {
+                    "水泵與濾水系統": {
+                        "general_seller_fee": "5.50%",
+                        "mall_seller_fee": "7.50%"
+                    },
+                    "錨泊與繫泊設備": {
+                        "general_seller_fee": "5.50%",
+                        "mall_seller_fee": "7.50%"
+                    },
+                    "照明設備": {
+                        "general_seller_fee": "5.50%",
+                        "mall_seller_fee": "7.50%"
+                    },
+                    "防護與運輸": {
+                        "general_seller_fee": "5.50%",
+                        "mall_seller_fee": "7.50%"
+                    },
+                    "船艙內裝": {
+                        "general_seller_fee": "5.50%",
+                        "mall_seller_fee": "7.50%"
+                    },
+                    "導航系統": {
+                        "general_seller_fee": "5.50%",
+                        "mall_seller_fee": "7.50%"
+                    },
+                    "安全與救援設備": {
+                        "general_seller_fee": "5.50%",
+                        "mall_seller_fee": "7.50%"
+                    },
+                    "清潔與保養": {
+                        "general_seller_fee": "5.50%",
+                        "mall_seller_fee": "7.50%"
+                    },
+                    "其他": {
+                        "general_seller_fee": "5.50%",
+                        "mall_seller_fee": "7.50%"
+                    }
+                }
+            },
+            "其他交通工具與用品": {
+                "general_seller_fee": "6.00%",
+                "mall_seller_fee": "9.00%"
             }
         },
         "書籍及雜誌期刊": {
